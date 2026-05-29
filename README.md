@@ -1,60 +1,103 @@
 # Systematic Alpha Lab
 
-Status: active flagship project, currently being consolidated from modular step repos into a single systematic research platform.
+AI-assisted systematic alpha research platform for factor research, signal generation, alpha evaluation, portfolio construction, and research automation.
 
-Systematic Alpha Lab is an AI-assisted systematic investing research platform that connects data ingestion, feature engineering, signal generation, factor evaluation, portfolio construction, risk management, backtesting, attribution, and research memo generation. It was developed under the QuantLab working name; the public-facing project is now being consolidated into this flagship repository.
+Status: active flagship project. The implemented data, factor research, and alpha construction modules have been consolidated into this repository under `src/systematic_alpha_lab/`. The older step repos remain useful implementation history, but this repo is now the public center of gravity.
 
-## Public Positioning
-- **Primary identity**: systematic alpha research and portfolio construction infrastructure.
-- **Research scope**: systematic equities first, with room for multi-asset allocation and volatility overlays.
-- **AI layer**: agents for hypothesis generation, experiment orchestration, evaluation, and research memo drafting.
-- **Public status**: in progress; data, factor, and alpha layers are implemented, while portfolio/risk/backtest layers are planned.
+## Research Workflow
 
-## Module map
-- **Step 0: Platform intro & environment** – active landing page, roadmap, environment reproducibility.
-- **Step 1: Data ingestion** – implemented ETL for prices, fundamentals, alternative data, lagging/QC, and parquet outputs.
-- **Step 2: Factor research** – implemented cross-sectional cleaning, IC/IR, deciles, LS PnL, FF regressions, and coverage diagnostics.
-- **Step 3: Alpha library** – implemented purified composites/raws, weighting engines, and regularized walk-forward ML pod.
-- **Step 4: Risk engine** – planned/TBD risk model, exposures, limits, and risk budgeting.
-- **Step 5: Portfolio optimizer** – planned/TBD RP/MVO/BL with transaction-cost, turnover, and liquidity constraints.
-- **Step 6: Backtest engine** – planned/TBD vectorized/event-driven backtests with slippage, costs, and attribution.
+```text
+Data Ingestion
+    -> Feature Engineering
+    -> Signal Generation
+    -> Factor Evaluation
+    -> Alpha Construction
+    -> Portfolio Construction
+    -> Risk Management
+    -> Backtesting and Attribution
+    -> Research Memo Generation
+```
 
-Core philosophy: modular (swap/test each step), reproducible (locked env, versioned artifacts), realistic (look-ahead guards, slippage/TC-aware).
+## Implemented Platform Layers
 
-## System outline
-- **Data pipeline (done)**: ingest raw prices/fundamentals via API, QC/lag, and store parquet in `data/data-processed`. Strict time alignment to avoid look-ahead, especially for event-driven fundamentals/revisions. Includes an MCP-based Alpha Vantage client alongside the REST implementation for flexible integration/testing.
-- **Factor library (done)**: compute ~50 equity factors (momentum, value, quality, growth, liquidity, size, forensic, analyst). Per-date cross-sectional cleaning: coverage filter, winsorize, median fill, sector-neutralize, z-score; drop all-NaN dates. Diagnostics: IC/IR, decile spreads, LS PnL, FF regression, rolling IC, coverage stats, plus lightweight long/short portfolio construction to test factor performance. Built on an abstract `FactorBase` interface (`compute_raw_factor` + `post_process`) so new factors plug in cleanly, enforce a consistent contract, improve testability, and keep the runner decoupled from factor internals. Outputs: `data/factors/factor_<name>.parquet` and `diagnostics/factor_analytics_summary.*`.
-- **Composites (done)**: thematic blends (value, quality, momentum, reversal, growth accel, forensic, liquidity, systematic risk, size). Config-driven signs/weights; sum available inputs per cell (ignore missing) with optional ffill/zero-fill for sparse forensic. Diagnostics: `composite_analytics_summary.*`, correlations.
-- **Alpha compositor (done)**: build alphas from purified composites/raws. Purge returns/factors per date vs sector dummies + beta + size + FF (ridge). Weighting: equal, walk-forward IC, rolling ridge MLR (skip ill-conditioned), Bayesian shrink, rolling GMV/MVO, ML pod (XGB/RF/GBM/MLP) walk-forward. Outputs alphas to `data/alpha/` and metrics to `diagnostics/alpha_metrics_all.csv`.
-- **Portfolio & risk (next)**: add multi-sleeve risk/turnover/liquidity constraints, exposure controls, and optimizers (RP/MVO/BL). Transaction-cost modeling and risk model are upcoming.
+| Layer | Package | Status | Purpose |
+| --- | --- | --- | --- |
+| Data Pipeline | `systematic_alpha_lab.data_pipeline` | Implemented | Ingest, transform, quality-check, and serve price/fundamental/macro datasets |
+| Factor Research | `systematic_alpha_lab.factor_research` | Implemented | Build cross-sectional equity factors, clean signals, run IC/IR and decile diagnostics |
+| Alpha Construction | `systematic_alpha_lab.alpha` | Implemented | Purify signals, combine thematic composites, evaluate alphas, run walk-forward weighting/ML experiments |
+| Portfolio Construction | `systematic_alpha_lab.portfolio` | Planned | Turn alphas into constrained weights |
+| Risk Model | `systematic_alpha_lab.risk` | Planned | Estimate exposures, covariance, limits, and risk budgets |
+| Backtest / Attribution | `systematic_alpha_lab.backtest` | Planned | Evaluate portfolio returns, costs, turnover, drawdown, and attribution |
+| Agentic Research | `systematic_alpha_lab.agents` | Planned | Generate hypotheses, run experiments, evaluate outputs, and draft research memos |
 
-## Key procedures & considerations
-- **No look-ahead**: lag fundamentals/events, forward-shift returns; walk-forward windows for IC/MLR/ML; rolling cov for GMV/MVO.
-- **Cross-sectional first**: factor cleaning, IC/IR, purge regressions, and weighting are per-date across names. Time-series used for rolling analytics/train windows.
-- **Purification**: per-date ridge regression to strip sector/beta/size/FF effects from returns and factors; residuals feed weighting/ML.
-- **Sparse signals**: keep event factors sparse (NaN = no event); composites ignore missing inputs; forensic composite ffill+zero-fill to stay usable in ML.
-- **Coverage stats**: diagnostics include dq_* fields (non-null %, coverage by date), dropping permanently empty tickers/dates.
-- **ML caution**: ML pod treated as additive; regularize heavily, shorten train/val for speed, and skip weak models if IC ~ 0. XGBoost requires `xgboost`/`libomp`.
+## What This Demonstrates
 
-## Demo flow
-1) **Factor build/diagnostics** (quantlab_factor_library):
-   - Run `notebooks/factor_parallel_demo.ipynb`.
-   - Inspect `diagnostics/factor_analytics_summary.csv` and `composite_analytics_summary.csv`.
-2) **Alpha build** (quantlab_alpha_compositor):
-   - Run `notebooks/alpha_demo.ipynb` with refreshed factors.
-   - Check `diagnostics/alpha_metrics_all.csv` and sample `data/alpha/alpha_*.parquet`.
-3) **(Next) Portfolio**:
-   - Feed alphas + risk model into optimizer; add constraints by sleeve (core/systematic, event/info, growth/cyclical, ML-neutral).
+- Point-in-time data handling for market, fundamental, macro, and benchmark inputs.
+- Cross-sectional factor engineering across momentum, value, quality, growth, liquidity, risk, size, forensic, and analyst themes.
+- Factor diagnostics: rank IC, IC IR, decile spreads, long-short PnL, Fama-French regression, coverage stats, and rolling analytics.
+- Alpha construction with purification against sector, beta, size, and style controls.
+- Walk-forward weighting engines: equal weight, IC weighting, MLR, Bayesian shrinkage, GMV/MVO, and regularized ML pods.
+- A path toward AI-assisted systematic research: hypothesis agent, experiment runner, evaluation agent, and report generator.
 
-## Environments
-- Base deps captured in `environment.yml` (Python ≥3.10, pandas/numpy/sklearn, optional xgboost). Install via `conda env create -f environment.yml` then `conda activate quantlab`.
+## Repository Layout
 
-## Repos (sibling)
-- `quantlab_data_pipeline_api`: data ingest/QC, parquet outputs under `data/data-processed`.
-- `quantlab_factor_library`: factor computation, cleaning, diagnostics, composites, saved factors under `data/factors`.
-- `quantlab_alpha_compositor`: purification, weighting/ML, alpha outputs under `data/alpha`.
+```text
+systematic-alpha-lab/
+  src/systematic_alpha_lab/
+    data_pipeline/       # data ingestion, transformation, quality checks
+    factor_research/     # factor library, cleaning, diagnostics, composites
+    alpha/               # alpha purification, weighting, evaluation
+    portfolio/           # planned
+    risk/                # planned
+    backtest/            # planned
+    agents/              # planned
+    reporting/           # planned
+  config/
+    datalist.yml
+    factors/config.json
+    alpha/config.json
+  docs/
+    architecture.md
+    roadmap.md
+  examples/
+  tests/
+```
 
-## Notes for portfolio use
-- Use purified alphas; add exposure, sector, turnover, liquidity limits; model costs.
-- Weak ML signals: consider shorter windows/fewer methods or drop until tuned.
-- Coverage varies by theme; composites handle missing inputs automatically; forensic/growth accel are sparser by design.
+## Quickstart
+
+Install in editable mode:
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+Run the lightweight import check:
+
+```bash
+python examples/consolidated_import_demo.py
+pytest
+```
+
+Credentials are not committed. For live ingestion, create `config/credentials.yml` or `config/credential.yml` locally with Alpha Vantage and WRDS credentials.
+
+## Configuration
+
+- Data defaults: `config/datalist.yml`
+- Factor cleaning and composite definitions: `config/factors/config.json`
+- Alpha construction and model settings: `config/alpha/config.json`
+- Default data root: `../data`, matching the existing local research artifact layout.
+
+## Legacy Component Repos
+
+These repos are being consolidated into this flagship codebase:
+
+| Legacy repo | Consolidated package |
+| --- | --- |
+| `quantlab_step1_data_ingestion` | `systematic_alpha_lab.data_pipeline` |
+| `quantlab_step2_factor_research` | `systematic_alpha_lab.factor_research` |
+| `quantlab_step3_alpha_library` | `systematic_alpha_lab.alpha` |
+
+## Documentation
+
+- [Architecture](docs/architecture.md)
+- [Roadmap](docs/roadmap.md)

@@ -1,0 +1,86 @@
+{
+  "data_root": "../data",
+  "price_file": "../data/data-processed/price_daily.parquet",
+  "ff_file": "../data/data-processed/fama_french_factors.parquet",
+  "factor_dir": "../data/factors",
+  "output_dir": "../../data/alpha",
+  "beta_window": 252,
+  "ic_window": 252,
+  "mlr_window": 252,
+  "mlr_ridge_alpha": 0.1,
+  "cov_window": 252,
+  "min_feature_coverage": 0.7,
+  "min_ff_coverage": 0.8,
+  "adv_lookback": null,
+  "adv_min": null,
+  "price_min": 5,
+  "purge_ridge_alpha": 1.0,
+  "risk_parity_abs": true,
+  "mvo_risk_aversion": 5.0,
+  "mvo_long_only": true,
+  "bayes_lambda": 0.5,
+  "sector_file": "../data/data-processed/company_overview.parquet",
+  "beta_factor": "beta_252d",
+  "size_factor": "size_log_mktcap",
+  "xgb_params": {
+    "objective": "reg:squarederror",
+    "learning_rate": 0.01,
+    "max_depth": 3,
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "n_estimators": 200,
+    "tree_method": "hist",
+    "n_jobs": -1,
+    "gamma": 0.2,
+    "reg_lambda": 1.0,
+    "train_window": 126,
+    "val_window": 10
+  },
+  "rf_params": {
+    "n_estimators": 100,
+    "max_depth": 5,
+    "min_samples_leaf": 5,
+    "n_jobs": -1
+  },
+  "gbm_params": {
+    "learning_rate": 0.03,
+    "n_estimators": 100,
+    "max_depth": 3,
+    "subsample": 0.8
+  },
+  "mlp_params": {
+    "hidden_layer_sizes": [64, 32],
+    "activation": "relu",
+    "alpha": 0.0005,
+    "learning_rate_init": 0.001,
+    "max_iter": 150,
+    "train_window": 126,
+    "val_window": 0
+  },
+  "pods": {
+    "core_systematic": {
+      "theta": ["theta_pure_value", "theta_pure_quality", "theta_momentum_riskadj", "theta_systematic_risk"]
+    },
+    "event_info": {
+      "theta": ["theta_info_forensic_drift", "theta_shortterm_reversal", "theta_structural_liquidity", "theta_pure_quality"]
+    },
+    "growth_cyclical": {
+      "theta": ["theta_growth_acceleration", "theta_momentum_riskadj"]
+    },
+    "global_ml": {
+      "theta": [
+        "theta_pure_value",
+        "theta_pure_quality",
+        "theta_momentum_riskadj",
+        "theta_systematic_risk",
+        "theta_info_forensic_drift",
+        "theta_shortterm_reversal",
+        "theta_structural_liquidity",
+        "theta_growth_acceleration",
+        "theta_size_smallcap"
+      ],
+      "raw_factors": ["size_log_mktcap", "beta_252d", "amihud_illiq_252d"],
+      "ml_methods": ["xgb", "rf", "gbm", "mlp"]
+    }
+  }
+}

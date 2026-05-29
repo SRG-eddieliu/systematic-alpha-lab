@@ -1,0 +1,81 @@
+{
+  "data_root": "../data",
+  "final_dir": "../data/data-processed",
+  "factors_dir": "../data/factors",
+  "factor_defaults": {
+    "winsor_limits": [0.01, 0.99],
+    "min_coverage": 0.3,
+    "fill_method": "median",
+    "neutralize_method": "sector",
+    "forward_fill": true
+  },
+  "factor_overrides": {
+    "benford_chi2_d1": {
+      "min_coverage": 0.0
+    },
+    "benford_chi2_d2": {
+      "min_coverage": 0.0
+    },
+    "sue": {
+      "min_coverage": 0.0
+    },
+    "earnings_surprise": {
+      "min_coverage": 0.0,
+      "fill_method": null,
+      "forward_fill": false
+    },
+    "analyst_revision_eps_30d": {
+      "lag_days": 3
+    }
+  },
+  "composites": {
+    "theta_momentum_riskadj": {
+      "factors": ["momentum_12m", "residual_momentum_12m", "volatility_60d", "downside_vol_60d", "industry_momentum"],
+      "sign": {"volatility_60d": -1, "downside_vol_60d": -1},
+      "weight_method": "equal"
+    },
+    "theta_pure_value": {
+      "factors": ["earnings_yield", "book_to_price", "ev_to_ebitda_inv", "cashflow_yield", "free_cashflow_yield"],
+      "weight_method": "equal"
+    },
+    "theta_pure_quality": {
+      "factors": ["profitability_roe", "roa", "gross_profitability", "piotroski_fscore", "accruals"],
+      "sign": {"accruals": -1},
+      "weight_method": "equal"
+    },
+    "theta_shortterm_reversal": {
+      "factors": ["mean_reversion_5d", "max_daily_return_1m", "high52w_proximity"],
+      "sign": {"max_daily_return_1m": -1, "high52w_proximity": -1},
+      "weight_method": "equal"
+    },
+    "theta_growth_acceleration": {
+      "factors": ["sales_growth", "sales_growth_accel", "rd_intensity"],
+      "weight_method": "equal"
+    },
+    "theta_info_forensic_drift": {
+      "factors": ["sue", "earnings_surprise", "analyst_revision_eps_30d", "benford_chi2_d1", "benford_chi2_d2"],
+      "sign": {"benford_chi2_d1": -1, "benford_chi2_d2": -1},
+      "weight_method": "equal"
+    },
+    "theta_structural_liquidity": {
+      "factors": ["dollar_volume_20d", "amihud_illiq_252d", "amihud_illiq_log_20d", "turnover"],
+      "sign": {"dollar_volume_20d": -1, "turnover": -1},
+      "weight_method": "equal"
+    },
+    "theta_systematic_risk": {
+      "factors": ["beta_252d", "residual_vol_252d", "downside_beta_252d", "leverage", "asset_growth", "investment_to_assets", "net_issuance"],
+      "sign": {"beta_252d": -1, "residual_vol_252d": -1, "downside_beta_252d": -1, "leverage": -1, "asset_growth": -1, "investment_to_assets": -1, "net_issuance": -1},
+      "weight_method": "equal"
+    },
+    "theta_size_smallcap": {
+      "factors": ["size_log_mktcap", "size_log_total_assets", "size_log_enterprise_value", "size_log_revenue"],
+      "sign": {
+        "size_log_mktcap": -1,
+        "size_log_total_assets": -1,
+        "size_log_enterprise_value": -1,
+        "size_log_revenue": -1
+      },
+      "weight_method": "equal"
+    }
+  }
+}

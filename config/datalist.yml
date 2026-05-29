@@ -1,0 +1,35 @@
+alpha_vantage:
+  time_series:
+    - TIME_SERIES_DAILY_ADJUSTED
+    - TIME_SERIES_WEEKLY_ADJUSTED
+  fundamentals:
+    - COMPANY_OVERVIEW
+    - INCOME_STATEMENT
+    - BALANCE_SHEET
+    - CASH_FLOW
+    - EARNINGS
+    - EARNINGS_ESTIMATES
+    - DIVIDENDS
+    - SPLITS
+  economic_indicators:
+    - REAL_GDP
+    - REAL_GDP_PER_CAPITA
+    - TREASURY_YIELD
+    - FEDERAL_FUNDS_RATE
+    - CPI
+    - INFLATION
+    - RETAIL_SALES
+    - DURABLES
+    - UNEMPLOYMENT
+    - NONFARM_PAYROLL
+  future_expansion:
+    - HISTORICAL_OPTIONS
+    - NEWS_SENTIMENT
+    - INSIDER_TRANSACTIONS
+    - ETF_HOLDINGS
+    - ANALYTICS_SLIDING_WINDOW
+wrds:
+  constituents_table: crsp_a_indexes.dsp500list_v2
+defaults:
+  start_date: "2000-01-01"
+  end_date: "2025-11-20"
