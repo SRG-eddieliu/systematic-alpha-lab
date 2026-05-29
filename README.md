@@ -1,8 +1,8 @@
-# QuantLab: AI-Assisted Systematic Research Platform
+# Systematic Alpha Lab
 
 Status: active flagship project, currently being consolidated from modular step repos into a single systematic research platform.
 
-QuantLab is an AI-assisted systematic investing research platform that connects data ingestion, feature engineering, signal generation, factor evaluation, portfolio construction, risk management, backtesting, attribution, and research memo generation. The current implementation is organized as modular repos while the public-facing project is being consolidated into one flagship repository.
+Systematic Alpha Lab is an AI-assisted systematic investing research platform that connects data ingestion, feature engineering, signal generation, factor evaluation, portfolio construction, risk management, backtesting, attribution, and research memo generation. It was developed under the QuantLab working name; the public-facing project is now being consolidated into this flagship repository.
 
 ## Public Positioning
 - **Primary identity**: systematic alpha research and portfolio construction infrastructure.

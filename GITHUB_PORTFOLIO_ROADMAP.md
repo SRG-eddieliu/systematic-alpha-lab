@@ -18,7 +18,7 @@ Primary themes:
 
 | Priority | Repository | Public Status | Positioning |
 | --- | --- | --- | --- |
-| 1 | QuantLab / Systematic Alpha Lab | In progress | Flagship AI-assisted systematic research platform |
+| 1 | Systematic Alpha Lab | In progress | Flagship AI-assisted systematic research platform |
 | 2 | OptionPricer | Public demo-ready | C++ derivatives pricing and numerical methods |
 | 3 | Transformer SAC Portfolio Allocation | Planned/TBD | Reinforcement learning for portfolio allocation |
 | 4 | Earnings Call NLP Alpha | Planned/TBD | Financial NLP signal research |
@@ -28,7 +28,7 @@ Primary themes:
 ## Near-Term GitHub Actions
 
 1. Pin `OptionPricer` as the polished C++ quant engineering project.
-2. Pin QuantLab as the active flagship, clearly labeled in progress.
+2. Pin `systematic-alpha-lab` as the active flagship, clearly labeled in progress.
 3. Keep placeholder modules private or unpinned until they have executable demos.
 4. Avoid pinning coursework-style, step-only, or notebook-only repos.
 5. Convert future research projects into focused repos only when each has a reproducible demo, README, and research memo.
