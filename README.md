@@ -4,18 +4,29 @@ AI-assisted systematic alpha research platform for factor research, signal gener
 
 Status: active flagship project. The implemented data, factor research, and alpha construction modules have been consolidated into this repository under `src/systematic_alpha_lab/`. The older step repos remain useful implementation history, but this repo is now the public center of gravity.
 
-## Research Workflow
+## Simple Research Workflow
 
 ```text
 Data Ingestion
-    -> Feature Engineering
-    -> Signal Generation
+    -> Factor Cleaning
     -> Factor Evaluation
     -> Alpha Construction
-    -> Portfolio Construction
     -> Risk Management
+    -> Portfolio Construction
     -> Backtesting and Attribution
     -> Research Memo Generation
+```
+
+For a credential-free first run, use the synthetic workflow:
+
+```bash
+python examples/synthetic_equity_alpha_demo.py
+```
+
+That demo runs:
+
+```text
+Synthetic prices -> simple factors -> factor analytics -> combined alpha -> IC/IR/turnover
 ```
 
 ## Implemented Platform Layers
@@ -44,6 +55,8 @@ Data Ingestion
 ```text
 systematic-alpha-lab/
   src/systematic_alpha_lab/
+    core/                # shared dataclasses for research artifacts
+    workflows/           # high-level runnable workflows
     data_pipeline/       # data ingestion, transformation, quality checks
     factor_research/     # factor library, cleaning, diagnostics, composites
     alpha/               # alpha purification, weighting, evaluation
@@ -75,6 +88,7 @@ Run the lightweight import check:
 
 ```bash
 python examples/consolidated_import_demo.py
+python examples/synthetic_equity_alpha_demo.py
 pytest
 ```
 
@@ -101,3 +115,4 @@ These repos are being consolidated into this flagship codebase:
 
 - [Architecture](docs/architecture.md)
 - [Roadmap](docs/roadmap.md)
+- [Research Workflow](docs/research_workflow.md)

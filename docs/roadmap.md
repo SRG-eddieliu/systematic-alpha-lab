@@ -8,15 +8,15 @@
 
 ## Near-Term
 
-1. Add smoke tests for imports, config resolution, and small synthetic factor runs.
-2. Add an end-to-end demo script that runs without external API credentials using synthetic/sample data.
+1. Expand smoke tests for config resolution and small synthetic factor runs.
+2. Extend the synthetic end-to-end demo into a notebook narrative.
 3. Add sample research memo output under `reports/examples/`.
 4. Convert the current notebooks into parent-repo examples.
 
 ## Medium-Term
 
-1. Implement portfolio construction: risk parity, mean-variance, constraints, turnover, liquidity.
-2. Add risk model: beta, sector, style, idiosyncratic volatility, covariance estimation.
+1. Add risk model: beta, sector, style, idiosyncratic volatility, covariance estimation.
+2. Implement portfolio construction: risk parity, mean-variance, constraints, turnover, liquidity.
 3. Add backtest and attribution: slippage, costs, turnover, exposures, drawdown, factor attribution.
 4. Add agentic research layer: hypothesis, experiment, evaluation, and report agents.
 
