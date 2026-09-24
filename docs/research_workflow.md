@@ -12,7 +12,7 @@ from systematic_alpha_lab.workflows import run_synthetic_equity_alpha_demo
 data, factor_result, alpha_result = run_synthetic_equity_alpha_demo()
 ```
 
-This runs a complete credential-free workflow:
+This runs a credential-free synthetic demonstration of the implemented research components:
 
 ```text
 Synthetic prices
@@ -23,6 +23,8 @@ Synthetic prices
     -> Alpha IC / IR / turnover / decay
 ```
 
+The data generator deliberately embeds a weak momentum effect. Metrics from this demonstration are not evidence of real-market alpha. Portfolio construction, trading costs, risk modeling, and portfolio backtesting are outside this example.
+
 The result objects are typed dataclasses:
 
 - `DataBundle`
@@ -31,7 +33,7 @@ The result objects are typed dataclasses:
 
 ## Advanced API
 
-Use this when you want the full production-style pipeline.
+Use these lower-level components for configured live-data research. They require separate data-quality, timing, and numerical validation before drawing investment conclusions.
 
 ```python
 from systematic_alpha_lab.data_pipeline import run_ingestion, transform_raw_to_final
