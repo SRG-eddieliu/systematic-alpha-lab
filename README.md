@@ -24,7 +24,17 @@ Synthetic equity prices
   -> IC / IR / rank-turnover / decay diagnostics
 ```
 
-The generated data includes a deliberately embedded weak momentum effect. These results demonstrate the software workflow; they are not market evidence or a validated investment strategy. Existing tests cover imports and basic synthetic workflow outputs, not comprehensive numerical or temporal correctness.
+The generated data includes a deliberately embedded weak momentum effect. These results demonstrate the software workflow; they are not market evidence or a validated investment strategy. Tests cover imports, synthetic outputs, forward-label timing, future-price invariance of the example factors, and as-of filing selection. They do not establish comprehensive correctness of every weighting engine.
+
+[![Research contracts](https://github.com/SRG-eddieliu/systematic-alpha-lab/actions/workflows/tests.yml/badge.svg)](https://github.com/SRG-eddieliu/systematic-alpha-lab/actions/workflows/tests.yml)
+
+## Focused Research Follow-up
+
+[Financial quality: data gate and protocol](docs/financial-quality-study.md) narrows
+the next study to accrual intensity and one-month returns. A tested release-time
+selector is implemented; actual market evaluation is pending verified publication
+timestamps, historical eligibility and suitable return data. No alpha result is
+claimed from the current extracts.
 
 ## Implemented Components
 
@@ -78,6 +88,10 @@ For live ingestion, provide local credentials in `config/credentials.yml` or `co
 ## Earlier Standalone Repositories
 
 The corresponding implementations are consolidated here. Earlier repositories remain available as development history; this is the starting point for new exploration.
+
+[Source-coverage check](docs/legacy-migration.md): all 83 legacy Python modules
+have consolidated counterparts; historical notebooks and Git history remain
+available in the original repositories.
 
 | Earlier repository | Consolidated package |
 | --- | --- |
