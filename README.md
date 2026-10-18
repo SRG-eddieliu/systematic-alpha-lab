@@ -51,6 +51,11 @@ not establish publication timing. No fraud probability or market result is claim
 
 ## Implemented Components
 
+The [shared snapshot pipeline](docs/data-snapshot-pipeline.md) adds bounded
+fundamental-statement collection, immutable JSON observations, a SQLite catalog,
+versioned Parquet staging and offline replay. Retrieval time is separate from
+historical availability; staged reports are not certified market-factor inputs.
+
 | Component | Code | Scope |
 | --- | --- | --- |
 | Data preparation | [data_pipeline](src/systematic_alpha_lab/data_pipeline) | Ingestion, transformation, quality checks, and Parquet data access |

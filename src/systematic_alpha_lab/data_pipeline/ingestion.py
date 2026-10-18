@@ -197,12 +197,14 @@ def _write_split_by_period(df: pd.DataFrame, base_dir: Path, endpoint: str, tick
 
 
 def _filter_date(df: pd.DataFrame, start: date, end: date) -> pd.DataFrame:
-    for col in ["date", "timestamp", "datetime"]:
+    if start > end:
+        raise ValueError("start must not exceed end")
+    df = df.copy()
+    for col in ["date", "timestamp", "datetime", "fiscalDateEnding"]:
         if col in df.columns:
             df[col] = pd.to_datetime(df[col]).dt.date
             filtered = df[(df[col] >= start) & (df[col] <= end)]
-            # If nothing falls in range (e.g., API returns future dates), keep original to avoid dropping everything.
-            return filtered if not filtered.empty else df
+            return filtered
     return df
 
 
