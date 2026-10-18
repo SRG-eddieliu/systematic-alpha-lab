@@ -38,6 +38,12 @@ selector is implemented; actual market evaluation is pending verified publicatio
 timestamps, historical eligibility and suitable return data. No alpha result is
 claimed from the current extracts.
 
+The [source consolidation](docs/financial-quality-intake-2026-10-18.md) includes
+a tested quarterly accrual diagnostic with fiscal-year cash-flow resets and an
+[offline example](examples/financial_quality_snapshot_demo.py). It operates on
+one snapshot and does not establish historical tradability. This is a research
+module within the platform; each signal study does not imply a separate product.
+
 ## Implemented Components
 
 | Component | Code | Scope |
