@@ -100,3 +100,12 @@ available in the original repositories.
 | [Data ingestion](https://github.com/SRG-eddieliu/quantlab_step1_data_ingestion) | `systematic_alpha_lab.data_pipeline` |
 | [Factor research](https://github.com/SRG-eddieliu/quantlab_step2_factor_research) | `systematic_alpha_lab.factor_research` |
 | [Alpha library](https://github.com/SRG-eddieliu/quantlab_step3_alpha_library) | `systematic_alpha_lab.alpha` |
+
+
+## Control availability policy
+
+The alpha pipeline requires beta and size DataFrames indexed by their **availability timestamps**. Index values must be unique and non-null. Missing dates never fall back to the final row. `control_max_age_days` defaults to `0`, requiring an exact timestamp; a positive value explicitly permits the latest prior row within that many calendar days. Missing history or a stale row raises `ValueError` instead of silently changing the information set. This policy applies to return, thematic-factor and raw-factor purification.
+
+For example, `"control_max_age_days": 3` permits a Friday observation on Monday at matching clock time. The provider must establish when each observation was available; labeling an economic period end as an availability time does not make it point-in-time safe. Existing missing feature values still follow the purification coverage policy. This correction does not validate all upstream data or every weighting/model path.
+
+Regression checks include sparse control histories, bounded staleness, invalid/duplicate timestamps and an end-to-end future-control mutation test for both beta and size.
