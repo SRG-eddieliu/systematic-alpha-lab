@@ -72,6 +72,12 @@ arithmetic only. Source duplicate keys, unverified units and missing release/vin
 metadata still block the market study. The legacy annual-accrual loader is not
 covered by this new calculation's verification.
 
+The [provider-only statement review](provider-statement-review.md) separately
+uses existing Alpha Vantage captures for descriptive annual ratios and source
+reconciliation. This makes the current inputs usable for exploration without
+requiring SEC. Its annual candidate arithmetic does not replace this protocol's
+four-quarter TTM specification or establish historical return performance.
+
 A separate [Benford repair](benford-diagnostics.md) verifies significant-digit
 arithmetic and a field-version as-of reference. The legacy automatic daily
 projection is disabled with an explicit migration error. Supplied timestamp
