@@ -56,6 +56,10 @@ fundamental-statement collection, immutable JSON observations, a SQLite catalog,
 versioned Parquet staging and offline replay. Retrieval time is separate from
 historical availability; staged reports are not certified market-factor inputs.
 
+The [SEC connector](docs/sec-filing-snapshots.md) adds explicit CIK collection,
+accession/context staging, unit and duration preservation, and source-bound replay.
+Its synthetic workflow is verified; live statement reconciliation remains pending.
+
 | Component | Code | Scope |
 | --- | --- | --- |
 | Data preparation | [data_pipeline](src/systematic_alpha_lab/data_pipeline) | Ingestion, transformation, quality checks, and Parquet data access |

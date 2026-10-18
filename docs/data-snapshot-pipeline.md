@@ -95,22 +95,24 @@ catalogs and generated tables are excluded from public GitHub publication.
 describes financial reports and market-data endpoints. Its free-key support page
 currently states [25 requests per day](https://www.alphavantage.co/support/);
 premium endpoint access and rate allowances depend on the actual subscription.
-The [terms](https://www.alphavantage.co/terms_of_service/) classify use on behalf
-of a corporation as commercial, for which a separate written arrangement is
-required. A working key or a local setting named "paid" does not establish that
-arrangement. No external communication or subscription action is performed here.
+A working key or a local setting named "paid" does not establish a subscription
+tier or endpoint entitlement. This implementation performs no external
+communication or subscription action beyond explicitly requested data retrieval.
 
-For historical financial-quality work, the next connector should preserve original
-filing identities and timestamps. [SEC submissions and XBRL APIs](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)
+For historical financial-quality work, the [SEC connector](sec-filing-snapshots.md)
+now preserves source accession identities, durations, units and filing metadata.
+[SEC submissions and XBRL APIs](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)
 provide a primary-source foundation without an API key; company-facts aggregates
 still need careful accession, taxonomy, unit, duration and revision selection.
 SEC financial frames align to calendar periods and are not a substitute for a
 validated company fiscal calendar. SEC's [developer guidance](https://www.sec.gov/about/webmaster-frequently-asked-questions)
 requires a declared contact User-Agent and limits access to 10 requests/second;
 acceptance timestamps and public dissemination time are not interchangeable.
-This first slice does not implement or call a SEC connector.
+The SEC follow-up is tested with synthetic inputs; live statement reconciliation
+remains pending. Acceptance metadata is not assigned to provider amounts merely
+because their period ends match.
 
-Next stages are a verified identifier/filing-version connector, corporate-action
+Next stages are live identifier/filing-version reconciliation, corporate-action
 and price validation, research-dataset materialization, and then shared scheduling
 and monitoring. Query engines/object storage can be added as volume warrants;
 the initial local Parquet/SQLite path requires no cloud provisioning.
