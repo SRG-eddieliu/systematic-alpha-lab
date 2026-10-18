@@ -56,6 +56,10 @@ fundamental-statement collection, immutable JSON observations, a SQLite catalog,
 versioned Parquet staging and offline replay. Retrieval time is separate from
 historical availability; staged reports are not certified market-factor inputs.
 
+The [provider-only review](docs/provider-statement-review.md) uses those statement
+captures directly for annual candidate arithmetic and annual/quarterly source
+reconciliation. It needs no additional provider and has an offline synthetic demo.
+
 The [SEC connector](docs/sec-filing-snapshots.md) adds explicit CIK collection,
 accession/context staging, unit and duration preservation, and source-bound replay.
 Its synthetic workflow is verified; live statement reconciliation remains pending.
