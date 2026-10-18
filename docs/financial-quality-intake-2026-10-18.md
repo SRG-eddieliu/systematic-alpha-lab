@@ -3,6 +3,11 @@
 Review and execution date: 2026-10-18. Portfolio role: signal-research module of
 Systematic Alpha Lab. No additional standalone product repository was created.
 
+Follow-up: the [Benford repair](benford-diagnostics.md) now addresses its baseline
+arithmetic defects below, adds explicit field-version as-of selection and disables
+the unsafe daily projection. This intake preserves the findings at its original
+reviewed revision `cccf199953d256ee386c4d8c900393e40b08f245`.
+
 ## Accepted implementation boundary
 
 [`quarterly_accrual_diagnostic`](../src/systematic_alpha_lab/factor_research/financial_quality.py)
