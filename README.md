@@ -1,5 +1,7 @@
 # Systematic Alpha Lab
 
+**Starpoint Research Group · Financial data and systematic research toolkit**
+
 A Python research toolkit for financial data preparation, cross-sectional factor diagnostics, and signal combination.
 
 **Status:** implemented research components with a credential-free synthetic example. Portfolio construction, a standalone risk model, portfolio backtesting, and research agents remain planned modules.
