@@ -66,3 +66,7 @@ PYTHONPATH=src python examples/review_fundamental_snapshots.py \
 The CLI selects the most recent local captures and emits the manifest needed to
 replay those exact versions. It does not refresh sources or contact another provider.
 The API also accepts explicitly selected older capture records.
+
+Use `--period quarterly` for the [quarterly TTM diagnostic](provider-quarterly-review.md).
+It consumes the same captures, uses quarterly flows directly and retains source
+differences and unverified timing/unit/flow assumptions. The default remains annual.

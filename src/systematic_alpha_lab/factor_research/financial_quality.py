@@ -95,3 +95,54 @@ def quarterly_accrual_diagnostic(statements: pd.DataFrame) -> pd.DataFrame:
     df["calculation_ready"] = df.accrual_quality.notna()
     df["timing_status"] = "snapshot_only_availability_unverified"
     return df.drop(columns="_ordinal")
+
+
+def accrual_from_quarterly_flows(statements: pd.DataFrame) -> pd.DataFrame:
+    """Snapshot TTM arithmetic when both input flows are already quarterly.
+
+    Required: asset, period_end, currency, unit, net_income,
+    operating_cash_flow_quarter, total_assets. Do not supply YTD cash flow here.
+    The asset field identifies a source series, not necessarily a traded security.
+
+    No fiscal labels are inferred. Consecutive reported dates must be 60–120 days
+    apart. Four quarterly flows need three valid intervals; an asset denominator
+    needs five rows/four intervals spanning 330–400 days. Currency and unit must agree across each
+    relevant window. Missing rows/amounts are not filled or restored from annuals.
+    """
+    required = ["asset", "period_end", "currency", "unit", "net_income",
+                "operating_cash_flow_quarter", "total_assets"]
+    if not set(required).issubset(statements.columns):
+        raise ValueError("Missing quarterly-flow statement fields")
+    df = statements[required].copy()
+    for column in ("asset", "currency", "unit"):
+        if not df[column].map(lambda value: isinstance(value, str) and bool(value.strip())).all():
+            raise ValueError("Quarterly identifiers/currency/unit must be nonempty strings")
+    df["period_end"] = pd.to_datetime(df.period_end, utc=True, errors="raise")
+    if df.period_end.isna().any() or df.duplicated(["asset", "period_end"]).any():
+        raise ValueError("Missing or duplicate quarterly period/version")
+    for column in ("net_income", "operating_cash_flow_quarter", "total_assets"):
+        df[column] = pd.to_numeric(df[column], errors="raise").astype(float)
+        if np.isinf(df[column]).any():
+            raise ValueError("Infinite quarterly amount")
+    df = df.sort_values(["asset", "period_end"]).reset_index(drop=True)
+    grouped = df.groupby("asset", sort=False)
+    days = grouped.period_end.diff().dt.total_seconds() / 86400
+    df["_pair_ok"] = days.between(60, 120) & df.currency.eq(grouped.currency.shift()) & df.unit.eq(grouped.unit.shift())
+    grouped = df.groupby("asset", sort=False)
+    df["four_quarter_window_ready"] = grouped._pair_ok.transform(lambda values: values.rolling(3).sum().eq(3))
+    span_days = (df.period_end - grouped.period_end.shift(4)).dt.total_seconds() / 86400
+    df["five_quarter_window_ready"] = grouped._pair_ok.transform(
+        lambda values: values.rolling(4).sum().eq(4)
+    ) & span_days.between(330, 400)
+    for source, target in (("net_income", "ttm_net_income"), ("operating_cash_flow_quarter", "ttm_operating_cash_flow")):
+        total = grouped[source].transform(lambda values: values.rolling(4, min_periods=4).sum())
+        df[target] = total.where(df.four_quarter_window_ready & np.isfinite(total))
+    opening_assets = grouped.total_assets.shift(4)
+    valid_assets = opening_assets.gt(0) & df.total_assets.gt(0) & df.five_quarter_window_ready
+    # Divide before adding to avoid overflow in the average of large finite stocks.
+    df["average_assets"] = (opening_assets / 2 + df.total_assets / 2).where(valid_assets)
+    ratio = -(df.ttm_net_income - df.ttm_operating_cash_flow) / df.average_assets
+    df["accrual_quality"] = ratio.where(np.isfinite(ratio))
+    df["calculation_ready"] = df.accrual_quality.notna()
+    df["timing_status"] = "snapshot_only_availability_unverified"
+    return df.drop(columns="_pair_ok")

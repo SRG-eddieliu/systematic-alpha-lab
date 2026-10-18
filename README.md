@@ -59,6 +59,9 @@ historical availability; staged reports are not certified market-factor inputs.
 The [provider-only review](docs/provider-statement-review.md) uses those statement
 captures directly for annual candidate arithmetic and annual/quarterly source
 reconciliation. It needs no additional provider and has an offline synthetic demo.
+Its [quarterly TTM path](docs/provider-quarterly-review.md) now connects those
+captures to financial-quality arithmetic with explicit source assumptions,
+continuity checks and cross-statement difference flags.
 
 The [SEC connector](docs/sec-filing-snapshots.md) adds explicit CIK collection,
 accession/context staging, unit and duration preservation, and source-bound replay.
