@@ -69,8 +69,13 @@ adds a strict single-snapshot quarterly accrual calculation with fiscal-year cas
 resets, missing-quarter checks and explicit currency/unit contracts. Its
 [offline synthetic example](../examples/financial_quality_snapshot_demo.py) checks
 arithmetic only. Source duplicate keys, unverified units and missing release/vintage
-metadata still block the market study. Legacy annual-accrual and Benford loaders
-are not covered by this new calculation's verification.
+metadata still block the market study. The legacy annual-accrual loader is not
+covered by this new calculation's verification.
+
+A separate [Benford repair](benford-diagnostics.md) verifies significant-digit
+arithmetic and a field-version as-of reference. The legacy automatic daily
+projection is disabled with an explicit migration error. Supplied timestamp
+selection cannot certify real input provenance or clear the market-data gate.
 
 Availability/revision selection, no backfill before release, asset isolation,
 missing timestamp rejection, duplicate-version rejection, future-mutation

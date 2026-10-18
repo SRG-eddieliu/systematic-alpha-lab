@@ -44,6 +44,11 @@ a tested quarterly accrual diagnostic with fiscal-year cash-flow resets and an
 one snapshot and does not establish historical tradability. This is a research
 module within the platform; each signal study does not imply a separate product.
 
+[Benford diagnostics](docs/benford-diagnostics.md) now have corrected significant-digit
+arithmetic, coverage counts and an explicit field-version as-of reference. The old
+automatic fiscal-period-to-daily methods raise a migration error because they do
+not establish publication timing. No fraud probability or market result is claimed.
+
 ## Implemented Components
 
 | Component | Code | Scope |
