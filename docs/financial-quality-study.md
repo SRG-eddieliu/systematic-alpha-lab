@@ -78,6 +78,13 @@ reconciliation. This makes the current inputs usable for exploration without
 requiring SEC. Its annual candidate arithmetic does not replace this protocol's
 four-quarter TTM specification or establish historical return performance.
 
+The [quarterly provider path](provider-quarterly-review.md) connects current
+statement captures to that TTM arithmetic using the provider's quarterly-report
+flows directly. It checks consecutive periods and carries source differences
+without fabricating YTD amounts, fiscal labels or historical availability. The
+existing YTD-input calculator remains available for sources that actually report
+YTD cash flow. Neither path alone clears the historical market-data gate.
+
 A separate [Benford repair](benford-diagnostics.md) verifies significant-digit
 arithmetic and a field-version as-of reference. The legacy automatic daily
 projection is disabled with an explicit migration error. Supplied timestamp
