@@ -64,6 +64,14 @@ It cannot verify that the supplied timestamps or universe are themselves genuine
 
 ## Tests already implemented
 
+The [2026-10-18 source consolidation](financial-quality-intake-2026-10-18.md)
+adds a strict single-snapshot quarterly accrual calculation with fiscal-year cash-flow
+resets, missing-quarter checks and explicit currency/unit contracts. Its
+[offline synthetic example](../examples/financial_quality_snapshot_demo.py) checks
+arithmetic only. Source duplicate keys, unverified units and missing release/vintage
+metadata still block the market study. Legacy annual-accrual and Benford loaders
+are not covered by this new calculation's verification.
+
 Availability/revision selection, no backfill before release, asset isolation,
 missing timestamp rejection, duplicate-version rejection, future-mutation
 invariance, and empty/missing data behavior. Separate toolkit tests check explicit

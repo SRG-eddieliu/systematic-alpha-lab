@@ -1,0 +1,107 @@
+{
+  "review_date": "2026-10-18",
+  "notebook_sources": [
+    {
+      "id": "Q01",
+      "role": "Leading-digit return comparison",
+      "sha256": "373da4ae225c3e08a085f11c0f580c73d32408a96641042b1a5736e761a98934",
+      "bytes": 49531,
+      "disposition": "retained privately; no raw source/output published"
+    },
+    {
+      "id": "Q02",
+      "role": "Leading-digit correlation exploration",
+      "sha256": "3277630ba21632c3eca8bb17d97b98edba5e59ecd8cbaa4dfa78ef0a5c8801e8",
+      "bytes": 592589,
+      "disposition": "retained privately; no raw source/output published"
+    },
+    {
+      "id": "Q03",
+      "role": "Cash-flow preparation and digit exploration",
+      "sha256": "5940046bf6045ff541f818fe30ddb9119fb1dfb39bb912e36bf2b6fb51625420",
+      "bytes": 1002022,
+      "disposition": "retained privately; no raw source/output published"
+    },
+    {
+      "id": "Q04",
+      "role": "Regression and composite exploration",
+      "sha256": "0e369846b420fdc1492d19bc05e6b228aa4984cb8c8f6852cbb809c8aec061e9",
+      "bytes": 5022804,
+      "disposition": "retained privately; no raw source/output published"
+    },
+    {
+      "id": "Q05",
+      "role": "Portfolio and regime exploration",
+      "sha256": "50828a9a7404431107e08eb3947cf8c3f37e531a627dc9370e167048c06d49df",
+      "bytes": 33943,
+      "disposition": "retained privately; no raw source/output published"
+    },
+    {
+      "id": "Q06",
+      "role": "Whole-extract digit diagnostic",
+      "sha256": "7b696618c7c5ed323b83c673c0df198fbef3d9e481bb50d98a148958638de5ae",
+      "bytes": 164722,
+      "disposition": "retained privately; no raw source/output published"
+    },
+    {
+      "id": "Q07",
+      "role": "Merged signal exploration",
+      "sha256": "d8191cc510d4957e3a53477405ef9fcafb64c98f9c22434bc18ad7628ef3f359",
+      "bytes": 12263,
+      "disposition": "retained privately; no raw source/output published"
+    }
+  ],
+  "private_input_audit": [
+    {
+      "sha256": "bcf4e4a4a864d5adab99e22413337bf044b09c518032be06a334ea11797e29a5",
+      "bytes": 93878968,
+      "rows": 657422,
+      "stable_entities": 12381,
+      "missing_key_rows": 134,
+      "duplicate_key_rows": 820,
+      "format_variants": [
+        {
+          "indfmt": "INDL",
+          "consol": "C",
+          "popsrc": "D",
+          "datafmt": "STD",
+          "count": 657422
+        }
+      ],
+      "currency_codes": [
+        "USD"
+      ],
+      "publication_timestamp_present": false,
+      "units_verified": false,
+      "standard_industrial_rows": 657288,
+      "standard_industrial_duplicate_key_rows": 708,
+      "role": "Cash-flow/leading-digit extract"
+    },
+    {
+      "sha256": "14649527b13fbec9399259f819099a0e6cb2dcc6035e48c7ef239fd5a0e1ceeb",
+      "bytes": 86438992,
+      "rows": 724081,
+      "stable_entities": 12414,
+      "missing_key_rows": 0,
+      "duplicate_key_rows": 306,
+      "format_variants": [
+        {
+          "indfmt": "INDL",
+          "consol": "C",
+          "popsrc": "D",
+          "datafmt": "STD",
+          "count": 724081
+        }
+      ],
+      "currency_codes": [
+        "USD"
+      ],
+      "publication_timestamp_present": false,
+      "units_verified": false,
+      "standard_industrial_rows": 724081,
+      "standard_industrial_duplicate_key_rows": 306,
+      "role": "Ratio-analysis extract"
+    }
+  ],
+  "scope": "Provenance and aggregate metadata only; no vendor rows or model results"
+}
