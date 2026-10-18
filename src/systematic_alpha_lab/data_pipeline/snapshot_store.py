@@ -40,6 +40,29 @@ def _safe_metadata(value):
             _safe_metadata(child)
 
 
+def _safe_payload(value):
+    """Reject credential fields without mistaking financial taxonomy names for keys.
+
+    Request metadata remains more restrictive. Raw source objects can contain
+    financial concepts such as KeyManagementPersonnelCompensation.
+    """
+    credential_fields = {
+        "key", "apikey", "apitoken", "token", "accesstoken", "refreshtoken",
+        "password", "passwd", "secret", "clientsecret", "authorization",
+        "privatekey", "secretkey", "accesskey", "secretaccesskey",
+        "awsaccesskeyid", "awssecretaccesskey",
+    }
+    if isinstance(value, dict):
+        for key, child in value.items():
+            name = re.sub(r"[^a-z0-9]", "", str(key).lower())
+            if name in credential_fields:
+                raise ValueError("Credentials cannot be stored in source payloads")
+            _safe_payload(child)
+    elif isinstance(value, list):
+        for child in value:
+            _safe_payload(child)
+
+
 class SnapshotStore:
     """Private data root; source observations never replace an older version."""
 
@@ -102,7 +125,7 @@ class SnapshotStore:
             key in payload for key in ("Information", "Note", "Error Message")
         ):
             raise ValueError("Only successful JSON objects can enter the snapshot catalog")
-        _safe_metadata(payload)
+        _safe_payload(payload)
         digest = hashlib.sha256(body).hexdigest()
         relative = f"raw/{digest[:2]}/{digest}.json"
         self._write(relative, body)
