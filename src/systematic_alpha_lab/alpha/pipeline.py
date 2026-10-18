@@ -22,6 +22,27 @@ from .weighting import (
 from .evaluate import evaluate_alpha, rank_ic
 
 
+def _control_history(frame: pd.DataFrame, name: str) -> pd.DataFrame:
+    """Control index is its availability time, not its economic period."""
+    if not isinstance(frame, pd.DataFrame) or not isinstance(frame.index, pd.DatetimeIndex):
+        raise ValueError(f"{name} controls require a DataFrame with a DatetimeIndex")
+    if frame.index.hasnans or not frame.index.is_unique:
+        raise ValueError(f"{name} control availability times must be unique and non-null")
+    return frame.sort_index()
+
+
+def _control_row_asof(history: pd.DataFrame, dt: pd.Timestamp,
+                      max_age: pd.Timedelta, name: str) -> pd.Series:
+    """Select only information available by dt; fail closed on absent/stale rows."""
+    pos = history.index.searchsorted(dt, side="right") - 1
+    if pos < 0:
+        raise ValueError(f"No {name} controls available at or before {dt}")
+    available_at = history.index[pos]
+    if dt - available_at > max_age:
+        raise ValueError(f"Stale {name} controls at {dt}: available {available_at}")
+    return history.iloc[pos]
+
+
 def _prepare_controls(sector_map: pd.Series, beta: pd.Series, size: pd.Series, ff_row: Optional[pd.Series] = None) -> pd.DataFrame:
     ctrl = pd.DataFrame({"beta": pd.to_numeric(beta, errors="coerce"), "size": pd.to_numeric(size, errors="coerce")})
     # Sector dummies; merge tiny sectors into misc
@@ -152,10 +173,18 @@ def run_alpha_pipeline(
     - theta: dict of thematic composites (Date x Ticker)
     - sector_map: Series indexed by ticker with sector codes
     - beta_series: DataFrame (Date x Ticker) of betas
-    - size_series: Series or DataFrame of size proxy (Date x Ticker)
+    - size_series: DataFrame of size proxy (availability time x Ticker)
+    - control_max_age_days: nonnegative calendar days in config; default 0
+      requires an exact availability timestamp. No future fallback is permitted.
     - factors_for_ic: optional raw/purified factors for IC weighting
     """
     cfg = json.loads(Path(cfg_path).read_text())
+    age_days = cfg.get("control_max_age_days", 0)
+    if isinstance(age_days, bool) or not isinstance(age_days, (int, float)) or not np.isfinite(age_days) or age_days < 0:
+        raise ValueError("control_max_age_days must be a finite nonnegative number")
+    max_control_age = pd.Timedelta(days=age_days)
+    beta_series = _control_history(beta_series, "beta")
+    size_series = _control_history(size_series, "size")
     loader = AlphaDataLoader(cfg)
     price = loader.load_price()
     volume = loader.load_volume()
@@ -170,8 +199,8 @@ def run_alpha_pipeline(
     # Purify returns per date
     purged_returns_rows = []
     for dt, row in fwd.iterrows():
-        size_row = size_series.loc[dt] if dt in size_series.index else size_series.iloc[-1]
-        beta_row = beta_series.loc[dt] if dt in beta_series.index else beta_series.iloc[-1]
+        size_row = _control_row_asof(size_series, dt, max_control_age, "size")
+        beta_row = _control_row_asof(beta_series, dt, max_control_age, "beta")
         ff_row = None
         if ff is not None and dt in ff.index:
             if ff.loc[dt].notna().mean() >= cfg.get("min_ff_coverage", 0.0):
@@ -187,8 +216,8 @@ def run_alpha_pipeline(
     for name, fac in theta.items():
         resids = []
         for dt, row in fac.iterrows():
-            size_row = size_series.loc[dt] if dt in size_series.index else size_series.iloc[-1]
-            beta_row = beta_series.loc[dt] if dt in beta_series.index else beta_series.iloc[-1]
+            size_row = _control_row_asof(size_series, dt, max_control_age, "size")
+            beta_row = _control_row_asof(beta_series, dt, max_control_age, "beta")
             ff_row = None
             if ff is not None and dt in ff.index:
                 if ff.loc[dt].notna().mean() >= cfg.get("min_ff_coverage", 0.0):
@@ -205,8 +234,8 @@ def run_alpha_pipeline(
         for name, fac in raw_factors.items():
             resids = []
             for dt, row in fac.iterrows():
-                size_row = size_series.loc[dt] if dt in size_series.index else size_series.iloc[-1]
-                beta_row = beta_series.loc[dt] if dt in beta_series.index else beta_series.iloc[-1]
+                size_row = _control_row_asof(size_series, dt, max_control_age, "size")
+                beta_row = _control_row_asof(beta_series, dt, max_control_age, "beta")
                 ff_row = None
                 if ff is not None and dt in ff.index:
                     if ff.loc[dt].notna().mean() >= cfg.get("min_ff_coverage", 0.0):

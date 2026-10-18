@@ -5,6 +5,7 @@
   "factor_dir": "../data/factors",
   "output_dir": "../../data/alpha",
   "beta_window": 252,
+  "control_max_age_days": 0,
   "ic_window": 252,
   "mlr_window": 252,
   "mlr_ridge_alpha": 0.1,
