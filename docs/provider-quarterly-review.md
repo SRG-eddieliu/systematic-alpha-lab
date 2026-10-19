@@ -1,5 +1,9 @@
 # Provider-only quarterly financial-quality diagnostics
 
+For an explicit multi-company sample and exact capture replay, use the
+[offline batch review](provider-batch-review.md). It preserves company isolation
+and reports missing or rejected sources without silently reducing the sample.
+
 The [statement review](provider-statement-review.md) now includes a quarterly TTM
 path using existing Alpha Vantage captures. The provider's
 [documentation](https://www.alphavantage.co/documentation/) describes annual and

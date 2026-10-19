@@ -145,6 +145,14 @@ class SnapshotStore:
                                 (request_id,)).fetchone()
         return dict(record) if record is not None else None
 
+    def get(self, snapshot_id: str) -> dict | None:
+        """Resolve an exact capture without falling back to a newer version."""
+        if not isinstance(snapshot_id, str) or not re.fullmatch(r"[0-9a-f]{32}", snapshot_id):
+            raise ValueError("Invalid snapshot identifier")
+        with self._db() as db:
+            record = db.execute("SELECT * FROM snapshots WHERE id=?", (snapshot_id,)).fetchone()
+        return dict(record) if record is not None else None
+
     def read_payload(self, record: dict) -> dict:
         body = (self.root / record["raw_path"]).read_bytes()
         if hashlib.sha256(body).hexdigest() != record["raw_sha256"]:
