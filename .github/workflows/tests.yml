@@ -16,3 +16,4 @@ jobs:
       - run: python -m pip install -e '.[dev]'
       - run: pytest -q
       - run: python examples/consolidated_import_demo.py
+      - run: python examples/av_batch_review_demo.py
