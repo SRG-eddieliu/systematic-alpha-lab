@@ -28,7 +28,9 @@ def contexts(dates=None, start="2019-07-01"):
         fiscal_start = pd.Timestamp(start, tz="UTC") if i < 4 else dates[3] + pd.Timedelta(days=1)
         accession = f"0000000042-20-{i + 1:06d}"
         form = "10-K" if quarter == 4 else "10-Q"
-        filings.append({"accession": accession, "report_date": end, "form": form})
+        filings.append(
+            {"accession": accession, "report_date": end, "form": form, "filing_date": end + pd.Timedelta(days=45)}
+        )
         base = {
             "cik": "0000000042",
             "namespace": "us-gaap",
@@ -162,6 +164,92 @@ def test_amendments_stay_separate_and_duplicate_originals_are_rejected():
         sec_quarterly_diagnostic(facts, pd.concat([filings, amendment.assign(form="10-Q")]))
 
 
+def amended_contexts(index=1):
+    facts, filings = contexts()
+    accession = "0000000042-20-999998"
+    original = filings.accession.iloc[index]
+    amendment = filings.iloc[[index]].assign(accession=accession, form=filings.form.iloc[index] + "/A")
+    amendment.filing_date += pd.Timedelta(days=8)
+    revised = facts.loc[facts.accession.eq(original)].assign(accession=accession)
+    # A later amendment is present but must never be chosen automatically.
+    later = amendment.assign(accession="0000000042-20-999999")
+    later_facts = revised.assign(accession=later.accession.iloc[0], value_text="999")
+    selected = filings.accession.tolist()
+    selected[index] = accession
+    return pd.concat([facts, revised, later_facts]), pd.concat([filings, amendment, later]), selected
+
+
+def test_explicit_amendment_replacement_preserves_values_and_propagates_dependencies():
+    facts, filings, selected = amended_contexts()
+    baseline = sec_quarterly_diagnostic(facts, filings)
+    output = sec_quarterly_diagnostic(facts, filings, filing_accessions=selected)
+    np.testing.assert_allclose(output.operating_cash_flow_quarter, baseline.operating_cash_flow_quarter)
+    assert output.form.iloc[1] == "10-Q/A"
+    assert output.filing_date.iloc[1] == baseline.filing_date.iloc[1] + pd.Timedelta(days=8)
+    assert output.filing_is_amendment.tolist() == [False, True] + [False] * 6
+    assert output.quarter_input_involves_amendment.tolist() == [False, True, True] + [False] * 5
+    assert output.cash_flow_previous_accession.iloc[2] == selected[1]
+    assert output.ttm_amendment_input_involved.iloc[:4].isna().all()
+    assert output.ttm_amendment_input_involved.iloc[4:].tolist() == [True, True, False, False]
+    assert output.available_at.isna().all()
+    assert baseline.selection_policy.eq("original_only").all()
+    assert output.selection_policy.eq("explicit_accession_list").all()
+    pd.testing.assert_frame_equal(
+        output,
+        sec_quarterly_diagnostic(facts, filings.sample(frac=1, random_state=4), filing_accessions=selected[::-1]),
+    )
+
+
+def test_amended_opening_assets_flag_a_ttm_without_amended_quarter_flows():
+    facts, filings, selected = amended_contexts(index=0)
+    direct = facts.loc[facts.accession.isin(selected[1:3]) & facts.tag.eq(NI) & facts.duration_days.le(120)].copy()
+    direct.tag = CFO
+    direct.value_text = ["8", "10"]
+    output = sec_quarterly_diagnostic(pd.concat([facts, direct]), filings, filing_accessions=selected)
+    assert not output.quarter_input_involves_amendment.iloc[1:5].any()
+    assert output.ttm_amendment_input_involved.iloc[4:].tolist() == [True, False, False, False]
+
+
+def test_selected_annual_amendment_keeps_form_and_requires_fy_metadata():
+    facts, filings, selected = amended_contexts(index=3)
+    output = sec_quarterly_diagnostic(facts, filings, filing_accessions=selected)
+    assert output.form.iloc[3] == "10-K/A"
+    assert output.fiscal_quarter.iloc[3] == 4
+    assert output.cash_flow_basis.iloc[3] == "annual_minus_q3_ytd"
+    facts.loc[facts.accession.eq(selected[3]), "source_fp"] = "Q3"
+    rejected = sec_quarterly_diagnostic(facts, filings, filing_accessions=selected)
+    assert pd.isna(rejected.fiscal_quarter.iloc[3])
+    assert pd.isna(rejected.operating_cash_flow_quarter.iloc[3])
+
+
+@pytest.mark.parametrize(
+    "selection, message",
+    [
+        ([], "nonempty list"),
+        ("0000000042-20-000001", "nonempty list"),
+        ([True], "Invalid selected"),
+        (["bad"], "Invalid selected"),
+        (["0000000042-20-000001"] * 2, "Duplicate selected"),
+        (["0000000042-20-888888"], "missing from metadata"),
+        (["0000000042-20-000002", "0000000042-20-999998"], "Multiple original or selected"),
+    ],
+)
+def test_invalid_explicit_selections_are_rejected(selection, message):
+    facts, filings, _ = amended_contexts()
+    with pytest.raises(ValueError, match=message):
+        sec_quarterly_diagnostic(facts, filings, filing_accessions=selection)
+
+
+@pytest.mark.parametrize(
+    "field, value", [("form", "8-K"), ("report_date", pd.NaT), ("report_date", pd.Timestamp("2008-12-31", tz="UTC"))]
+)
+def test_selected_metadata_is_never_silently_filtered(field, value):
+    facts, filings = contexts()
+    filings.loc[0, field] = value
+    with pytest.raises(ValueError, match="unsupported|missing or before"):
+        sec_quarterly_diagnostic(facts, filings, filing_accessions=filings.accession.tolist())
+
+
 def test_input_immutability_order_and_future_mutation():
     facts, filings = contexts()
     original = facts.copy(deep=True)
@@ -250,7 +338,8 @@ def test_verified_source_wrapper_replay_and_corruption(tmp_path, monkeypatch):
         review_sec_quarterly_snapshots(store, source, submission)
 
 
-def test_filing_date_conflict_remains_a_source_gate(tmp_path):
+@pytest.mark.parametrize("explicit_selection", [False, True])
+def test_filing_date_conflict_remains_a_source_gate(tmp_path, explicit_selection):
     store = SnapshotStore(tmp_path)
     source, submission = capture(store)
     payload = store.read_payload(source)
@@ -259,4 +348,21 @@ def test_filing_date_conflict_remains_a_source_gate(tmp_path):
         "sec", json.loads(source["request_json"]), json.dumps(payload).encode(), observed_at="2022-01-01T00:00:00Z"
     )
     with pytest.raises(ValueError, match="metadata conflicts"):
-        review_sec_quarterly_snapshots(store, conflict, submission)
+        # Omitting the conflicted accession from the scenario cannot bypass
+        # verification of the complete pinned source input.
+        selected = contexts()[1].accession.tolist()[1:] if explicit_selection else None
+        review_sec_quarterly_snapshots(store, conflict, submission, filing_accessions=selected)
+
+
+def test_explicit_selection_is_bound_to_replay_identity(tmp_path):
+    store = SnapshotStore(tmp_path)
+    source, submission = capture(store)
+    selected = contexts()[1].accession.tolist()
+    original = review_sec_quarterly_snapshots(store, source, submission)
+    explicit = review_sec_quarterly_snapshots(store, source, submission, filing_accessions=selected)
+    assert original["normalizer"] != explicit["normalizer"]
+    assert explicit["provenance"]["filing_accessions"] == sorted(selected)
+    assert explicit == review_sec_quarterly_snapshots(store, source, submission, filing_accessions=selected[::-1])
+    assert original["provenance"]["filing_accessions"] is None
+    subset = review_sec_quarterly_snapshots(store, source, submission, filing_accessions=selected[1:])
+    assert subset["normalizer"] != explicit["normalizer"]

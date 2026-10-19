@@ -48,12 +48,31 @@ def _number(value):
     return result
 
 
-def sec_quarterly_diagnostic(facts: pd.DataFrame, filings: pd.DataFrame, *, unit="USD", min_report_end="2009-01-01"):
+def _selection(filing_accessions):
+    if filing_accessions is None:
+        return None
+    if not isinstance(filing_accessions, (list, tuple)) or not filing_accessions:
+        raise ValueError("Declare a nonempty list of filing accessions")
+    if any(
+        not isinstance(value, str) or not re.fullmatch(r"[0-9]{10}-[0-9]{2}-[0-9]{6}", value)
+        for value in filing_accessions
+    ):
+        raise ValueError("Invalid selected filing accession")
+    if len(set(filing_accessions)) != len(filing_accessions):
+        raise ValueError("Duplicate selected filing accession")
+    return sorted(filing_accessions)
+
+
+def sec_quarterly_diagnostic(
+    facts: pd.DataFrame, filings: pd.DataFrame, *, unit="USD", min_report_end="2009-01-01", filing_accessions=None
+):
     """Use reported quarters first; difference explicit YTD contexts if needed.
 
     Fiscal labels come only from facts in the filing's own report period.
-    Differences use adjacent original filings of the same fiscal year/start,
+    Differences use adjacent selected filings of the same fiscal year/start,
     retain both accessions and remain unverified snapshot-vintage arithmetic.
+    Defaults use originals only. A complete explicit accession list can select
+    amendments, without assigning them the original filing's availability.
     No source value, filing date, availability time or missing quarter is filled.
     """
     required = {
@@ -81,9 +100,19 @@ def sec_quarterly_diagnostic(facts: pd.DataFrame, filings: pd.DataFrame, *, unit
     boundary = boundary.tz_localize("UTC") if boundary.tzinfo is None else boundary.tz_convert("UTC")
     if pd.isna(boundary):
         raise ValueError("Invalid reporting boundary")
-    scope = filings.loc[filings.form.isin(["10-K", "10-Q"]) & filings.report_date.ge(boundary)].copy()
+    selected = _selection(filing_accessions)
+    if selected is None:
+        scope = filings.loc[filings.form.isin(["10-K", "10-Q"]) & filings.report_date.ge(boundary)].copy()
+    else:
+        if not set(selected).issubset(set(filings.accession)):
+            raise ValueError("Selected filing accession missing from metadata")
+        scope = filings.loc[filings.accession.isin(selected)].copy()
+        if not scope.form.isin(["10-K", "10-Q", "10-K/A", "10-Q/A"]).all():
+            raise ValueError("Selected filing form is unsupported")
+        if not scope.report_date.ge(boundary).all():
+            raise ValueError("Selected filing report date is missing or before the boundary")
     if scope.report_date.duplicated().any():
-        raise ValueError("Multiple original filings for one report end; choose sources explicitly")
+        raise ValueError("Multiple original or selected filings for one report end; choose one accession")
     if scope.empty:
         raise ValueError("No original quarterly or annual filings in scope")
     rows = []
@@ -99,6 +128,9 @@ def sec_quarterly_diagnostic(facts: pd.DataFrame, filings: pd.DataFrame, *, unit
             "cik": str(facts.cik.iloc[0]),
             "accession": filing.accession,
             "form": filing.form,
+            "filing_date": filing.get("filing_date", pd.NaT),
+            "selection_policy": "original_only" if selected is None else "explicit_accession_list",
+            "filing_is_amendment": filing.form.endswith("/A"),
             "period_end": filing.report_date,
             "currency": unit,
             "unit": unit,
@@ -134,7 +166,10 @@ def sec_quarterly_diagnostic(facts: pd.DataFrame, filings: pd.DataFrame, *, unit
                 and np.isfinite(year)
                 and 1 <= year <= 9999
                 and year == int(year)
-                and ((filing.form == "10-K" and quarter == 4) or (filing.form == "10-Q" and quarter in (1, 2, 3)))
+                and (
+                    (filing.form.removesuffix("/A") == "10-K" and quarter == 4)
+                    or (filing.form.removesuffix("/A") == "10-Q" and quarter in (1, 2, 3))
+                )
             ):
                 row.update(fiscal_year=int(year), fiscal_quarter=quarter, fiscal_label_status="filing_current_period")
         assets, _ = _one(current, "Assets")
@@ -242,6 +277,18 @@ def sec_quarterly_diagnostic(facts: pd.DataFrame, filings: pd.DataFrame, *, unit
     frame["cross_filing_differencing"] = (
         frame.income_previous_accession.notna() | frame.cash_flow_previous_accession.notna()
     )
+    amendments = set(frame.loc[frame.filing_is_amendment, "accession"])
+    frame["quarter_input_involves_amendment"] = (
+        frame.filing_is_amendment
+        | frame.income_previous_accession.isin(amendments)
+        | frame.cash_flow_previous_accession.isin(amendments)
+    )
+    # Four quarterly flows plus the opening asset observation can depend on
+    # an amendment. Keep unavailable windows unknown instead of marking false.
+    amendment_input = frame.quarter_input_involves_amendment.rolling(4).max().eq(1) | frame.filing_is_amendment.shift(
+        4, fill_value=False
+    )
+    frame["ttm_amendment_input_involved"] = amendment_input.astype("boolean").where(frame.calculation_ready)
     frame["version_status"] = "current_aggregate_cross_filing_vintages_unverified"
     frame["timing_status"] = "snapshot_only_availability_unverified"
     frame["available_at"] = pd.Series(pd.NaT, index=frame.index, dtype="datetime64[ns, UTC]")
@@ -256,13 +303,17 @@ def review_sec_quarterly_snapshots(
     history_records=(),
     unit="USD",
     min_report_end="2009-01-01",
+    filing_accessions=None,
 ):
     """Strict source verification, including filing-date conflict rejection."""
+    selected = _selection(filing_accessions)
     source = replay_sec_facts(store, facts_record, submissions_record, history_records=history_records)
     provenance = {
         "source_manifest": source,
         "unit": unit,
         "min_report_end": min_report_end,
+        "filing_accessions": selected,
+        "selection_policy": "original_only" if selected is None else "explicit_accession_list",
         "normalizer_source_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "calculation_source_sha256": hashlib.sha256(
             Path(__file__).resolve().parents[1].joinpath("factor_research/financial_quality.py").read_bytes()
@@ -278,5 +329,7 @@ def review_sec_quarterly_snapshots(
         name: pd.read_parquet(store.root / item["path"], use_threads=False, pre_buffer=False)
         for name, item in source["tables"].items()
     }
-    result = sec_quarterly_diagnostic(tables["facts"], tables["filings"], unit=unit, min_report_end=min_report_end)
+    result = sec_quarterly_diagnostic(
+        tables["facts"], tables["filings"], unit=unit, min_report_end=min_report_end, filing_accessions=selected
+    )
     return store.publish_tables(facts_record, version, {"quarterly_review": result}, provenance=provenance)

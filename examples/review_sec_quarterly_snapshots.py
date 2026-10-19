@@ -16,6 +16,7 @@ def main():
     parser.add_argument("--history-snapshots", nargs="*", default=[])
     parser.add_argument("--unit", default="USD")
     parser.add_argument("--min-report-end", default="2009-01-01")
+    parser.add_argument("--filing-accessions-file", type=Path, help="JSON array selecting every filing row explicitly")
     args = parser.parse_args()
     try:
         store = SnapshotStore(args.data_root)
@@ -32,8 +33,11 @@ def main():
             history_records=records[2:],
             unit=args.unit,
             min_report_end=args.min_report_end,
+            filing_accessions=json.loads(args.filing_accessions_file.read_text())
+            if args.filing_accessions_file
+            else None,
         )
-    except (ValueError, FileNotFoundError):
+    except (ValueError, OSError):
         parser.exit(1, "Pinned SEC inputs, source contract or integrity rejected.\n")
     print(json.dumps(manifest, indent=2))
 
