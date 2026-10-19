@@ -110,6 +110,7 @@ For live ingestion, provide local credentials in `config/credentials.yml` or `co
 
 ## Documentation
 
+- [SEC quarterly and TTM snapshot diagnostics](docs/sec-quarterly-review.md)
 - [Multi-company financial statement diagnostics and pinned replay](docs/provider-batch-review.md)
 - [Architecture](docs/architecture.md)
 - [Research workflow and APIs](docs/research_workflow.md)
