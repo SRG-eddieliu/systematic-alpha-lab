@@ -39,7 +39,7 @@ class AlphaVantageRESTClient:
         options = dict(params or {})
         if any(str(key).lower() in {"apikey", "api_key", "function", "token", "password"} for key in options):
             raise ValueError("Request parameters cannot override credentials or function")
-        payload = {"function": function, "apikey": self.api_key, **options}
+        payload = {"function": function, **options, "apikey": self.api_key}
         logger.info("Fetching %s via REST", function)
         try:
             response = self.session.get(BASE_URL, params=payload, timeout=(10, 60), allow_redirects=False)
