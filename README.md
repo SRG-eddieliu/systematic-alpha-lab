@@ -111,6 +111,7 @@ For live ingestion, provide local credentials in `config/credentials.yml` or `co
 ## Documentation
 
 - [Factor diagnostic arithmetic, missingness and coverage](docs/factor-analytics.md)
+- [Weighting and monthly study-split contracts](docs/research-correctness-contracts.md)
 - [Monthly adjusted-price snapshots and one-month change diagnostics](docs/monthly-price-snapshots.md)
 - [SEC quarterly and TTM snapshot diagnostics](docs/sec-quarterly-review.md)
 - [Multi-company financial statement diagnostics and pinned replay](docs/provider-batch-review.md)

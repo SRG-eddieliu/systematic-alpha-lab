@@ -44,13 +44,28 @@ def pipeline_case(tmp_path):
     raw = {"raw": pd.DataFrame(rng.normal(size=(12, 40)), index=dates, columns=assets)}
     sectors = pd.Series([f"S{i // 10}" for i in range(40)], index=assets)
     controls = {name: pd.DataFrame(rng.normal(size=(12, 40)), index=dates, columns=assets) for name in ["beta", "size"]}
-    def run(selected, age=None):
+    def run(selected, age=None, *, return_all=False):
         options = dict(cfg)
         if age is not None:
             options["control_max_age_days"] = age
+        if return_all:
+            options.update(cov_window=3, ic_window=3, mvo_long_only=False)
         path.write_text(json.dumps(options))
-        return run_alpha_pipeline(path, theta, sectors, selected["beta"], selected["size"], raw_factors=raw)["equal"]["alpha"]
+        result = run_alpha_pipeline(
+            path, theta, sectors, selected["beta"], selected["size"], raw_factors=raw,
+            factors_for_ic=theta if return_all else None,
+        )
+        return result if return_all else result["equal"]["alpha"]
     return dates, controls, run
+
+
+def test_pipeline_labels_covariance_directions_as_heuristics(pipeline_case):
+    _, controls, run = pipeline_case
+    result = run(controls, return_all=True)
+    for name in ("gmv", "mvo"):
+        assert result[name]["weights"]
+        assert result[name]["weighting_kind"] == "normalized_covariance_direction_heuristic"
+    assert result["mvo"]["risk_aversion_effect"] == "none_after_unit_gross_normalization"
 
 
 @pytest.mark.parametrize("name", ["beta", "size"])

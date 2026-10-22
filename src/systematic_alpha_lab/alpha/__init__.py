@@ -11,6 +11,9 @@ from .weighting import (
     weight_mlr,
     weight_bayesian_shrink,
     weight_gmv,
+    weight_gmv_direction,
+    weight_mvo,
+    weight_mvo_direction,
 )
 from .evaluate import evaluate_alpha
 from .pipeline import run_alpha_pipeline
@@ -27,6 +30,9 @@ __all__ = [
     "weight_mlr",
     "weight_bayesian_shrink",
     "weight_gmv",
+    "weight_gmv_direction",
+    "weight_mvo",
+    "weight_mvo_direction",
     "evaluate_alpha",
     "run_alpha_pipeline",
 ]
