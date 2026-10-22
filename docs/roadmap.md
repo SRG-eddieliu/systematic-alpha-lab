@@ -10,7 +10,10 @@ Existing tests cover imports and basic output structure. They do not establish i
 
 1. Add tests for forward-return alignment, missing-data handling, and signal timing.
 2. Verify fundamental release dates and historical universe membership before making point-in-time claims.
-3. Add numerical checks for factor analytics and weighting helpers.
+3. Expand numerical checks for factor analytics and weighting helpers. The
+   [diagnostic arithmetic repair](factor-analytics.md) covers signed bucket
+   spreads, formation-only assignment, missing selected returns, coverage and
+   the initial wealth baseline. Weighting and other analytics still need review.
 4. Replace or explicitly separate the GMV/MVO heuristics from constrained portfolio optimization. Test that any risk-aversion parameter has its intended effect.
 5. Document train/validation/test boundaries for real-data experiments and keep selection separate from final evaluation.
 

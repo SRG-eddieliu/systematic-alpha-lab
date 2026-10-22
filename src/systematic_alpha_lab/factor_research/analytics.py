@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import logging
+import math
+from numbers import Integral, Real
 from pathlib import Path
-from typing import Dict, Tuple
 
 import numpy as np
 import pandas as pd
@@ -12,11 +13,22 @@ from .paths import factors_dir, repo_root
 logger = logging.getLogger(__name__)
 
 
-def _data_quality_stats(df: pd.DataFrame) -> Dict[str, float]:
-    """
-    Basic coverage diagnostics for a factor/composite panel.
-    """
-    if df is None or df.empty:
+def _numeric_panel(frame: pd.DataFrame, name: str) -> pd.DataFrame:
+    """Require unambiguous labels and finite observations, preserving missingness."""
+    if not isinstance(frame, pd.DataFrame):
+        raise TypeError(f"{name} must be a DataFrame")
+    for axis in (frame.index, frame.columns):
+        if not axis.is_unique or axis.to_frame(index=False).isna().to_numpy().any():
+            raise ValueError(f"{name} requires unique, non-null date and asset labels")
+    numeric = frame.apply(pd.to_numeric, errors="raise").astype(float)
+    if np.isinf(numeric.to_numpy()).any():
+        raise ValueError(f"{name} observations must be finite or missing")
+    return numeric
+
+
+def _data_quality_stats(df: pd.DataFrame) -> dict[str, float]:
+    """Coverage over the entire declared panel, including empty dates/assets."""
+    if df is None:
         return {
             "dq_total_dates": 0,
             "dq_total_tickers": 0,
@@ -27,15 +39,13 @@ def _data_quality_stats(df: pd.DataFrame) -> Dict[str, float]:
             "dq_min_coverage": np.nan,
             "dq_pct_allnan_dates": np.nan,
         }
-    # Drop permanently empty rows/cols to avoid penalizing all-NaN tickers/dates
-    df_use = df.loc[df.notna().any(axis=1), df.notna().any(axis=0)]
-    total_dates = df_use.index.nunique()
-    total_tickers = df_use.columns.nunique()
+    df = _numeric_panel(df, "factor")
+    total_dates, total_tickers = df.shape
     total_cells = total_dates * total_tickers
-    non_null = int(df_use.notna().sum().sum())
+    non_null = int(df.notna().sum().sum())
     pct_non_null = non_null / total_cells if total_cells else np.nan
-    coverage = df_use.notna().mean(axis=1) if total_tickers else pd.Series(dtype=float)
-    all_nan_dates = df_use.isna().all(axis=1)
+    coverage = df.notna().mean(axis=1) if total_tickers else pd.Series(dtype=float)
+    all_nan_dates = df.isna().all(axis=1) if total_tickers else pd.Series(dtype=float)
     return {
         "dq_total_dates": total_dates,
         "dq_total_tickers": total_tickers,
@@ -81,34 +91,38 @@ def factor_autocorrelation(factor: pd.DataFrame) -> pd.Series:
     return pd.Series(ac, index=ac_dates).dropna()
 
 
-def factor_monotonicity(factor: pd.DataFrame, fwd_returns: pd.DataFrame, buckets: int = 10) -> Tuple[pd.Series, pd.Series]:
+def factor_monotonicity(factor: pd.DataFrame, fwd_returns: pd.DataFrame, buckets: int = 10) -> tuple[pd.Series, pd.Series]:
+    """Highest-score minus lowest-score bucket, with formation-only assignment.
+
+    Quantiles use all nonmissing factor scores on each common date, before
+    consulting return availability. Ties that collapse the requested quantiles
+    leave the date missing. A bucket mean needs returns for all assigned assets;
+    missing future labels never change assignments or become zero returns.
+    Returns date-level spreads (including missing dates) and mean bucket returns.
+    These are descriptive diagnostics, not an executable portfolio simulation.
     """
-    Returns: decile_spreads (Series) and average_decile_returns (Series of mean across time per decile)
-    """
+    if isinstance(buckets, bool) or not isinstance(buckets, Integral) or buckets < 2:
+        raise ValueError("buckets must be an integer of at least two")
+    factor = _numeric_panel(factor, "factor")
+    fwd_returns = _numeric_panel(fwd_returns, "forward returns")
     common_dates = factor.index.intersection(fwd_returns.index)
-    spreads = []
-    spread_dates = []
-    per_decile = {i: [] for i in range(buckets)}
+    means = pd.DataFrame(np.nan, index=common_dates, columns=range(buckets), dtype=float)
     for dt in common_dates:
-        fac = factor.loc[dt]
-        ret = fwd_returns.loc[dt]
-        aligned = pd.concat([fac, ret], axis=1, join="inner").dropna()
-        if len(aligned) < buckets:
+        scores = factor.loc[dt].dropna()
+        if len(scores) < buckets:
             continue
-        aligned.columns = ["factor", "fwd_ret"]
-        aligned["decile"] = pd.qcut(aligned["factor"], buckets, labels=False, duplicates="drop")
-        decile_means = aligned.groupby("decile")["fwd_ret"].mean()
-        for dec, val in decile_means.items():
-            per_decile[dec].append(val)
-        if not decile_means.empty:
-            spreads.append(decile_means.max() - decile_means.min())
-            spread_dates.append(dt)
-    spread_series = pd.Series(spreads, index=spread_dates)
-    avg_decile = pd.Series({dec: np.nanmean(vals) if len(vals) else np.nan for dec, vals in per_decile.items()})
-    return spread_series.dropna(), avg_decile
+        labels = pd.qcut(scores, buckets, labels=False, duplicates="drop")
+        if labels.nunique() != buckets:
+            continue
+        outcomes = fwd_returns.loc[dt].reindex(scores.index)
+        for bucket in range(buckets):
+            selected = outcomes.loc[labels.eq(bucket)]
+            if selected.notna().all():
+                means.loc[dt, bucket] = selected.mean()
+    return means[buckets - 1] - means[0], means.mean(axis=0)
 
 
-def summarize_analytics(ic: pd.Series, ac: pd.Series, decile_spread: pd.Series, avg_decile: pd.Series) -> Dict[str, float]:
+def summarize_analytics(ic: pd.Series, ac: pd.Series, decile_spread: pd.Series, avg_decile: pd.Series) -> dict[str, float]:
     mean_ic = ic.mean() if not ic.empty else np.nan
     ic_std = ic.std(ddof=1) if len(ic) > 1 else np.nan
     ic_tstat = mean_ic / (ic_std / np.sqrt(len(ic))) if len(ic) > 1 and ic_std and ic_std > 0 else np.nan
@@ -130,7 +144,7 @@ def summarize_analytics(ic: pd.Series, ac: pd.Series, decile_spread: pd.Series, 
     return summary
 
 
-def update_registry(factor_name: str, summary: Dict[str, float], registry_path: Path | None = None) -> Path:
+def update_registry(factor_name: str, summary: dict[str, float], registry_path: Path | None = None) -> Path:
     registry = registry_path or factors_dir() / "factor_analytics_summary.parquet"
     registry.parent.mkdir(parents=True, exist_ok=True)
     if registry.exists():
@@ -185,6 +199,8 @@ def compute_all_analytics(
     decile_spread, avg_decile = factor_monotonicity(factor, fwd_returns, buckets=buckets)
     summary = summarize_analytics(ic, ac, decile_spread, avg_decile)
     summary.update(_data_quality_stats(factor))
+    summary["bucket_spread_observed_dates"] = int(decile_spread.notna().sum())
+    summary["bucket_spread_missing_dates"] = int(decile_spread.isna().sum())
     # Add longer-window IC (12m ~ 252d) for weighting diagnostics
     ic_12m = ic.rolling(252).mean()
     summary["ic_mean_12m"] = ic_12m.iloc[-1] if len(ic_12m) else None
@@ -257,34 +273,36 @@ def long_short_returns(
     top_pct: float = 0.1,
     bottom_pct: float = 0.1,
 ) -> pd.Series:
+    """Equal-weighted selected-leg diagnostic; percentiles use factor scores only.
+
+    Require complete returns in both selected legs and no overlapping assets.
+    Undefined dates remain missing. No return-based constituent replacement,
+    price execution, weight drift, trading costs or delisting model is supplied.
     """
-    Construct a daily long-short return (top minus bottom percentile) using forward returns.
-    Percentiles are specified as fractions (e.g., 0.1 = 10%).
-    """
-    if top_pct <= 0 or bottom_pct <= 0 or top_pct + bottom_pct >= 1:
+    if any(
+        isinstance(value, bool) or not isinstance(value, Real) or not math.isfinite(value) or value <= 0
+        for value in (top_pct, bottom_pct)
+    ) or top_pct + bottom_pct >= 1:
         raise ValueError("top_pct and bottom_pct must be > 0 and sum to < 1.")
 
+    factor = _numeric_panel(factor, "factor")
+    fwd_returns = _numeric_panel(fwd_returns, "forward returns")
     common_dates = factor.index.intersection(fwd_returns.index)
-    ls_ret: list[float] = []
-    ls_dates: list = []
+    result = pd.Series(np.nan, index=common_dates, dtype=float)
     for dt in common_dates:
-        fac = factor.loc[dt]
-        ret = fwd_returns.loc[dt]
-        aligned = pd.concat([fac, ret], axis=1, join="inner").dropna()
-        if aligned.empty:
+        scores = factor.loc[dt].dropna()
+        if scores.empty:
             continue
-        aligned.columns = ["factor", "fwd_ret"]
-        long_cut = aligned["factor"].quantile(1 - top_pct)
-        short_cut = aligned["factor"].quantile(bottom_pct)
-        long_mask = aligned["factor"] >= long_cut
-        short_mask = aligned["factor"] <= short_cut
-        if long_mask.sum() == 0 or short_mask.sum() == 0:
+        long_mask = scores.ge(scores.quantile(1 - top_pct))
+        short_mask = scores.le(scores.quantile(bottom_pct))
+        if not long_mask.any() or not short_mask.any() or (long_mask & short_mask).any():
             continue
-        long_ret = aligned.loc[long_mask, "fwd_ret"].mean()
-        short_ret = aligned.loc[short_mask, "fwd_ret"].mean()
-        ls_ret.append(long_ret - short_ret)
-        ls_dates.append(dt)
-    return pd.Series(ls_ret, index=ls_dates)
+        outcomes = fwd_returns.loc[dt].reindex(scores.index)
+        long_returns, short_returns = outcomes.loc[long_mask], outcomes.loc[short_mask]
+        if long_returns.isna().any() or short_returns.isna().any():
+            continue
+        result.loc[dt] = long_returns.mean() - short_returns.mean()
+    return result
 
 
 def sharpe_ratio(returns: pd.Series, annualization: int = 252) -> float:
@@ -309,7 +327,8 @@ def max_drawdown(returns: pd.Series) -> float:
     if r.empty:
         return np.nan
     cumulative = (1 + r).cumprod()
-    running_max = cumulative.cummax()
+    # The initial wealth is one, even when the first observed return is negative.
+    running_max = cumulative.cummax().clip(lower=1.0)
     drawdowns = cumulative / running_max - 1
     return drawdowns.min()
 
@@ -346,7 +365,7 @@ def diagnostic_ls_backtest(
     }
 
 
-def regress_on_ff(ls_returns: pd.Series, ff_factors: pd.DataFrame) -> Dict[str, float]:
+def regress_on_ff(ls_returns: pd.Series, ff_factors: pd.DataFrame) -> dict[str, float]:
     """
     Regress long-short returns on FF factors (mktrf, smb, hml, rmw, cma, umd).
     Returns alpha, betas, and t-stats (p-values when scipy is available).
