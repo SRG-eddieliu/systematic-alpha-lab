@@ -13,9 +13,17 @@ Existing tests cover imports and basic output structure. They do not establish i
 3. Expand numerical checks for factor analytics and weighting helpers. The
    [diagnostic arithmetic repair](factor-analytics.md) covers signed bucket
    spreads, formation-only assignment, missing selected returns, coverage and
-   the initial wealth baseline. Weighting and other analytics still need review.
-4. Replace or explicitly separate the GMV/MVO heuristics from constrained portfolio optimization. Test that any risk-aversion parameter has its intended effect.
-5. Document train/validation/test boundaries for real-data experiments and keep selection separate from final evaluation.
+   the initial wealth baseline. The [weighting contract](research-correctness-contracts.md)
+   adds covariance-label alignment, finite/PSD checks and hand-calculated
+   coefficient cases. This is not exhaustive numerical certification.
+4. The [explicit covariance-direction APIs](research-correctness-contracts.md)
+   separate the legacy GMV/MVO heuristics from constrained portfolio optimization.
+   Tests verify that positive legacy risk scaling cancels under unit-gross
+   normalization; a genuine constrained optimizer remains a future component.
+5. The [monthly split reference](research-correctness-contracts.md) implements
+   predeclared 60/20/20 month boundaries and purges unavailable labels. Freeze
+   actual input hashes and calendar boundaries after the real-data gate passes;
+   keep model selection separate from final evaluation.
 
 ## Priority 2: Reproducible Examples
 

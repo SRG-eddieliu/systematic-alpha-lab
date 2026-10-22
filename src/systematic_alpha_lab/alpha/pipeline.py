@@ -394,7 +394,7 @@ def run_alpha_pipeline(
             alpha_bayes = pd.DataFrame(bayes_rows).T.sort_index()
             results["bayesian"] = {"weights": last_bayes_w, "alpha": alpha_bayes, "metrics": evaluate_alpha(alpha_bayes, purged_returns)}
 
-    # Risk parity / MVO (rolling, no look-ahead)
+    # Rolling normalized covariance directions; these are coefficient heuristics.
     if not ml_requested:
         dates = list(purged_returns.index)
         ic_window = cfg.get("ic_window", 252)
@@ -435,10 +435,13 @@ def run_alpha_pipeline(
             alpha_rp = pd.DataFrame(gmv_alpha_rows).T.sort_index()
             last_w = gmv_weights_by_date[sorted(gmv_weights_by_date.keys())[-1]]
             results["gmv"] = {"weights": last_w, "alpha": alpha_rp, "metrics": evaluate_alpha(alpha_rp, purged_returns)}
+            results["gmv"]["weighting_kind"] = "normalized_covariance_direction_heuristic"
         if mvo_alpha_rows:
             alpha_mvo = pd.DataFrame(mvo_alpha_rows).T.sort_index()
             last_w = mvo_weights_by_date[sorted(mvo_weights_by_date.keys())[-1]]
             results["mvo"] = {"weights": last_w, "alpha": alpha_mvo, "metrics": evaluate_alpha(alpha_mvo, purged_returns)}
+            results["mvo"]["weighting_kind"] = "normalized_covariance_direction_heuristic"
+            results["mvo"]["risk_aversion_effect"] = "none_after_unit_gross_normalization"
 
     # XGB path (ml-only pod)
     if ml_requested:

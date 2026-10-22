@@ -44,6 +44,12 @@ It cannot verify that the supplied timestamps or universe are themselves genuine
 
 ## Evaluation after the data gate passes
 
+The [coefficient and study-split contracts](research-correctness-contracts.md)
+include a tested monthly 60/20/20 split reference with explicit feature,
+execution and label-availability timestamps. It records source hashes and
+purges labels unavailable before the next segment. It does not certify the
+supplied data or apply this policy automatically to the legacy ML pipeline.
+
 1. Fix the time split before inspecting returns: earliest 60% of usable months for
    development, next 20% for validation, final 20% for testing; record calendar
    boundaries and input hashes. Exclude training observations whose holding periods
