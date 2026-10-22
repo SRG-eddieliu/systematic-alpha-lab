@@ -32,8 +32,9 @@ The generated data includes a deliberately embedded weak momentum effect. These 
 
 ## Focused Research Follow-up
 
-[Financial quality: data gate and protocol](docs/financial-quality-study.md) narrows
-the next study to accrual intensity and one-month returns. A tested release-time
+[Financial quality: data gate and protocol](docs/financial-quality-study.md) locks
+one sub-study of the wider Integrity Factor review to accrual intensity and
+one-month returns. A tested release-time
 selector is implemented; actual market evaluation is pending verified publication
 timestamps, historical eligibility and suitable return data. No alpha result is
 claimed from the current extracts.
@@ -55,6 +56,13 @@ The [shared snapshot pipeline](docs/data-snapshot-pipeline.md) adds bounded
 fundamental-statement collection, immutable JSON observations, a SQLite catalog,
 versioned Parquet staging and offline replay. Retrieval time is separate from
 historical availability; staged reports are not certified market-factor inputs.
+
+The [offline data reader](docs/offline-data-access.md) provides one read-only
+entrypoint for exact existing captures and normalized tables. It exposes source
+identity, hashes, coverage and missingness without fetching data, replacing
+snapshots or silently selecting the latest version. See the
+[Integrity Factor data coverage map](docs/integrity-factor-data-coverage.md) for
+the implemented definitions and remaining source requirements before recomputation.
 
 The [provider-only review](docs/provider-statement-review.md) uses those statement
 captures directly for annual candidate arithmetic and annual/quarterly source
