@@ -7,6 +7,12 @@ Prepared 2026-10-22 (America/Toronto). The companion
 selected definitions. The method contract itself does not certify a provider,
 fraud classifier, Integrity composite or market result.
 
+**Source-target qualification (2026-10-23):** the [target reconciliation and
+source options](beneish-source-options-2026-10-23.md) identify a discrepancy
+between v1's pure-depreciation policy and the paper's historical `DP14-AM65`
+construction, plus debt-lease and income-scope bridges. V1 is unchanged and
+blocked; its equivalence to those historical source targets is not certified.
+
 ## Scope and order
 
 Integrity is the research programme's name, not a measured latent property or an

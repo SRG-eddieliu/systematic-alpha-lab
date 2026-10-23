@@ -1,0 +1,144 @@
+{
+  "validation_date": "2026-10-23",
+  "record_kind": "sanitized_aggregate_evidence_addendum",
+  "pr19_validation": {
+    "reviewed_head": "63a539d33a7e8398475bf4cc7b7f500d6b643399",
+    "merge_commit": "b602430d2ad8471a4ba422baff790a4b99ed8603",
+    "full_local_tests_passed": 799,
+    "independent_focused_audit_tests_passed": 42,
+    "independent_material_findings": 0,
+    "ruff_rules": [
+      "E4",
+      "E7",
+      "E9",
+      "F",
+      "I"
+    ],
+    "diff_check_passed": true,
+    "exact_head_ci_python_versions_passed": [
+      "3.10",
+      "3.11"
+    ]
+  },
+  "method_status": {
+    "unchanged_definition_id": "beneish_2013_cashflow_annual_raw_v1",
+    "paper_source_item_expressions": {
+      "expense": "14-65",
+      "income": "18",
+      "leverage": "(5+9)/6"
+    },
+    "target_equivalence_certified": false,
+    "reconciliation_required": [
+      "expense_target",
+      "debt_lease_scope",
+      "income_attribution_and_discontinued_operations"
+    ],
+    "canonical_fields_filled": false,
+    "definition_or_calculator_changed": false,
+    "standard_definition_satisfied": false,
+    "factor_calculated": false
+  },
+  "av_assessment": {
+    "value_evidence_scope": "original_closed_collection_succeeded_selections_only",
+    "new_financial_api_calls": 0,
+    "original_planned_tasks": 1509,
+    "original_succeeded_tasks": 1394,
+    "original_failed_tasks": 115,
+    "planned_etf_proxy_securities": 503,
+    "exact_sp500_membership_certified": false,
+    "depreciation_finite_annual": 0,
+    "depreciation_annual_rows": 8809,
+    "depreciation_finite_quarterly": 0,
+    "depreciation_quarterly_rows": 35259,
+    "noncurrent_debt_finite_annual": 0,
+    "noncurrent_debt_annual_rows": 8892,
+    "noncurrent_debt_finite_quarterly": 0,
+    "noncurrent_debt_quarterly_rows": 35592,
+    "annual_source_rows_with_joint_finite_debt_components": 4474,
+    "annual_source_rows_with_negative_implied_noncurrent_debt": 316,
+    "same_row_cf_income_comparison_denominator": 0,
+    "all_required_concepts_demonstrated": false,
+    "alternative_av_endpoint_or_upgrade_resolution_demonstrated": false,
+    "provider_can_never_supply_required_concepts_claimed": false,
+    "provider_contacted": false,
+    "new_currency_recovery_version_field_audited": false,
+    "new_normalizer_accepted_by_research_adapter": false
+  },
+  "options": {
+    "av_only_strict": "retain_blocked_until_source_evidence",
+    "bounded_filings_supplement": "recommended_feasibility_after_target_choice_not_executed",
+    "separately_named_av_proxy": "requires_new_definition_and_independent_validation_not_implemented",
+    "new_source_or_proxy_selected": false
+  },
+  "engineering_recovery_handoff": {
+    "review_scope": "read_only_closed_handoff_aggregate_arithmetic_not_source_field_audit",
+    "original_batch_preserved": true,
+    "engineering_pr_still_draft": true,
+    "recovered_selections": 109,
+    "retained_additional_financial_rows": 8123,
+    "quarantined_rows_excluded_from_financial_research": 1204,
+    "combined_securities_with_three_readable_endpoints": 501,
+    "securities_with_quarantined_periods": 46,
+    "securities_still_without_usable_recovery": 2,
+    "tasks_still_without_usable_recovery": 6,
+    "historical_failed_response_bodies_still_unavailable": 8,
+    "research_normalizer_acceptance_passed": false,
+    "research_field_audit_completed": false,
+    "all_periods_complete_or_research_ready_claimed": false
+  },
+  "drive_sample_recovery": {
+    "independently_reviewed": true,
+    "real_cloud_upload_and_authenticated_download_passed": true,
+    "owner_only_metadata_passed": true,
+    "archive_bytes": 14837760,
+    "downloaded_archive_equal": true,
+    "sample_snapshots": 397,
+    "data_files": 1192,
+    "financial_tables": 794,
+    "table_rows": 38105,
+    "restic_check_read_data_passed": true,
+    "pinned_restore_verify_passed": true,
+    "closure_payload_code_and_baseline_checks_passed": true,
+    "os_isolation_tested_denials_passed": true,
+    "python_network_attempts": 0,
+    "reader_equal_to_baseline": true,
+    "successful_runtime_python": "3.12.14",
+    "initial_python_3_9_failure_retained": true,
+    "prepared_runtime_reused": true,
+    "same_mac_independent_directory": true,
+    "different_machine_tested": false,
+    "clean_runtime_rebuild_tested": false,
+    "off_machine_key_recovery_tested": false,
+    "full_collection_cloud_recovery_accepted": false,
+    "new_currency_recovery_version_included": false,
+    "account_wide_quota_read": false,
+    "paid_configuration_performed": false
+  },
+  "public_record_policy": {
+    "aggregate_counts_and_public_code_commits_only": true,
+    "private_lineage_authentication_requires_authorized_records": true,
+    "live_checkpoint": "existing_SRG_main_progress_page"
+  },
+  "primary_references": [
+    "https://cpb-us-w2.wpmucdn.com/sites.udel.edu/dist/a/855/files/2020/07/Earnings-Manipulation-and-Expected-Returns.pdf#page=20",
+    "https://sites.bu.edu/qm222projectcourse/files/2014/08/compustat_users_guide-2003.pdf#page=265",
+    "https://sites.bu.edu/qm222projectcourse/files/2014/08/compustat_users_guide-2003.pdf#page=200",
+    "https://sites.bu.edu/qm222projectcourse/files/2014/08/compustat_users_guide-2003.pdf#page=352",
+    "https://sites.bu.edu/qm222projectcourse/files/2014/08/compustat_users_guide-2003.pdf#page=314",
+    "https://documentation.alphavantage.co/FundamentalDataDocs/gaap_documentation.html",
+    "https://documentation.alphavantage.co/FundamentalDataDocs/index.html",
+    "https://www.alphavantage.co/documentation/",
+    "https://www.sec.gov/search-filings/edgar-application-programming-interfaces"
+  ],
+  "documentation_validation": {
+    "production_code_changed": false,
+    "contract_json_changed": false,
+    "full_test_suite_repeated_for_documentation_only_change": false,
+    "json_parse_and_aggregate_arithmetic_passed": true,
+    "new_note_relative_links_checked": 3,
+    "privacy_pattern_check_passed": true,
+    "independent_recovery_and_privacy_review_passed": true,
+    "independent_engineering_aggregate_review_passed": true,
+    "independent_primary_source_and_method_review_passed": true
+  }
+}
