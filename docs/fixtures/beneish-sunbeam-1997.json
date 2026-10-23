@@ -1,0 +1,17 @@
+{
+  "fixture_id": "author_sunbeam_1997_1996",
+  "source": "https://apps.kelley.iu.edu/Beneish/Content/Examples/SunbeamExample.pdf",
+  "source_input_page": 2,
+  "source_output_page": 3,
+  "scope": "published_example_arithmetic_not_a_historical_data_vintage",
+  "current_year": 1997,
+  "prior_year": 1996,
+  "amount_basis": "common_scale_as_printed",
+  "current": {"AR":"295.6", "CA":"658", "CL":"198.1", "TA":"1120.3", "PPE":"240.9", "LTD":"194.6", "Sales":"1168.2", "Dep":"38.6", "COGS":"837.7", "SGA":"131", "CFO":"-8.2", "IBEI":"109.4"},
+  "prior": {"AR":"213.4", "CA":"624.2", "CL":"271.6", "TA":"1072.7", "PPE":"220.1", "LTD":"201.1", "Sales":"984.2", "Dep":"47.4", "COGS":"900.6", "SGA":"214", "CFO":"14.16", "IBEI":"-228.3"},
+  "published_ratios": {"DSRI":"1.1670", "GMI":"0.3002", "AQI":"0.9282", "SGI":"1.1870", "DEPI":"1.2831", "SGAI":"0.5157", "TATA":"0.1050", "LVGI":"0.7955"},
+  "published_m_score": "-1.884",
+  "published_ratio_absolute_tolerance": "0.00005",
+  "published_score_absolute_tolerance": "0.0005",
+  "decimal_oracle_to_existing_float_score_absolute_tolerance": "1e-12"
+}

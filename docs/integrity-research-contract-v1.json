@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "definition_id": "integrity_research_method_v1",
+  "status": "method_defined_provider_adapter_pending",
+  "beneish": {
+    "definition_id": "beneish_2013_cashflow_annual_raw_v1",
+    "frequency": "annual",
+    "intercept": "-4.840",
+    "coefficients": {
+      "DSRI": "0.920", "GMI": "0.528", "AQI": "0.404", "SGI": "0.892",
+      "DEPI": "0.115", "SGAI": "-0.172", "TATA": "4.679", "LVGI": "-0.327"
+    },
+    "formulas": {
+      "DSRI": "(AR_t / Sales_t) / (AR_p / Sales_p)",
+      "GMI": "((Sales_p - COGS_p) / Sales_p) / ((Sales_t - COGS_t) / Sales_t)",
+      "AQI": "(1 - (CA_t + PPE_t) / TA_t) / (1 - (CA_p + PPE_p) / TA_p)",
+      "SGI": "Sales_t / Sales_p",
+      "DEPI": "(Dep_p / (Dep_p + PPE_p)) / (Dep_t / (Dep_t + PPE_t))",
+      "SGAI": "(SGA_t / Sales_t) / (SGA_p / Sales_p)",
+      "TATA": "(IBEI_t - CFO_t) / TA_t",
+      "LVGI": "((CL_t + LTD_t) / TA_t) / ((CL_p + LTD_p) / TA_p)"
+    },
+    "financial_fields": [
+      {"symbol":"AR", "name":"trade_receivables_net", "basis":"stock", "periods":["t","p"], "av_candidate":"BALANCE_SHEET.currentNetReceivables", "mapping_status":"proxy_until_trade_equivalence_verified"},
+      {"symbol":"CA", "name":"current_assets", "basis":"stock", "periods":["t","p"], "av_candidate":"BALANCE_SHEET.totalCurrentAssets", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"CL", "name":"current_liabilities", "basis":"stock", "periods":["t","p"], "av_candidate":"BALANCE_SHEET.totalCurrentLiabilities", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"TA", "name":"total_assets", "basis":"stock", "periods":["t","p"], "av_candidate":"BALANCE_SHEET.totalAssets", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"PPE", "name":"net_ppe", "basis":"stock", "periods":["t","p"], "av_candidate":"BALANCE_SHEET.propertyPlantEquipment", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"LTD", "name":"long_term_debt_noncurrent", "basis":"stock", "periods":["t","p"], "av_candidate":"BALANCE_SHEET.longTermDebtNoncurrent", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"Sales", "name":"sales", "basis":"annual_flow", "periods":["t","p"], "av_candidate":"INCOME_STATEMENT.totalRevenue", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"COGS", "name":"cost_of_goods_sold", "basis":"annual_flow", "periods":["t","p"], "av_candidate":"INCOME_STATEMENT.costofGoodsAndServicesSold", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"Dep", "name":"depreciation", "basis":"annual_flow", "periods":["t","p"], "av_candidate":"INCOME_STATEMENT.depreciation", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"SGA", "name":"sga_expense", "basis":"annual_flow", "periods":["t","p"], "av_candidate":"INCOME_STATEMENT.sellingGeneralAndAdministrative", "mapping_status":"candidate_requires_verification"},
+      {"symbol":"IBEI", "name":"income_before_extraordinary_items", "basis":"annual_flow", "periods":["t"], "av_candidate":null, "mapping_status":"requires_explicit_income_scope_bridge"},
+      {"symbol":"CFO", "name":"operating_cash_flow", "basis":"annual_flow", "periods":["t"], "av_candidate":"CASH_FLOW.operatingCashflow", "mapping_status":"candidate_requires_verification"}
+    ],
+    "required_amount_count": 22,
+    "optional_prior_fields": ["IBEI", "CFO"],
+    "strict_domain": {
+      "positive_both_periods": ["AR","CA","CL","TA","PPE","Sales","COGS","Dep","SGA"],
+      "nonnegative_both_periods": ["LTD"],
+      "signed_current_period": ["IBEI","CFO"],
+      "gross_margin_positive_both_periods": true,
+      "residual_asset_share_positive_both_periods": true,
+      "all_intermediate_denominators_nonzero_finite": true,
+      "adjacent_verified_fiscal_years": true,
+      "known_annual_duration_and_end_spacing_days_inclusive": [330,400],
+      "same_currency_explicit_scale_compatible_scope": true,
+      "required_mapping_status": "verified_exact"
+    },
+    "risk_direction": "higher_m_score",
+    "primary_output": "continuous_raw_m_score",
+    "reference_screen": {"enabled_by_default":false, "operator":">", "threshold":"-1.78", "meaning":"historical_reference_only_not_fraud_ground_truth"},
+    "preprocessing": "none_no_imputation_clipping_winsorization_or_fitted_scaling",
+    "tata_asset_basis": "ending_total_assets",
+    "source_conflict": "2013 Appendix B says average assets; Appendix A and author Sunbeam arithmetic support ending assets selected here",
+    "proxy_policy": "separate_definition_id_and_standard_definition_satisfied_false",
+    "invalid_result": "null_with_reason_codes_never_zero_or_negative_screen",
+    "fraud_probability_output": false
+  },
+  "accrual_quality": {
+    "definition_id": "accrual_quality_ttm_avg_assets_v1",
+    "formula": "-(sum(NI_four_quarters)-sum(CFO_four_quarters))/((TA_open+TA_close)/2)",
+    "inputs": ["four_verified_quarterly_net_income_flows","four_verified_quarterly_operating_cash_flows","positive_beginning_and_ending_total_assets"],
+    "quarter_end_observations": 5,
+    "adjacent_end_spacing_days_inclusive": [60,120],
+    "full_year_end_spacing_days_inclusive": [330,400],
+    "flow_policy": "verify_quarterly_vs_ytd_do_not_automatically_difference_AV_quarters",
+    "quality_direction": "higher_score",
+    "ni_scope": "documented_net_income_not_automatically_beneish_IBEI"
+  },
+  "benford": {
+    "definition_id": "benford_statement_diagnostics_v1",
+    "output": "descriptive_digit_discrepancies_and_counts",
+    "inferential_p_value": false,
+    "fraud_label": false,
+    "composite_input": false
+  },
+  "integrity_composite": {"enabled":false, "adjusted_m_reconstruction_required":false},
+  "data_gate": {
+    "collection_universe": "frozen_current_sp500_all_securities_with_issuer_links",
+    "primary_beneish_population": "nonfinancial_services_issuers_with_verified_classification_and_semantics",
+    "classification_policy": "exclude_verified_SIC_6000_6899_or_reviewed_equivalent_other_taxonomy_including_REIT_treatment",
+    "unknown_classification": "eligibility_unverified",
+    "separate_statuses": ["arithmetic","definition","source","timing","research"],
+    "required_metadata": ["entity_id","provider_symbol","dated_security_links","period_start","period_end","fiscal_year","period_type","flow_basis","currency","unit_scale","sign_convention","reporting_scope","accounting_basis","source_field","mapping_evidence","provider_request","snapshot_id","normalizer","table","raw_hash","observed_at","universe_version","classification_version"],
+    "historical_additional_requirements": ["authentic_version_available_at","historical_constituents_including_exits","effective_dated_identity","processing_and_execution_calendar","suitable_returns_and_controls"],
+    "unknown_availability": "snapshot_only",
+    "current_membership_is_historical_membership": false,
+    "implicit_refresh_on_read": false
+  },
+  "acceptance_gates": [
+    {"id":"A", "scope":"definition", "requirement":"frozen_formulas_fields_domain_null_policy_sources"},
+    {"id":"B", "scope":"arithmetic", "requirement":"independent_public_fixture_ratios_score_and_scale_invariance"},
+    {"id":"C", "scope":"provider_adapter", "requirement":"strict_semantics_periods_units_provenance_rejections_and_full_universe_accounting"},
+    {"id":"D", "scope":"historical_availability", "requirement":"authentic_vintages_identity_membership_timing_and_no_future_leakage"},
+    {"id":"E", "scope":"empirical_claim", "requirement":"separate_preregistered_classification_or_return_protocol_and_holdout"}
+  ],
+  "primary_sources": [
+    "https://cpb-us-w2.wpmucdn.com/sites.udel.edu/dist/a/855/files/2020/07/Earnings-Manipulation-and-Expected-Returns.pdf",
+    "https://apps.kelley.iu.edu/beneish/mscore/mscoreinput",
+    "https://apps.kelley.iu.edu/Beneish/Content/Examples/SunbeamExample.pdf",
+    "https://documentation.alphavantage.co/FundamentalDataDocs/gaap_documentation.html",
+    "https://xlinux.nist.gov/dads/HTML/benfordslaw.html"
+  ]
+}
