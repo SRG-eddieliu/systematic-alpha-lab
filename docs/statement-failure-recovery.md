@@ -132,11 +132,40 @@ remaining hypothesis, an explicit selection and budget, and a separate receipt.
 
 ## Acceptance evidence
 
-A completed recovery record should include the actual recovery code commit
-and source fingerprints, the unchanged original-input inventory fingerprint,
-the copied-root inventory, new input/output manifest fingerprints, retained
-and quarantined row counts, the remaining unresolved-job count, and the real
-all-pin offline replay result. Preserve the original and new failure histories
-separately. Synthetic tests exercise the recovery contract without publishing
-provider data; actual private verification must establish the result on the
-closed frozen inputs.
+The closed execution on 2026-10-23 used code commit
+`29d5541ce5a57bfaa6a8cae1f1b6579a60478798` and normalizer
+`av_fundamentals_currency_quarantine_v1`. Its fixed
+[aggregate receipt](validation-statement-failure-recovery-2026-10-23.json)
+binds the parent and recovery manifests, selection, code, policy, inventories
+and private verification files.
+
+| Result | Count |
+| --- | ---: |
+| Original successful jobs, preserved | 1,394 |
+| Failed jobs with accepted rows recovered | 109 |
+| Jobs still without usable data | 6 |
+| Newly readable annual / quarterly rows | 1,733 / 6,390 |
+| Source rows preserved in quarantine | 1,204 |
+| Securities with all three statements readable | 501 |
+| Securities with quarantined periods | 46 |
+
+The 501 readable securities do not have certified complete histories. The
+remaining two securities have six empty source responses. The original ledger
+continues to record its 115 failures; only the separate derived version has
+1,503 usable statement jobs.
+
+With network and credential loading blocked, execution wrote only the new
+output root. After closure, independent all-pin replay verified 3,006 financial
+tables / 141,303 financial rows. Quarantine and normalization audit outputs
+bring the selected total to 3,224 tables / 142,725 rows; those diagnostic rows
+are excluded from financial coverage. Every recovered or quarantined source
+row was checked against its original array position and values, including
+source types and per-row currency. All 4,322 parent and 4,762 derived input
+files retained their bytes and modification times during verification.
+
+The local suite passed 992 tests. Python 3.10/3.11
+[CI on the implementation commit](https://github.com/SRG-eddieliu/systematic-alpha-lab/actions/runs/39962196462)
+passed, including its configured examples. Independent review added regression
+guards for numeric precision/type coercion and empty or incomplete receipt
+table sets. Units, accounting semantics and historical research eligibility
+remain unverified.
