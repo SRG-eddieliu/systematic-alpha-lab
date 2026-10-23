@@ -1,9 +1,9 @@
 """Synthetic library-return snapshots: precision, identity and pinned replay."""
-from copy import deepcopy
 import hashlib
 import json
 import socket
 import sqlite3
+from copy import deepcopy
 
 import numpy as np
 import pandas as pd

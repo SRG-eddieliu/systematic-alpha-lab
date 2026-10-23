@@ -37,3 +37,8 @@ where = ["src"]
 [tool.ruff]
 line-length = 120
 target-version = "py310"
+
+[tool.ruff.lint.per-file-ignores]
+# This v1 file is byte-pinned in captured evidence. Keep its source immutable;
+# cosmetic import ordering / exception-style changes belong to a new version.
+"src/systematic_alpha_lab/data_pipeline/yfinance_snapshots.py" = ["I001", "TRY004"]
