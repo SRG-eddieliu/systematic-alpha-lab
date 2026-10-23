@@ -54,6 +54,11 @@ and [premium plans](https://www.alphavantage.co/premium/).
 
 ## Plan a bounded private batch
 
+The following `plan` and `run` commands use the current implementation to
+create and collect a new batch. They do not reproduce the execution policy of
+the original batch, whose collector source and private transport executor are
+pinned separately below.
+
 ```bash
 python examples/collect_fundamental_batch.py plan \
   --data-root "$SRG_DATA_ROOT" --run-id "$SRG_RUN_ID" \
@@ -95,9 +100,12 @@ Imported legacy receipts may contain only observation time; an earlier
 request-start time is not invented. The first implementation paced request
 starts; its source is preserved by the initial collection commit. The final
 implementation additionally persists request completion and waits after it.
-The ongoing original batch uses its exact recorded collector source and a
-separately fingerprinted transport wrapper that waits two seconds after each
-response; its execution receipts retain actual HTTP start and finish times.
+The original batch uses its exact recorded collector source plus an archived
+private transport executor that additionally waits two seconds after a response
+completes. Its private execution receipts retain actual HTTP start and finish
+times. This additional execution policy does not rewrite the original batch
+configuration, its hash, or its collector source pin. Collection and diagnostic
+phases must be recorded separately, with their actual policies and budgets.
 
 ## Execute and recover explicitly
 
@@ -107,6 +115,7 @@ entry point; other tools and the general offline reader must independently
 honor the quiescent-catalog requirement.
 
 ```bash
+# Current implementation: collect a new batch created by the plan command above.
 python examples/collect_fundamental_batch.py run \
   --data-root "$SRG_DATA_ROOT" --run-id "$SRG_RUN_ID" \
   --max-requests 1500 --credentials "$SRG_CREDENTIAL_FILE" \
@@ -137,6 +146,60 @@ Each successful response is captured as a new immutable observation; identical
 raw bytes share their content-addressed object. Changed source code must use
 an appropriate new version. To resume an existing collection, restore the
 exact recorded collector source; offline replay does not require recollection.
+
+### Resume the original batch from its archived execution handoff
+
+The original collector is preserved at commit
+`e3dd34288c0fd959909169dc75ee903ebdcb4161`, with collector source SHA256
+`a9be4edcde6a16c1a81004fff0aa2b7736cce0d5ee6cbcf5f594735f29be2002`.
+These execution pins stay unchanged. The final collector source has separate
+fingerprints under `validation_code_fingerprints` in the public validation
+record; those hashes describe the code being validated, not the collector
+that produced the original observations. The current collection CLI rejects
+an original batch with a different collector source hash. It cannot be used
+as a substitute for the archived original execution command.
+
+Create this independent detached checkout once, then reuse it only at the
+recorded commit. Use the runtime, private configuration and archived executor
+from the original execution handoff. All variables below are private path or
+budget placeholders; no private run identifier or local path belongs in public
+documentation.
+
+```bash
+git worktree add --detach "$SRG_PINNED_EXEC_CHECKOUT" \
+  e3dd34288c0fd959909169dc75ee903ebdcb4161
+
+git -C "$SRG_PINNED_EXEC_CHECKOUT" rev-parse HEAD
+shasum -a 256 \
+  "$SRG_PINNED_EXEC_CHECKOUT/src/systematic_alpha_lab/data_pipeline/fundamental_batch.py" \
+  "$SRG_ARCHIVED_TRANSPORT_EXECUTOR"
+
+cd "$SRG_PINNED_EXEC_CHECKOUT"
+PYTHONPATH="$SRG_PINNED_EXEC_CHECKOUT/src" \
+  python "$SRG_ARCHIVED_TRANSPORT_EXECUTOR" "$SRG_MAX_NEW_ATTEMPTS"
+```
+
+Before invoking the executor, verify the commit, collector source hash and
+executor source hash against the private execution receipt. Archive the exact
+executor source and reference its SHA256 and execution receipt in the public
+validation record. The executor uses the original private root and manifest
+configuration and accepts one integer argument limiting additional attempts.
+At startup it selects existing `failed` jobs with `provider_notice_or_error`
+whose attempt count remains below the frozen per-job budget, passes that set
+as `retry_jobs`, and acknowledges the prior halt with `resume_after_halt=True`.
+Before invocation, review the closed ledger and explicitly authorize that
+startup retry set and halt acknowledgement. The collector does not retry
+automatically during execution. Diagnostic and recovery stages retain their
+separate retry selections, authorizations and execution receipts. In the final
+1,316-attempt stage, the eligible startup retry set was empty; all 1,316
+attempts were pending jobs.
+The frozen run-wide budget still applies; increasing a per-invocation argument
+cannot increase that budget. Record the two-second response-completion policy
+and its actual execution receipts separately from the unchanged collector pin.
+
+Offline replay of this original batch uses the current read-only API below.
+It does not require the archived transport executor, credentials, or a new
+collection request.
 
 ## Close collection and replay with credentials disabled
 

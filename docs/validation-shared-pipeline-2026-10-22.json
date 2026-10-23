@@ -23,96 +23,218 @@
   },
   "batch": {
     "schema": "av_fundamental_batch_v1",
-    "state": "halted",
+    "state": "incomplete",
     "universe_sha256": "0480b3130b45bf645e5491c1cb65e21c2dddc1b1d65bf662e8b836d527cb38ee",
     "universe_scope": "etf_proxy",
     "config_sha256": "66a0f01a2bf1bc9f93ec1ff752a621fd51fccd7c3781827dbd61571fc25d3f42",
-    "manifest_sha256": "030c5caf6d3b738e7eed03ded23ba02a51b3176b2e752abc4c7c472dbd1fc2f2",
-    "input_sha256": "41896f8b2e2be1a436874421f8a69a34fb2180ba8cc7ad5871f0462efafab788",
+    "manifest_sha256": "0158630fa9841eedddc2cd081596409c708d88d2bb2457813811e6bae84e665d",
+    "input_sha256": "2e68d89d85545632ec3026c1dade72695f6eee45a730f508b61f740f41fd7a80",
     "symbols": 503,
     "planned_jobs": 1509,
     "coverage": {
-      "pending": 1362,
+      "pending": 0,
       "inflight": 0,
-      "succeeded": 140,
-      "failed": 7,
+      "succeeded": 1394,
+      "failed": 115,
       "uncertain": 0
     },
     "imported_jobs": 9,
-    "attempts_used": 140,
+    "attempts_used": 1505,
     "max_requests": 1530,
-    "remaining_request_budget": 1390,
+    "remaining_request_budget": 25,
     "failure_categories": {
-      "data_quality": 6,
-      "provider_notice_or_error": 3
+      "data_quality": 109,
+      "provider_notice_or_error": 5,
+      "response_format": 6
     },
-    "halt_reason": "provider_notice_or_error",
+    "halt_reason": null,
     "timing_status": "current_snapshot_only_historical_availability_unverified",
-    "replayed_tables": 280,
-    "replayed_rows": 13455,
+    "replayed_tables": 2788,
+    "replayed_rows": 133180,
     "access_mode": "offline_read_only"
   },
   "offline_verification": {
     "credentials_disabled": true,
     "network_attempts": 0,
-    "input_files": 452,
+    "credential_load_attempts": 0,
+    "writable_store_attempts": 0,
+    "whole_verification_shared_lock": true,
+    "input_files": 4322,
     "content_and_mtime_unchanged": true,
-    "input_inventory_sha256": "935b4bd01c92ad0ce1345974a616fdabc1a99b1ca9c9973c8cde6eede716db7f"
+    "input_inventory_sha256_before": "4f0e50d89f1fe8f92db7a8828f6aee14e118c6fc5e5a3682ce4ec335af63b61a",
+    "input_inventory_sha256_after": "4f0e50d89f1fe8f92db7a8828f6aee14e118c6fc5e5a3682ce4ec335af63b61a",
+    "external_input_inventory_sha256_before": "06cdf9064a1c3a5c5968290038219d19580587eb3a7ca251d2374a62899ed49b",
+    "external_input_inventory_sha256_after": "06cdf9064a1c3a5c5968290038219d19580587eb3a7ca251d2374a62899ed49b"
+  },
+  "attempt_history": {
+    "total_attempts": 1505,
+    "first_attempts": 1500,
+    "explicit_retry_attempts_by_batch_contract": 5,
+    "jobs_with_retries": 5,
+    "retry_attempt_status_counts": {
+      "succeeded": 5
+    },
+    "cumulative_attempt_error_categories": {
+      "data_quality": 109,
+      "provider_notice_or_error": 5,
+      "response_format": 6
+    },
+    "cumulative_provider_notice_attempts": 5,
+    "final_failed_jobs": 115,
+    "final_uncertain_jobs": 0,
+    "final_unsuccessful_latest_error_categories": {
+      "data_quality": 109,
+      "response_format": 6
+    },
+    "recovered_jobs_with_failure_history": 5,
+    "failed_or_uncertain_attempts": 120,
+    "failure_raw_evidence_status_counts": {
+      "snapshot_raw_verified": 109,
+      "response_body_not_recorded": 2,
+      "transport_raw_verified": 3,
+      "recorded_hash_body_not_retained": 6
+    },
+    "provider_notice_attempts_with_retained_body": 3,
+    "provider_notice_attempts_without_retained_body": 2,
+    "all_failure_response_bodies_retained": false,
+    "known_content_addressed_body_files_verified": 1507
   },
   "quality": {
     "profile_version": "av_statement_quality_v1",
     "profile_source_sha256": "022dbfb00379eaa510179e9a710965458930530773fdd5512b8da1c1e9ef0e09",
-    "input_pins_sha256": "379cf2b7b9ba100fa2ec9b5ef2dfb3444cf527105cd55d74af657f3453f73f66",
-    "complete_three_statement_symbols": 45,
+    "input_pins_sha256": "91da45bbe188638ac0babfdc594e3a2c1f91c69b10a1a415bb04d41f4a7cb139",
+    "complete_three_statement_symbols": 455,
     "periods": {
       "annual": {
-        "tables": 140,
-        "rows": 2690
+        "tables": 1394,
+        "rows": 26625
       },
       "quarterly": {
-        "tables": 140,
-        "rows": 10765
+        "tables": 1394,
+        "rows": 106555
       }
     },
     "amount_cells": {
-      "finite": 249005,
-      "missing": 146203,
+      "finite": 2423707,
+      "missing": 1484933,
       "nonnumeric": 0,
       "nonfinite": 0
     },
     "eligibility": "not_certified",
-    "available_at_supplied_rows": 0
+    "available_at_supplied_rows": 0,
+    "successful_statement_counts_per_security": {
+      "3": 455,
+      "2": 6,
+      "1": 17,
+      "0": 25
+    }
   },
   "execution": {
     "collection_code_commit": "e3dd34288c0fd959909169dc75ee903ebdcb4161",
+    "validation_code_commit": "21876eba8b6562adc27842252785e343a537949c",
+    "verifier_source_sha256": "b849946b5c24ba9131d1f1544209159a4af9f0c993bdd597018b03ba05dfe316",
     "collector_source_sha256": "a9be4edcde6a16c1a81004fff0aa2b7736cce0d5ee6cbcf5f594735f29be2002",
     "normalizer_source_sha256": "f7eb4cec65f59d25c6c85e3e8e425d8039636eb94a349618c1c2b406eec6f3c3",
-    "provider_identity_preflight_requests": 3,
-    "new_statement_attempts": 140,
-    "last_notice_classification": "provider_free_rate_or_entitlement_limit",
-    "automatic_retries": 0,
-    "explicit_diagnostic_retries": 2,
-    "early_notice_response_bodies_not_retained": 2,
+    "validation_module_source_sha256": {
+      "fundamental_batch": "6a478ac10a92c09528f1d4e5c88fbbd88c68f29ff4484f7b81e5dd2cfe9b13f8",
+      "fundamental_snapshots": "f7eb4cec65f59d25c6c85e3e8e425d8039636eb94a349618c1c2b406eec6f3c3",
+      "offline_reader": "86cf1c6b21c8b0f79c3cc71a0b9a4e7f0b10e4063e410bd0fb073f0b02664380",
+      "statement_quality": "022dbfb00379eaa510179e9a710965458930530773fdd5512b8da1c1e9ef0e09",
+      "universe": "190863f48047a6f55e569b9e10555b2ecbd66e7dfde49c4faa9d3729484c9940"
+    },
+    "new_statement_attempts": 1505,
+    "collector_implicit_retry_attempts": 0,
+    "wrapper_supports_explicitly_authorized_retry_selection": true,
+    "explicit_retry_attempts_by_batch_contract": 5,
+    "premium_probe_requests": 1,
+    "premium_endpoint_access_observed": true,
+    "premium_probe_series_rows": 100,
+    "actual_subscription_tier": "not_established",
+    "entitlement_is_not_inferred_from_rate_notice_template": true,
+    "final_closed_trace_sha256": "e6e4729d5f2ae962991a009e07f56fdb95c40ef228127c6605c9b277aa251f46",
+    "closed_transport_trace_count": 4,
+    "final_trace_requests": 1316,
+    "final_trace_provider_notices": 0,
+    "final_trace_transport_interval_seconds": 2.0,
+    "final_trace_transport_interval_basis": "after_response_completed",
+    "final_trace_after_response_gap_min_seconds": 2.000035,
+    "final_trace_after_response_gap_max_seconds": 118.470811,
     "pandas_version": "2.2.3",
     "python_version": "3.12.14",
-    "provider_reported_free_rate_or_entitlement_notice": true
+    "premium_probe_raw_sha256": "c8ca58f38afe533706db310d17a0514ba95555826f4b29a2ffc4c63a0d28d207",
+    "provider_identity_preflight_requests": 3,
+    "total_new_av_network_requests_including_preflight_and_probe": 1509,
+    "final_transport_executor_source_sha256": "6f15320fcc8ff02583f1e0a71eef94f56aed8bdc4284b3ee2ff849ee719bd2a0",
+    "source_archives_verified": true,
+    "archived_transport_stages": [
+      {
+        "sha256": "d59f8f21333f28f39183dcdd3ea5e310e23431980e757adb975025e88e3a91e1",
+        "script_sha256": "ad5f1c56ed09be80a22f4537d993ed9c27e34091cae4705b661e997c2c89f6f2",
+        "policy": "request_start",
+        "interval_seconds": 2.0,
+        "requests": 10,
+        "notices": 1,
+        "minimum_response_to_next_request_seconds": 0.040476,
+        "invocation_budget": 25,
+        "stage_number": 1,
+        "explicit_retry_attempts": 1
+      },
+      {
+        "sha256": "5d71aa87898fd49d807568200b1a592308d5603fe30c90ff54128c1e3ec944bb",
+        "script_sha256": "7c4ad9ce5a5611d18fcfb46ab3e627e166b1f23486d9dfbb45f917a8fce2c571",
+        "policy": "request_start",
+        "interval_seconds": 5.0,
+        "requests": 14,
+        "notices": 1,
+        "minimum_response_to_next_request_seconds": 0.041345,
+        "invocation_budget": 25,
+        "stage_number": 2,
+        "explicit_retry_attempts": 1
+      },
+      {
+        "sha256": "74d34d46745bf4cdc3021f1a6a37432086bfdf6ad92254d6b2e29fdb49c9c444",
+        "script_sha256": "6f15320fcc8ff02583f1e0a71eef94f56aed8bdc4284b3ee2ff849ee719bd2a0",
+        "policy": "after_response_completed",
+        "interval_seconds": 2.0,
+        "requests": 25,
+        "notices": 0,
+        "minimum_response_to_next_request_seconds": 2.000187,
+        "invocation_budget": 25,
+        "stage_number": 3,
+        "explicit_retry_attempts": 1
+      },
+      {
+        "sha256": "e6e4729d5f2ae962991a009e07f56fdb95c40ef228127c6605c9b277aa251f46",
+        "script_sha256": "6f15320fcc8ff02583f1e0a71eef94f56aed8bdc4284b3ee2ff849ee719bd2a0",
+        "policy": "after_response_completed",
+        "interval_seconds": 2.0,
+        "requests": 1316,
+        "notices": 0,
+        "minimum_response_to_next_request_seconds": 2.000035,
+        "invocation_budget": 1316,
+        "stage_number": 4,
+        "explicit_retry_attempts": 0
+      }
+    ],
+    "statement_attempts_before_archived_transport_stages": 140,
+    "last_response_received_at": "2026-10-23T03:36:34.278518+00:00"
   },
   "remaining_gaps": [
     "exact_current_index_membership",
     "stable_company_identity",
-    "two_unverified_provider_candidates",
-    "provider_entitlement_or_rate_limit",
-    "incomplete_collection",
-    "source_currency_rejections",
+    "unverified_provider_candidates",
     "units_and_flow_basis",
     "financial_statement_available_at",
-    "historical_vintages_and_membership"
+    "historical_vintages_and_membership",
+    "final_failed_statement_jobs",
+    "source_currency_rejections",
+    "historical_failure_response_bodies_not_fully_retained"
   ],
   "record_date": "2026-10-22",
   "timezone": "America/Toronto",
   "record_kind": "historical_execution_receipt_not_live_checkpoint",
   "validation": {
-    "pytest": "658 passed",
+    "pytest": "667 passed",
     "pytest_warnings": 3286,
     "python": "3.12.14",
     "ruff_new_files": "passed",
@@ -128,24 +250,63 @@
       "symbol_order_cannot_bypass_explicit_refresh",
       "offline_full_manifest_pins",
       "non_scalar_amounts",
-      "provider_scope_cannot_silently_shrink"
-    ]
+      "provider_scope_cannot_silently_shrink",
+      "response_completion_cooldown_with_slow_responses",
+      "error_completion_cooldown",
+      "cooldown_across_restarts_and_batches",
+      "crash_without_completion_waits_full_interval",
+      "clock_rollback_rejected"
+    ],
+    "validated_code_commit": "21876eba8b6562adc27842252785e343a537949c",
+    "ci": {
+      "url": "https://github.com/SRG-eddieliu/systematic-alpha-lab/actions/runs/39892056034",
+      "conclusion": "success",
+      "python_versions": [
+        "3.10",
+        "3.11"
+      ],
+      "tests_and_all_examples": "passed"
+    }
   },
   "validation_code_fingerprints": {
     "src/systematic_alpha_lab/data_pipeline/universe.py": "190863f48047a6f55e569b9e10555b2ecbd66e7dfde49c4faa9d3729484c9940",
-    "src/systematic_alpha_lab/data_pipeline/fundamental_batch.py": "4ab3b46f82a9ca681bbdcc9fb31a557bb13e45739733a774aed6124b5cebd348",
+    "src/systematic_alpha_lab/data_pipeline/fundamental_batch.py": "6a478ac10a92c09528f1d4e5c88fbbd88c68f29ff4484f7b81e5dd2cfe9b13f8",
     "src/systematic_alpha_lab/data_pipeline/statement_quality.py": "022dbfb00379eaa510179e9a710965458930530773fdd5512b8da1c1e9ef0e09",
     "examples/freeze_universe.py": "a6ebb6bc6a14b1cdf7789e3344061118c938c767977ea6224dcfb286d7ef4de5",
-    "examples/collect_fundamental_batch.py": "273ded4c4c32da0bcf919363679aa926cc9d62ad335f129005b4a7a5ec79903f",
+    "examples/collect_fundamental_batch.py": "abb3843055c1cff24cd0824251b7fb43ea648692ba00f19dc0336b5f8d0f089f",
     "examples/shared_pipeline_demo.py": "9c8cec8e4320dc081a36aa6b4c6eedad5eb1c555aa8ae451a63c2b5c4912d0df",
     "tests/test_universe.py": "1ac20d88817d94ee3abea5907fbe354dd34e2c1855d8a91ea41bb7403901641c",
-    "tests/test_fundamental_batch.py": "8f06a8b573508fb0aef100eb21fceaa9401c8011267409e174e61a6293dca917",
+    "tests/test_fundamental_batch.py": "40d06c89c0462a82df926bbab6914384a1ea2a85e631e28fbe7b86e7551c7112",
     "tests/test_statement_quality.py": "0dc6c51b420ef340c7d95eb43e6bdc5f811fef9da53a98466bd46d08af365bf1"
   },
   "private_evidence_fingerprints": {
-    "coverage-and-failures-private.json": "c8a5cf450e61d1a11eef46ad6c2f5e4014f6df89f531f9da4da8d7bbe5ab337b",
-    "closed-batch-quality-private.json": "322d37ace35db89acea71f9acfc4675efdd7b52a7d1f0067706a854dbd396843",
-    "successful-receipts-private.json": "56ed8a75a77c54014bdc754b8e4f7f8fade77b5f6004223b51ec356fba110c70"
+    "final-closed-batch-offline-verification.json": "34880ef9f0bb2bbcea966e2c015b80617a9e6bb94a8952b193c9fa97a99cdefb",
+    "final-coverage-and-failures-private.json": "c6f98ada51ba745317688a734caec5b58960d6fae433ea4c90e21d968cd666cc",
+    "final-closed-batch-quality-private.json": "a83f81078717a557a7be406ad3032c091caad6050c223fd3864801fef55a90fd",
+    "final-successful-receipts-private.json": "6bcddc62a7d894c289497cc64452eb3eb9c9c3b1cdb2cb3f5be70b82fe25c8c1",
+    "final-failure-attempt-history-private.json": "c3321833f2e5a3493d683b7bbd995774e20525cd9bc736eadddcf4f6d478a690",
+    "final-input-inventory-private.json": "4bd0b55e94c63992d1e02e645366d9dbb08a235365bd0a7e7396fa415726ae54",
+    "final-closed-transport-trace-audit-private.json": "6a8b8dc81383edb632096e6bba534bf5809c840a3d6696baf288e0912f3f4583",
+    "final-transport-audit-private.json": "47f0f40a58800b38f2597ddbaf1835dc98350b2c19785588fa699a47e316df45",
+    "premium-probe-summary.json": "1c554e23104395aaff01c13b0fb9dc7dba38f4611d16f5f58f5f16102ad61d1f"
   },
-  "collection_code_version_note": "Original collection source is pinned separately; the final collector fixes order-independent duplicate selection. Existing batches replay offline; collecting them requires the recorded collector version."
+  "collection_code_version_note": "Original observations retain e3dd342 and its original collector hash. Separately archived transport executors record actual completion-based pacing. The validated collector fixes duplicate selection and persists response-completion cooldown. Offline replay uses the final read-only implementation; collection of this original batch requires its recorded collector pin.",
+  "failure_summary": {
+    "final_data_quality_rejections": 109,
+    "data_quality_rejection_reason": "Missing or unsupported reported currency",
+    "final_response_format_failures": 6,
+    "recovered_provider_notice_jobs": 5,
+    "historical_provider_notice_bodies_not_retained": 2,
+    "historical_response_format_bodies_not_retained": 6,
+    "missing_failure_bodies_are_not_reconstructed": true
+  },
+  "identity_metadata_followup": {
+    "official_sec_requests": 2,
+    "http_status_counts": {
+      "403": 2
+    },
+    "verified_company_links_added": 0,
+    "unknown_company_links": 503,
+    "frozen_universe_unchanged": true
+  }
 }
