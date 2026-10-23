@@ -57,8 +57,11 @@ checks the eight-ratio coefficients against the author's public example and
 reproduces an explicitly labeled legacy quarterly proxy with missing/finite,
 company and period guards. Run `python examples/beneish_reproduction_demo.py`
 without credentials. This is arithmetic restoration, not an annual-model adapter,
-fraud probability or validated market signal; Adjusted M and the reported fixed
-composite remain unresolved.
+fraud probability or validated market signal. The
+[definition-gap audit](docs/integrity-definition-gaps-2026-10-22.md) locates the
+report's signed five-factor recipe and Adjusted M1 selection, while documenting
+its disagreement with the saved sixteen-factor output. Adjusted M's generator
+and the fixed recipe's operational transforms and lineage remain unresolved.
 
 ## Implemented Components
 

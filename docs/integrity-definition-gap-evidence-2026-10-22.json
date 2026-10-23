@@ -1,0 +1,162 @@
+{
+  "audit": "integrity_fixed_composite_source_trace_v1",
+  "scope": "Source restoration and aggregate alignment only; no notebook execution, new factor specification, model search, return study or alpha claim",
+  "source_review": {
+    "notebooks_reviewed": 14,
+    "code_cells_reviewed": 204,
+    "nonempty_code_cells_reviewed": 179,
+    "csv_schemas_reviewed": 8,
+    "all_reviewed_source_bytes_unchanged": true
+  },
+  "report_variant": {
+    "role": "July 2025 twenty-page report variant",
+    "sha256": "7c63411b4ead3f97303d6f9b6acfe090d670bb7e348d93621f3ad31bf9898c0b",
+    "selected_factor_picture_visual_review": "Visual source check at physical page 6 / printed page 5",
+    "formula_location": "section 4.5, physical page 8 / printed page 7",
+    "higher_is_better_location": "physical page 9 / printed page 8",
+    "stated_selected_factors": [
+      "Chi2 D1",
+      "Chi2 D2",
+      "Adj M Score1",
+      "R2 Lag1",
+      "R2 Lag2"
+    ],
+    "stated_equal_weight_formula": {
+      "Chi2 D2": 0.2,
+      "Chi2 D1": -0.2,
+      "Adj M Score1": 0.2,
+      "R2 Lag1": -0.2,
+      "R2 Lag2": 0.2
+    },
+    "normalization_for_stated_five_factor_formula": "not_established",
+    "executable_five_factor_generator": "not_found_in_reviewed_notebooks",
+    "bytes": 2134106
+  },
+  "q04_and_checkpoint": {
+    "original_sha256": "0e369846b420fdc1492d19bc05e6b228aa4984cb8c8f6852cbb809c8aec061e9",
+    "checkpoint_sha256": "0e369846b420fdc1492d19bc05e6b228aa4984cb8c8f6852cbb809c8aec061e9",
+    "byte_identical": true,
+    "candidate_names": 19,
+    "available_candidates_in_saved_result": 16,
+    "abs_correlation_threshold": 0.8,
+    "stored_stdout_dropped_factors": [],
+    "raw_m_and_both_adjusted_m_sign": -1,
+    "other_retained_factor_sign": 1,
+    "normalization": "pooled complete-case saved panel zscore, ddof=0; no per-date or train-only fit",
+    "equal_composite": "mean of all 16 normalized columns after fillna(0)",
+    "pca": "PC1 fitted on complete retained panel",
+    "usefulness_weighting": "absolute max correlation with future ret_1y/ret_3y/ret_5y, normalized to sum one",
+    "report_appendix_e_contains_same_dynamic_code_recipe": true
+  },
+  "saved_result_alignment": {
+    "sha256": "0befad0b118dc04bd4b6ee27a64f369ff7df03bea628619f0377e67568e7d93f",
+    "rows": 19228,
+    "columns": 72,
+    "normalized_columns": [
+      "M_score_norm",
+      "adj_M_score2_norm",
+      "adj_M_score1_norm",
+      "chi2_d1_norm",
+      "chi2_d2_norm",
+      "p_chi2_d1_norm",
+      "p_chi2_d2_norm",
+      "max_z_d1_norm",
+      "p_z_d1_norm",
+      "max_z_d2_norm",
+      "p_z_d2_norm",
+      "r2_lag0_norm",
+      "r2_lag1_norm",
+      "r2_lag2_norm",
+      "r2_lag3_norm",
+      "r2_lag4_norm"
+    ],
+    "actual_fiscal_period_start": [
+      1991,
+      3
+    ],
+    "actual_fiscal_period_end": [
+      2020,
+      4
+    ],
+    "equal_mean_comparisons": 19228,
+    "equal_mean_mismatches_at_1e_minus_10": 0,
+    "equal_mean_max_absolute_error": 6.661338147750939e-16,
+    "all_16_normalization_columns_align_with_known_signed_pooled_zscores": true
+  },
+  "recovered": [
+    "The stated five factors, equal coefficient magnitudes, signs and higher-is-better intention for this report variant.",
+    "The exact Q04 dynamic implementation, its normalization and missingness policies, and its stored sixteen-factor equal-mean output.",
+    "The hidden Eddie Analysis checkpoint is identical to Q04; it supplies no alternative five-factor generator."
+  ],
+  "conflicts": [
+    "The same report states five signed factors in section 4.5 but supplies the broader dynamic candidate workflow in Appendix E.",
+    "Under direct raw-field correspondence, stated negative Chi2 D1 and R2 Lag1 and positive Adjusted M1 differ from Q04 signed zscores; the transformation-level mapping is not documented.",
+    "The report describes firm-year scoring while Q04 groups and lags ticker fiscal-quarter rows.",
+    "The report factor table describes R2 lags as return explanatory power, while section 4.1 and Q04 actually use separate NI-on-lagged-CFO regressions; those meanings cannot be silently exchanged."
+  ],
+  "unknown": [
+    "The operational normalization sample, transformation order, missing-value rule, firm-year versus fiscal-quarter frequency and generator for the stated five-factor formula.",
+    "The generating definitions and source lineage of Adjusted M1/M2; separate source investigation is required.",
+    "The upstream generation of the precomputed Benford panel and historical availability of each selected component."
+  ],
+  "minimum_next_inputs": [
+    "A preserved code/version or explicit method record connecting the stated five-factor formula to exact input fields and transformations.",
+    "The Adjusted M1 generator and the intended Benford/statistic definitions.",
+    "If the generator cannot be recovered, obtain an explicit new specification for normalization, directions and missingness and label implementation as a new version rather than recovered historical code."
+  ],
+  "other_named_integrity_function": "Q01 create_integrity_score dynamically zscores available digit metrics and averages with skipna=True; it is not the report five-factor set.",
+  "prepared_date": "2026-10-22",
+  "timezone": "America/Toronto",
+  "code_baseline": {
+    "pr_number": 14,
+    "reviewed_head": "18f0341c6f17d9db2eeef237a5a563cf763a7004",
+    "merge_commit": "4f72449c3e12a21e78a10a92ca95be9888f72efa",
+    "tested_and_merged_tree": "876652e86513f8d74b90b02b80f869b0ee474343",
+    "fresh_review_tests_passed": 547,
+    "network_blocked_examples_passed": 7,
+    "private_beneish_replay_matches_published_aggregate": true,
+    "ci_run_id": 39880208620,
+    "ci_python_versions": [
+      "3.10",
+      "3.11"
+    ]
+  },
+  "other_report_variant": {
+    "role": "previously retained Library report",
+    "bytes": 174407,
+    "sha256": "7fd876d1cd5f6557184439177dfb81d8b1762ee630334507e4a3dacde53c2aa4",
+    "five_equal_weighted_normalized_components_named": true,
+    "adjusted_m_variant_and_signs": "not_established",
+    "chronological_supersession": "not_established"
+  },
+  "adjusted_m_source_trace": {
+    "source_notebooks": 14,
+    "source_code_cells": 204,
+    "xlsx_formula_sets_reviewed": 5,
+    "csv_schemas_reviewed": 13,
+    "earlier_code_trees_candidate_files": 255,
+    "earlier_code_trees_notebooks": 10,
+    "earlier_code_trees_notebook_code_cells": 98,
+    "named_variant_generator_found": false,
+    "initial_input_assembly_export_found": false,
+    "initial_input_table": {
+      "sha256": "0775b0d14b526df37e9968be1bb4a1dee3ffe606b041e270728a1bd7faf71ba5",
+      "bytes": 393310784,
+      "columns": 46,
+      "named_variants_already_present": [
+        "adj_M_score1",
+        "adj_M_score2"
+      ]
+    },
+    "independent_verification_workbook": {
+      "sha256": "77c5d09ab02eae2d4ce6d0494e3d7680b42772003895f0c3922dbb00d1f81285",
+      "worksheet": "sheet1",
+      "tata_weighted_term": "4.679 * (ibq - oancfq) / atq",
+      "total_mapping": "NORMSDIST(total)",
+      "binding_to_named_adjusted_m_variants": "not_found",
+      "source_notebook_or_workbook_execution": false
+    },
+    "search_boundary": "Recorded source files and actual cells only; no claim about unexamined history, ignored files, other machines or cloud copies.",
+    "formula_fitting_or_return_selection_performed": false
+  }
+}
