@@ -8,11 +8,11 @@ they are not counts of distinct fiscal periods or cells in the 354 denominator.
 """
 from __future__ import annotations
 
-from datetime import date, datetime
-from decimal import Decimal, InvalidOperation
 import json
 import math
 import re
+from datetime import date, datetime
+from decimal import Decimal, InvalidOperation
 
 import numpy as np
 import pandas as pd

@@ -1,7 +1,7 @@
 """Self-contained public synthetic contract; no source files or data services."""
-from copy import deepcopy
 import json
 import socket
+from copy import deepcopy
 
 import pandas as pd
 import pytest
