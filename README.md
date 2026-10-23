@@ -43,6 +43,12 @@ explicitly synthetic metadata. Real-source acceptance and empirical validation
 remain pending; historical Adjusted M/fixed-five recovery is no longer
 a prerequisite for this fresh-data research direction.
 
+The [fresh-data field audit](docs/beneish-field-gaps-2026-10-22.md) adds a reusable
+aggregate coverage check and an executed notebook. Its fixed 397-task completed
+prefix exposes missing pure depreciation, noncurrent debt and IBEI; the full
+collection and exact S&P 500 membership remain unverified. Numeric field coverage
+does not certify the annual model's accounting or metadata requirements.
+
 [Financial quality: data gate and protocol](docs/financial-quality-study.md) locks
 one sub-study of the wider Integrity Factor review to accrual intensity and
 one-month returns. A tested release-time
