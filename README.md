@@ -110,6 +110,12 @@ The [SEC connector](docs/sec-filing-snapshots.md) adds explicit CIK collection,
 accession/context staging, unit and duration preservation, and source-bound replay.
 Its synthetic workflow is verified; live statement reconciliation remains pending.
 
+The [currency-recovery intake](docs/beneish-recovery-intake.md) explicitly accepts
+one closed derived version for field audit only, with exhaustive raw/accepted/
+quarantine accounting. Annual scoring remains blocked. A [bounded supplement
+contract](docs/av-primary-supplement-pilot-contract.json) and [method review draft](docs/beneish-paper-target-review-draft.md)
+retain AV as primary while defining separate source and accounting acceptance.
+
 | Component | Code | Scope |
 | --- | --- | --- |
 | Data preparation | [data_pipeline](src/systematic_alpha_lab/data_pipeline) | Ingestion, transformation, quality checks, and Parquet data access |

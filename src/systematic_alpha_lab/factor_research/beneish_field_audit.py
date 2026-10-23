@@ -11,7 +11,7 @@ from collections import Counter
 from collections.abc import Mapping
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
-from numbers import Real
+from numbers import Integral, Real
 
 import pandas as pd
 
@@ -19,6 +19,9 @@ from .beneish_pipeline import AV_CANDIDATES, FUNCTIONS, NORMALIZER
 from .beneish_standard import DEFINITION_ID
 
 AUDIT_VERSION = "beneish_field_coverage_v2"
+CURRENCY_QUARANTINE_NORMALIZER = "av_fundamentals_currency_quarantine_v1"
+RECOVERY_AUDIT_VERSION = "beneish_field_coverage_currency_quarantine_v1"
+SUPPORTED_NORMALIZERS = (NORMALIZER, CURRENCY_QUARANTINE_NORMALIZER)
 TABLES = ("annual", "quarterly")
 _MISSING_MARKERS = {"", "none", "null"}
 _ALTERNATIVES = {
@@ -105,10 +108,10 @@ def _validate_selections(selections):
     return sorted(result, key=lambda item: (FUNCTIONS.index(item["function"]), item["symbol"]))
 
 
-def _validate_read(read, selection, table):
+def _validate_read(read, selection, table, normalizer):
     metadata, frame = getattr(read, "metadata", None), getattr(read, "frame", None)
     expected = {
-        "snapshot_id": selection["snapshot_id"], "normalizer": NORMALIZER, "table": table,
+        "snapshot_id": selection["snapshot_id"], "normalizer": normalizer, "table": table,
         "provider": "alpha_vantage", "request": {"function": selection["function"], "symbol": selection["symbol"]},
     }
     if not isinstance(metadata, Mapping) or any(metadata.get(key) != value for key, value in expected.items()):
@@ -118,12 +121,40 @@ def _validate_read(read, selection, table):
     if any(type(metadata.get(key)) is not int or metadata[key] != len(frame) for key in ("source_rows", "returned_rows")):
         raise ValueError("Returned statement is not the complete pinned source table")
     identities = {
-        "snapshot_id": selection["snapshot_id"], "normalizer": NORMALIZER, "provider": "alpha_vantage",
+        "snapshot_id": selection["snapshot_id"], "normalizer": normalizer, "provider": "alpha_vantage",
         "symbol": selection["symbol"], "source_function": selection["function"], "period_type": table,
     }
     if any(name not in frame or not frame[name].eq(value).fillna(False).all() for name, value in identities.items()):
         raise ValueError("Statement row source identity differs from its pinned metadata")
+    if normalizer == CURRENCY_QUARANTINE_NORMALIZER:
+        _validate_recovery_rows(frame, table)
     return frame
+
+
+def _validate_recovery_rows(frame, table):
+    """Accept financial-row structure, never producer semantic certification.
+
+    Full raw/accepted/quarantine partition and producer policy/code provenance
+    still require the separate closed-handoff reconciliation. These checks do
+    not replace that evidence or prove reporting-currency equivalence.
+    """
+    required = {"source_report_key", "source_row_index", "currency", "reportedCurrency"}
+    diagnostic = {"source_row_json", "reported_currency_json", "quarantine_reason", "source_rows",
+                  "accepted_rows", "quarantined_rows", "recovery_status", "usable_recovery", "eligibility"}
+    if not required.issubset(frame) or diagnostic.intersection(frame):
+        raise ValueError("Recovery financial table lacks lineage or contains diagnostic columns")
+    report_key = "annualReports" if table == "annual" else "quarterlyReports"
+    if not frame.source_report_key.eq(report_key).fillna(False).all():
+        raise ValueError("Recovery source report array differs from the pinned financial table")
+    positions = frame.source_row_index.tolist()
+    if any(not isinstance(value, Integral) or isinstance(value, bool) or value < 0 for value in positions) or (
+        frame.source_row_index.duplicated().any()
+    ):
+        raise ValueError("Recovery source row positions must be unique nonnegative integers")
+    if any(not isinstance(value, str) or re.fullmatch(r"[A-Z]{3}", value) is None for value in frame.currency) or (
+        not frame.currency.eq(frame.reportedCurrency).fillna(False).all()
+    ):
+        raise ValueError("Recovery financial rows must preserve the reported currency without imputation")
 
 
 def _period_counts(frame):
@@ -281,13 +312,19 @@ def _add_frame(group, frame):
                     counts["equal_rows" if net_income == profit_loss else "different_rows"] += 1
 
 
-def audit_beneish_field_coverage(reader, *, selections):
+def audit_beneish_field_coverage(reader, *, selections, normalizer=NORMALIZER):
     """Read annual and quarterly candidate fields through OfflineDataReader.read.
 
     Selections are a nonempty list of exact symbol/function/snapshot_id objects;
     partial endpoint coverage is allowed, duplicate symbol/function choices are
     rejected before reading. Both tables must be materialized for every selected
     source; read failures propagate rather than silently shrinking denominators.
+    The normalizer is an explicit common pin for this selection, restricted to
+    original v1 or the reviewed currency-quarantine version. Audit the recovery
+    increment separately; no latest-version or mixed-normalizer selection occurs.
+    Recovery counts include accepted financial rows only, with source positions
+    retained. Diagnostic tables and their quarantined periods are not read or
+    counted here; the closed-handoff reconciliation accounts for them separately.
     Each function/table denominator includes all its selected provider symbols,
     even an empty table or a symbol with no finite field values. These are source
     statement rows, never aligned research rows or counts of eligible scores.
@@ -303,17 +340,19 @@ def audit_beneish_field_coverage(reader, *, selections):
     The caller supplies a closed, quiescent root; this function never discovers
     latest versions, requests credentials, collects, writes, joins or calculates M.
     """
+    if not isinstance(normalizer, str) or normalizer not in SUPPORTED_NORMALIZERS:
+        raise ValueError("Unsupported explicitly pinned audit normalizer")
     selected = _validate_selections(selections)
     denominators = Counter(item["function"] for item in selected)
     groups = {(function, table): _new_group(function, table, denominators[function])
               for function in FUNCTIONS if function in denominators for table in TABLES}
     for selection in selected:
         for table in TABLES:
-            read = reader.read(snapshot_id=selection["snapshot_id"], normalizer=NORMALIZER, table=table)
-            frame = _validate_read(read, selection, table)
+            read = reader.read(snapshot_id=selection["snapshot_id"], normalizer=normalizer, table=table)
+            frame = _validate_read(read, selection, table, normalizer)
             _add_frame(groups[(selection["function"], table)], frame)
-    return {
-        "audit_version": AUDIT_VERSION, "definition_id": DEFINITION_ID, "normalizer": NORMALIZER,
+    result = {
+        "audit_version": AUDIT_VERSION, "definition_id": DEFINITION_ID, "normalizer": normalizer,
         "selection_count": len(selected), "provider_symbol_count": len({item["symbol"] for item in selected}),
         "semantic_verification_status": "not_assessed", "standard_definition_satisfied": False,
         "factor_calculated": False, "research_ready": False,
@@ -325,3 +364,12 @@ def audit_beneish_field_coverage(reader, *, selections):
         "nonfinite_policy": "native_or_text_nan_infinity_nonfinite_not_missing",
         "network_operations": "none_requested", "groups": list(groups.values()),
     }
+    if normalizer == CURRENCY_QUARANTINE_NORMALIZER:
+        result.update(
+            audit_version=RECOVERY_AUDIT_VERSION,
+            row_basis="currency_accepted_source_statement_rows_not_aligned_research_rows",
+            intake_scope="field_audit_only_not_annual_scoring_adapter_acceptance",
+            raw_partition_status="requires_separate_closed_handoff_reconciliation",
+            diagnostic_tables_excluded=["quarantine", "normalization_audit"],
+        )
+    return result
