@@ -2,7 +2,7 @@
   "status": "passed",
   "definition_id": "beneish_2013_cashflow_annual_raw_v1",
   "checked_scope": "public_fixture_arithmetic_and_contract_structure_only",
-  "contract_sha256": "03a5d8025ecf3d5c895d3a42c4bc339f4841f4374d57ba63bbe4c40647a09fcf",
+  "contract_sha256": "b6063b620b08817b31a0870c8372b91770af330fd374d8bffac40a6221404d46",
   "fixture_sha256": "0706537d545eaefb9e3b9ec912c011f67049b50412209655b6f0e0df5e08e6a3",
   "ratios": {
     "DSRI": "1.1670142885176322820279422824178435507522286547909",

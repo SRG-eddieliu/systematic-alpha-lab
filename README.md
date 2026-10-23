@@ -36,8 +36,11 @@ The generated data includes a deliberately embedded weak momentum effect. These 
 new annual, cash-flow/raw-ratio Beneish specification, required financial fields,
 candidate Alpha Vantage mappings and acceptance gates. Accrual quality and Benford
 remain separate outputs. Run `python examples/verify_integrity_method_contract.py`
-for the public author-fixture arithmetic check. Provider integration and empirical
-validation remain pending; historical Adjusted M/fixed-five recovery is no longer
+for the public author-fixture arithmetic check. The [annual calculator and pinned
+source bridge](docs/annual-beneish-calculator.md) add strict input validation;
+`python examples/annual_beneish_demo.py` runs the author-amount example with
+explicitly synthetic metadata. Real-source acceptance and empirical validation
+remain pending; historical Adjusted M/fixed-five recovery is no longer
 a prerequisite for this fresh-data research direction.
 
 [Financial quality: data gate and protocol](docs/financial-quality-study.md) locks
