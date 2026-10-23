@@ -18,7 +18,7 @@ import pandas as pd
 from .beneish_pipeline import AV_CANDIDATES, FUNCTIONS, NORMALIZER
 from .beneish_standard import DEFINITION_ID
 
-AUDIT_VERSION = "beneish_field_coverage_v1"
+AUDIT_VERSION = "beneish_field_coverage_v2"
 TABLES = ("annual", "quarterly")
 _MISSING_MARKERS = {"", "none", "null"}
 _ALTERNATIVES = {
@@ -28,18 +28,23 @@ _ALTERNATIVES = {
         "netIncome": "not_ibei_without_verified_bridge",
         "netIncomeFromContinuingOperations": "not_ibei_without_verified_bridge",
         "incomeBeforeTax": "not_ibei_not_standard_accepted",
+        "incomeTaxExpense": "tax_component_not_ibei_without_verified_bridge",
     },
     "BALANCE_SHEET": {
         "longTermDebt": "scope_equivalence_unverified",
         "currentLongTermDebt": "current_maturities_not_noncurrent_debt",
+        "currentDebt": "broad_debt_not_noncurrent_debt",
+        "shortLongTermDebtTotal": "broad_debt_not_noncurrent_debt",
         "capitalLeaseObligations": "scope_equivalence_unverified",
         "accumulatedDepreciationAmortizationPPE": "stock_not_current_pure_depreciation_expense",
     },
     "CASH_FLOW": {
         "depreciationDepletionAndAmortization": "not_pure_depreciation_not_standard_accepted",
         "netIncome": "not_ibei_without_verified_bridge",
+        "profitLoss": "consolidated_vs_parent_income_scope_unverified_not_ibei",
     },
 }
+_UNPROMISED_COMPONENT_PROBES = {"INCOME_STATEMENT": ("amortization", "depletion")}
 _ROW_BUCKETS = (
     "column_absent_rows", "missing_marker_rows", "invalid_numeric_rows",
     "nonfinite_numeric_rows", "boolean_rows", "finite_rows",
@@ -174,6 +179,11 @@ def _field_definitions(function):
     for field, constraint in _ALTERNATIVES[function].items():
         definitions[field] = {"canonical_fields": [], "candidate_role": "alternative_candidate",
                               "acceptance_constraint": constraint}
+    for field in _UNPROMISED_COMPONENT_PROBES.get(function, ()):
+        definitions[field] = {
+            "canonical_fields": [], "candidate_role": "probed_unpromised_component",
+            "acceptance_constraint": "no_official_mapping_or_coverage_promised_not_standard_accepted",
+        }
     return definitions
 
 
@@ -202,6 +212,14 @@ def _new_group(function, table, denominator):
             "minuend": "longTermDebt", "subtrahend": "currentLongTermDebt",
             "source_rows": 0, "jointly_finite_rows": 0,
             "difference_nonnegative_rows": 0, "difference_negative_rows": 0,
+            "negative_component_rows": 0, "both_components_nonnegative_rows": 0,
+            "standard_field_filled": False,
+        }
+    if function == "CASH_FLOW":
+        group["cash_flow_income_comparison"] = {
+            "status": "not_IBEI_verification", "left_field": "netIncome", "right_field": "profitLoss",
+            "comparison_basis": "same_source_statement_row_no_cause_inference",
+            "source_rows": 0, "jointly_finite_rows": 0, "equal_rows": 0, "different_rows": 0,
             "standard_field_filled": False,
         }
     return group
@@ -249,6 +267,18 @@ def _add_frame(group, frame):
                     counts["jointly_finite_rows"] += 1
                     # Compare exactly instead of subtracting under a Decimal context.
                     counts["difference_nonnegative_rows" if total >= current else "difference_negative_rows"] += 1
+                    counts["negative_component_rows" if total < 0 or current < 0
+                           else "both_components_nonnegative_rows"] += 1
+    if "cash_flow_income_comparison" in group:
+        counts = group["cash_flow_income_comparison"]
+        counts["source_rows"] += len(frame)
+        if {"netIncome", "profitLoss"}.issubset(parsed):
+            for (_, net_income), (_, profit_loss) in zip(parsed["netIncome"], parsed["profitLoss"]):
+                if net_income is not None and profit_loss is not None:
+                    counts["jointly_finite_rows"] += 1
+                    # Equality needs neither subtraction nor float conversion;
+                    # it does not identify why the two reported values differ.
+                    counts["equal_rows" if net_income == profit_loss else "different_rows"] += 1
 
 
 def audit_beneish_field_coverage(reader, *, selections):
@@ -267,6 +297,9 @@ def audit_beneish_field_coverage(reader, *, selections):
     invalid numerics, nonfinite numerics and finite decimals stay distinct. Finite
     decimals can exceed float calculator limits. No canonical value is created,
     D&A is not pure depreciation, and conditional debt diagnostics fill nothing.
+    Unpromised amortization/depletion probes carry no official mapping or
+    coverage assertion. CF income comparisons stay within the same source row;
+    equality/difference neither establishes IBEI nor explains a scope difference.
     The caller supplies a closed, quiescent root; this function never discovers
     latest versions, requests credentials, collects, writes, joins or calculates M.
     """
