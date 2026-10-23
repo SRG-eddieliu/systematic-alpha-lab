@@ -20,8 +20,10 @@ partial coverage and 25 with no accepted statement. Do not silently exclude the
 
 Final failures comprise 109 data-quality rejections and six response-format
 failures. Five earlier provider notices were retried successfully; they are not
-five additional final failures. Two historical notice response bodies were not
-retained, a known evidence gap to declare in a backup closure. It does not alter
+five additional final failures. Eight historical failed-response bodies are
+unavailable: two notice bodies were not recorded, and six response-format
+attempts retained a body hash without the body. Declare all eight gaps in a
+backup closure; do not claim the entire response history is recoverable. This does not alter
 the selected succeeded-statement field counts. The producer batch remains labelled
 incomplete because final failures remain, even though no requests are pending.
 

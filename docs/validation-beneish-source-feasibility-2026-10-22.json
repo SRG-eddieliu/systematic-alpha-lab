@@ -26,7 +26,10 @@
     "historical_provider_notices": 5,
     "historical_notice_retries_recovered": 5,
     "historical_notice_response_bodies_not_retained": 2,
-    "provider_batch_state": "incomplete_due_to_final_failures"
+    "provider_batch_state": "incomplete_due_to_final_failures",
+    "historical_failed_response_bodies_unavailable_total": 8,
+    "response_format_attempts_hash_retained_but_body_unavailable": 6,
+    "all_historical_failure_bodies_recoverable": false
   },
   "execution": {
     "input_files_unchanged": 4322,
