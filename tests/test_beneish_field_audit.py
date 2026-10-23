@@ -143,6 +143,53 @@ def test_alternatives_never_fill_standard_candidates_and_all_twelve_are_present(
     assert group(result, "BALANCE_SHEET")["fields"]["longTermDebtNoncurrent"]["finite_rows"] == 0
 
 
+def test_v2_candidates_and_unpromised_probes_are_private_noncertifying_and_offline(tmp_path, monkeypatch):
+    sentinel = "76543210987654321098765432109876543210987"
+    store, selections = make_store(tmp_path, [
+        ("PRIVATEPROBE77", "INCOME_STATEMENT", [{"incomeTaxExpense": sentinel, "amortization": sentinel,
+                                              "depletion": sentinel}], [{"incomeTaxExpense": "None"}]),
+        ("PRIVATEPROBE77", "BALANCE_SHEET", [{"currentDebt": sentinel, "shortLongTermDebtTotal": sentinel}],
+         [{"currentDebt": "None"}]),
+        ("PRIVATEPROBE77", "CASH_FLOW", [{"netIncome": sentinel, "profitLoss": sentinel}], [{"profitLoss": "None"}]),
+    ])
+    before, selection_copy = fingerprints(store.root), deepcopy(selections)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("Network attempted")
+
+    monkeypatch.setattr(socket.socket, "connect", forbidden)
+    monkeypatch.setattr(requests.Session, "request", forbidden)
+    result = audit_beneish_field_coverage(OfflineDataReader(store.root), selections=selections)
+    assert result["audit_version"] == "beneish_field_coverage_v2"
+    fields = group(result)["fields"]
+    assert fields["incomeTaxExpense"]["candidate_role"] == "alternative_candidate"
+    assert fields["incomeTaxExpense"]["acceptance_constraint"] == "tax_component_not_ibei_without_verified_bridge"
+    for field in ("amortization", "depletion"):
+        assert fields[field]["candidate_role"] == "probed_unpromised_component"
+        assert fields[field]["canonical_fields"] == []
+        assert fields[field]["acceptance_constraint"] == "no_official_mapping_or_coverage_promised_not_standard_accepted"
+        assert fields[field]["finite_rows"] == 1
+    debt_fields = group(result, "BALANCE_SHEET")["fields"]
+    for field in ("currentDebt", "shortLongTermDebtTotal"):
+        assert debt_fields[field]["candidate_role"] == "alternative_candidate"
+        assert debt_fields[field]["canonical_fields"] == []
+        assert debt_fields[field]["acceptance_constraint"] == "broad_debt_not_noncurrent_debt"
+        assert debt_fields[field]["finite_rows"] == 1
+    profit_loss = group(result, "CASH_FLOW")["fields"]["profitLoss"]
+    assert profit_loss["canonical_fields"] == []
+    assert profit_loss["acceptance_constraint"] == "consolidated_vs_parent_income_scope_unverified_not_ibei"
+    assert fields["incomeBeforeExtraordinaryItems"]["finite_rows"] == 0
+    assert fields["depreciation"]["finite_rows"] == 0
+    assert debt_fields["longTermDebtNoncurrent"]["finite_rows"] == 0
+    assert result["factor_calculated"] is False and result["standard_definition_satisfied"] is False
+    assert result["research_ready"] is False
+    assert fingerprints(store.root) == before and selections == selection_copy
+    encoded = json.dumps(result, allow_nan=False)
+    for private in [str(store.root), "PRIVATEPROBE77", "2025-02-13", sentinel,
+                    *[selection["snapshot_id"] for selection in selections], *[digest for digest, _ in before.values()]]:
+        assert private not in encoded
+
+
 def test_conditional_debt_difference_is_only_an_exact_sign_count(tmp_path):
     rows = [{"longTermDebt": total, "currentLongTermDebt": current} for total, current in [
         ("10", "2"), ("2", "2"), ("1", "2"), ("None", "2"), ("NaN", "2"),
@@ -156,10 +203,104 @@ def test_conditional_debt_difference_is_only_an_exact_sign_count(tmp_path):
     debt = group(result, "BALANCE_SHEET")["conditional_debt_diagnostic"]
     assert debt["jointly_finite_rows"] == 5
     assert debt["difference_nonnegative_rows"] == 3 and debt["difference_negative_rows"] == 2
+    assert debt["negative_component_rows"] == 0 and debt["both_components_nonnegative_rows"] == 5
     assert debt["status"] == "conditional_derivation_only_not_standard_accepted"
     assert debt["standard_field_filled"] is False
     assert group(result, "BALANCE_SHEET", "quarterly")["conditional_debt_diagnostic"]["jointly_finite_rows"] == 0
     assert len(result["groups"]) == 2  # Partial endpoint selection stays partial.
+
+
+def test_debt_components_partition_joint_finite_rows_without_subtraction_or_acceptance(tmp_path):
+    rows = [{"longTermDebt": total, "currentLongTermDebt": current} for total, current in [
+        ("10", "2"), ("2", "2"), ("1", "2"), ("-1", "-2"), ("-2", "-1"), ("1", "-1"), ("-1", "2"),
+        ("-0", "0"), ("1e999999", "1e-999999"),
+        ("10000000000000000000000000001", "10000000000000000000000000002"),
+        ("None", "-1"), ("NaN", "-1"), ("-1", "Infinity"),
+    ]]
+    store, selections = make_store(tmp_path, [("SYNTH", "BALANCE_SHEET", rows, [{"currentLongTermDebt": "-1"}])])
+    with localcontext() as context:
+        context.prec, context.Emax, context.Emin = 1, 9, -9
+        result = audit_beneish_field_coverage(OfflineDataReader(store.root), selections=selections)
+    debt = group(result, "BALANCE_SHEET")["conditional_debt_diagnostic"]
+    assert debt["source_rows"] == 13 and debt["jointly_finite_rows"] == 10
+    assert debt["difference_nonnegative_rows"] == 6 and debt["difference_negative_rows"] == 4
+    assert debt["negative_component_rows"] == 4 and debt["both_components_nonnegative_rows"] == 6
+    assert debt["negative_component_rows"] + debt["both_components_nonnegative_rows"] == debt["jointly_finite_rows"]
+    assert debt["status"] == "conditional_derivation_only_not_standard_accepted"
+    assert debt["standard_field_filled"] is False
+    quarterly = group(result, "BALANCE_SHEET", "quarterly")["conditional_debt_diagnostic"]
+    assert quarterly["jointly_finite_rows"] == 0
+    assert quarterly["negative_component_rows"] == quarterly["both_components_nonnegative_rows"] == 0
+
+
+def test_cash_flow_income_comparison_is_exact_and_excludes_nonfinite_or_missing_pairs(tmp_path):
+    rows = [{"netIncome": net_income, "profitLoss": profit_loss} for net_income, profit_loss in [
+        ("1", "1.00"), ("-2", "-2"), ("0", "-0"), ("1", "2"),
+        ("None", "1"), ("1", "null"), ("NaN", "1"), ("1", "Infinity"),
+        ("100000000000000000000000000001", "100000000000000000000000000002"),
+        ("1e999999", "10e999998"), ("1e-999999", "2e-999999"),
+        ("not numeric", "1"), ("True", "1"), ("sNaN", "1"),
+    ]]
+    store, selections = make_store(tmp_path, [("SYNTH", "CASH_FLOW", rows, [{"netIncome": "-7", "profitLoss": "-7.0"}])])
+
+    def transform(frame, metadata, kwargs):
+        if kwargs["table"] == "annual":
+            frame.loc[frame.index[-2], "netIncome"] = True
+
+    reader = TransformReader(OfflineDataReader(store.root), transform)
+    with localcontext() as context:
+        context.prec, context.Emax, context.Emin = 1, 9, -9
+        result = audit_beneish_field_coverage(reader, selections=selections)
+    comparison = group(result, "CASH_FLOW")["cash_flow_income_comparison"]
+    assert comparison == {
+        "status": "not_IBEI_verification", "left_field": "netIncome", "right_field": "profitLoss",
+        "comparison_basis": "same_source_statement_row_no_cause_inference",
+        "source_rows": 14, "jointly_finite_rows": 7, "equal_rows": 4, "different_rows": 3,
+        "standard_field_filled": False,
+    }
+    quarterly = group(result, "CASH_FLOW", "quarterly")["cash_flow_income_comparison"]
+    assert quarterly["source_rows"] == quarterly["jointly_finite_rows"] == quarterly["equal_rows"] == 1
+    assert quarterly["different_rows"] == 0
+    assert result["factor_calculated"] is False and result["standard_definition_satisfied"] is False
+    for frame, before in reader.frames:
+        pd.testing.assert_frame_equal(frame, before)
+
+
+def test_cash_flow_comparison_does_not_pair_across_rows_symbols_or_tables(tmp_path):
+    store, selections = make_store(tmp_path, [
+        ("SYNTHA", "CASH_FLOW", [{"netIncome": "1"}, {"profitLoss": "1"}], [{"profitLoss": "1"}]),
+        ("SYNTHB", "CASH_FLOW", [{"profitLoss": "1"}], [{"netIncome": "1"}]),
+    ])
+    result = audit_beneish_field_coverage(OfflineDataReader(store.root), selections=selections)
+    assert len(result["groups"]) == 2
+    for table, expected_rows in (("annual", 3), ("quarterly", 2)):
+        item = group(result, "CASH_FLOW", table)
+        assert item["provider_symbol_denominator"] == 2
+        assert item["fields"]["netIncome"]["finite_rows"] > 0
+        assert item["fields"]["profitLoss"]["finite_rows"] > 0
+        comparison = item["cash_flow_income_comparison"]
+        assert comparison["source_rows"] == expected_rows
+        assert comparison["jointly_finite_rows"] == comparison["equal_rows"] == comparison["different_rows"] == 0
+
+
+def test_empty_cash_flow_tables_keep_denominators_and_zero_comparisons(tmp_path):
+    store, selections = make_store(tmp_path, [("SYNTH", "CASH_FLOW", [{"netIncome": "1", "profitLoss": "1"}],
+                                             [{"netIncome": "1", "profitLoss": "1"}])])
+
+    def transform(frame, metadata, kwargs):
+        frame.drop(frame.index, inplace=True)
+        metadata["source_rows"] = metadata["returned_rows"] = 0
+
+    result = audit_beneish_field_coverage(TransformReader(OfflineDataReader(store.root), transform), selections=selections)
+    assert len(result["groups"]) == 2
+    for item in result["groups"]:
+        assert item["source_rows"] == 0 and item["source_tables"] == item["provider_symbol_denominator"] == 1
+        assert item["fields"]["netIncome"]["provider_symbol_denominator"] == 1
+        comparison = item["cash_flow_income_comparison"]
+        assert comparison["source_rows"] == comparison["jointly_finite_rows"] == 0
+        assert comparison["equal_rows"] == comparison["different_rows"] == 0
+        assert comparison["standard_field_filled"] is False
+        assert comparison["status"] == "not_IBEI_verification"
 
 
 def test_metadata_coverage_counts_do_not_certify_annual_duration_or_expose_values(tmp_path):
