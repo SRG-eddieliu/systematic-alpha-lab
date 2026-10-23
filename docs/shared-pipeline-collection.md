@@ -75,19 +75,29 @@ attempt consumes that budget. The provider identity preflight used a separate
 three-request budget. A reserved second attempt never authorizes an automatic
 retry. No purchase, key rotation or fallback source is part of this workflow.
 
-The default interval is 15 seconds. An explicit 1.1-second interval limits one
-collector to approximately 54.55 starts per minute, below the currently
-published minimum paid plan of 75 per minute. The actual account tier and
-other users of the credential must be checked separately; a credential's
-configuration slot name does not establish its entitlement. Provider notices,
-quota/authentication responses and safety errors halt collection.
+The default interval is 15 seconds after the preceding response or error
+completes. The persisted completion time is used across restarts and batches;
+an interrupted or legacy request without a completion time waits a full
+interval from recovery. Slow responses therefore cannot be followed by an
+immediate send. An explicit 1.1-second interval has an upper bound of about
+54.55 starts per minute, below the currently published minimum paid plan of
+75 per minute; actual throughput also includes response latency. The actual
+account tier and other users of the credential must be checked separately.
+A credential's configuration slot name does not establish its entitlement.
+Provider notices, quota/authentication responses and safety errors halt
+collection.
 
 Successful imported observations are pinned regardless of their age. They
 are not refreshed automatically. The private batch ledger binds the universe,
 configuration, collector and normalizer source hashes, job identities,
 attempt history, UTC request/response times and successful input fingerprints.
 Imported legacy receipts may contain only observation time; an earlier
-request-start time is not invented.
+request-start time is not invented. The first implementation paced request
+starts; its source is preserved by the initial collection commit. The final
+implementation additionally persists request completion and waits after it.
+The ongoing original batch uses its exact recorded collector source and a
+separately fingerprinted transport wrapper that waits two seconds after each
+response; its execution receipts retain actual HTTP start and finish times.
 
 ## Execute and recover explicitly
 

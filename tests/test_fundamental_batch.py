@@ -38,12 +38,13 @@ class Clock:
 
 
 class Feed:
-    def __init__(self, clock, outcomes=()):
+    def __init__(self, clock, outcomes=(), duration=1):
         self.clock, self.outcomes, self.calls = clock, list(outcomes), []
+        self.duration = duration
 
     def fetch_json_response(self, function, params):
         self.calls.append((function, params, self.clock()))
-        self.clock.now += timedelta(seconds=1)
+        self.clock.now += timedelta(seconds=self.duration)
         outcome = self.outcomes.pop(0) if self.outcomes else None
         if isinstance(outcome, BaseException):
             raise outcome
@@ -93,6 +94,7 @@ def test_successful_jobs_are_pinned_and_never_refetched_on_resume(tmp_path):
     assert first["jobs"][0]["status"] == "succeeded"
     assert first["jobs"][0]["attempts"][0]["request_started_at"] == NOW.isoformat()
     assert first["jobs"][0]["attempts"][0]["response_received_at"] == (NOW + timedelta(seconds=1)).isoformat()
+    assert first["jobs"][0]["attempts"][0]["request_finished_at"] == (NOW + timedelta(seconds=1)).isoformat()
     second = run(feed, store, clock)
     assert len(feed.calls) == 3 and second["state"] == "complete"
     pinned = first["jobs"][0]["pin"]
@@ -140,11 +142,94 @@ def test_persisted_interval_survives_restart_and_applies_to_refresh_runs(tmp_pat
     # Reconstruct every caller-owned object after a short process interruption.
     store = SnapshotStore(tmp_path)
     run(feed, store, clock, max_requests=1)
-    assert clock.sleeps == [14.0]
+    assert clock.sleeps == [15.0]
     create_fundamental_batch(store, run_id="refresh", symbols=["SYNTH"], universe_sha256=UNIVERSE,
                               max_requests=3, refresh_of="test", clock=clock)
     run_fundamental_batch(feed, store, run_id="refresh", max_requests=1, clock=clock, sleep=clock.sleep)
-    assert [item[2] for item in feed.calls] == [NOW, NOW + timedelta(seconds=15), NOW + timedelta(seconds=30)]
+    assert [item[2] for item in feed.calls] == [NOW, NOW + timedelta(seconds=16), NOW + timedelta(seconds=32)]
+
+
+def test_slow_response_still_requires_a_full_interval_before_the_next_send(tmp_path):
+    store, clock = SnapshotStore(tmp_path), Clock()
+    create(store, clock, min_interval_seconds=2)
+    feed = Feed(clock, duration=11)
+    result = run(feed, store, clock)
+    assert clock.sleeps == [2.0, 2.0]
+    assert [call[2] for call in feed.calls] == [NOW, NOW + timedelta(seconds=13), NOW + timedelta(seconds=26)]
+    for previous, following in zip(result["jobs"], result["jobs"][1:]):
+        finished = datetime.fromisoformat(previous["attempts"][0]["request_finished_at"])
+        started = datetime.fromisoformat(following["attempts"][0]["request_started_at"])
+        assert (started - finished).total_seconds() == 2
+
+
+@pytest.mark.parametrize("kind", ["transport", "http_429", "http_401", "provider_notice_or_error"])
+def test_error_completion_is_persisted_and_paces_the_next_explicit_resume(tmp_path, kind):
+    store, clock = SnapshotStore(tmp_path), Clock()
+    create(store, clock, min_interval_seconds=2)
+    feed = Feed(clock, [AlphaVantageError(kind)], duration=11)
+    first = run(feed, store, clock, max_requests=1)
+    attempt = first["jobs"][0]["attempts"][0]
+    assert attempt["request_finished_at"] == (NOW + timedelta(seconds=11)).isoformat()
+    assert attempt["response_received_at"] is None
+    pacing = json.loads((tmp_path / "fundamental_batch_pacing.json").read_bytes())
+    assert pacing == {"last_request_started_at": NOW.isoformat(), "last_request_finished_at": attempt["request_finished_at"]}
+    run(feed, SnapshotStore(tmp_path), clock, max_requests=1, resume_after_halt=True)
+    assert len(feed.calls) == 2 and feed.calls[1][2] == NOW + timedelta(seconds=13)
+    assert clock.sleeps == [2.0]
+
+
+def test_slow_response_completion_pacing_survives_restart_and_new_run(tmp_path):
+    store, clock = SnapshotStore(tmp_path), Clock()
+    create(store, clock, min_interval_seconds=2)
+    feed = Feed(clock, duration=11)
+    run(feed, store, clock, max_requests=1)
+    run(feed, SnapshotStore(tmp_path), clock, max_requests=1)
+    create_fundamental_batch(store, run_id="refresh", symbols=["SYNTH"], universe_sha256=UNIVERSE,
+                              max_requests=3, min_interval_seconds=2, refresh_of="test", clock=clock)
+    run_fundamental_batch(feed, SnapshotStore(tmp_path), run_id="refresh", max_requests=1,
+                           clock=clock, sleep=clock.sleep)
+    assert [call[2] for call in feed.calls] == [NOW, NOW + timedelta(seconds=13), NOW + timedelta(seconds=26)]
+    assert clock.sleeps == [2.0, 2.0]
+
+
+def test_clock_rollback_after_response_is_rejected_before_checkpoint_or_send(tmp_path):
+    store, clock = SnapshotStore(tmp_path), Clock()
+    create(store, clock)
+    feed = Feed(clock, duration=11)
+    run(feed, store, clock, max_requests=1)
+    before = files(tmp_path)
+    # Later than the prior start, but earlier than its durable response finish.
+    clock.now = NOW + timedelta(seconds=10)
+    with pytest.raises(ValueError, match="clock moved backwards"):
+        run(feed, store, clock)
+    assert len(feed.calls) == 1 and files(tmp_path) == before
+
+
+def test_clock_rollback_inside_request_halts_with_an_uncertain_charged_attempt(tmp_path):
+    store, clock = SnapshotStore(tmp_path), Clock()
+    create(store, clock)
+    feed = Feed(clock, duration=-1)
+    with pytest.raises(ValueError, match="clock moved backwards"):
+        run(feed, store, clock)
+    result = read_fundamental_batch(tmp_path, run_id="test")
+    assert len(feed.calls) == 1 and result["state"] == "halted"
+    assert result["jobs"][0]["status"] == "uncertain"
+    assert fundamental_batch_summary(result)["attempts_used"] == 1
+    attempt = result["jobs"][0]["attempts"][0]
+    assert attempt["error_category"] == "clock_rollback" and attempt["request_finished_at"] is None
+
+
+def test_missing_finish_from_crash_waits_full_interval_at_recovery_without_resending(tmp_path):
+    store, clock = SnapshotStore(tmp_path), Clock()
+    create(store, clock, min_interval_seconds=2)
+    feed = Feed(clock, [KeyboardInterrupt()], duration=11)
+    with pytest.raises(KeyboardInterrupt):
+        run(feed, store, clock)
+    clock.now += timedelta(days=1)
+    recovered_at = clock.now
+    result = run(feed, store, clock, max_requests=1)
+    assert feed.calls[1][2] == recovered_at + timedelta(seconds=2)
+    assert clock.sleeps == [2.0] and result["jobs"][0]["status"] == "uncertain"
 
 
 @pytest.mark.parametrize("kind,category", [
@@ -422,7 +507,7 @@ def test_explicit_interval_and_proxy_scope_are_pinned_without_upgrading_scope(tm
     manifest = create(store, clock, min_interval_seconds=1.1, universe_scope="etf_proxy")
     result = run(Feed(clock), store, clock)
     assert result["config_sha256"] == manifest["config_sha256"]
-    assert clock.sleeps == pytest.approx([0.1, 0.1])
+    assert clock.sleeps == pytest.approx([1.1, 1.1])
     assert fundamental_batch_summary(result)["universe_scope"] == "etf_proxy"
 
 

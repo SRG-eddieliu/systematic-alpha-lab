@@ -6,6 +6,8 @@ They are atomic checkpoints: an HTTP attempt is charged and marked in flight
 No latest-snapshot/age selection, retry, provider switch or credential loading
 occurs here. All collectors/readers must use a quiescent catalog; this module's
 collection and replay entry points additionally coordinate through a root lock.
+The persisted interval starts after the preceding response/error completes,
+including when that request took longer than the interval itself.
 """
 from __future__ import annotations
 
@@ -105,7 +107,10 @@ def _directory(path):
 
 
 def _save(root, manifest, now):
-    manifest["updated_at"] = utc_time(now).isoformat()
+    now = utc_time(now)
+    if now < utc_time(manifest.get("updated_at", manifest["created_at"])):
+        raise ValueError("Collection clock moved backwards; checkpoint was not changed")
+    manifest["updated_at"] = now.isoformat()
     manifest.pop("manifest_sha256", None)
     manifest["manifest_sha256"] = _sha(manifest)
     _atomic(_path(root, manifest["run_id"]), manifest)
@@ -258,6 +263,26 @@ def _classify(kind):
     return "safety", True
 
 
+def _pacing_anchor(root, now):
+    """Return the persisted finish, or recover a missing finish conservatively."""
+    path = Path(root) / _PACING
+    if not path.exists():
+        return None
+    pacing = json.loads(path.read_bytes())
+    if not isinstance(pacing, dict) or not pacing.get("last_request_started_at"):
+        raise ValueError("Invalid persisted collection pacing state")
+    started = utc_time(pacing["last_request_started_at"])
+    finished = utc_time(pacing["last_request_finished_at"]) if pacing.get("last_request_finished_at") else None
+    if finished is not None and finished < started:
+        raise ValueError("Persisted request finish precedes its start")
+    if now < started or (finished is not None and now < finished):
+        raise ValueError("Collection clock moved backwards; pacing cannot be established safely")
+    # A killed worker may leave only a start reservation. Its response time
+    # cannot be reconstructed: wait a full interval from this recovery clock,
+    # rather than assume an old start means the provider already finished.
+    return finished if finished is not None else now
+
+
 def run_fundamental_batch(
     client, store: SnapshotStore, *, run_id: str, max_requests: int,
     retry_jobs=(), resume_after_halt: bool = False, clock=utc_time, sleep=time.sleep,
@@ -267,6 +292,8 @@ def run_fundamental_batch(
     Resume selects pending jobs only. Failed/uncertain jobs require explicit
     retry_jobs, reserved per-job capacity and remaining run budget. Clearing a
     quota/auth/safety halt additionally requires resume_after_halt=True.
+    Each send waits at least min_interval_seconds after the previous completed
+    response/error, across restarts and runs sharing this private data root.
     """
     _integer(max_requests, "max_requests")
     if not isinstance(resume_after_halt, bool) or not isinstance(retry_jobs, (list, tuple)) or any(
@@ -280,6 +307,10 @@ def run_fundamental_batch(
             config["normalizer_source_sha256"] != hashlib.sha256(Path(fundamental_snapshots.__file__).read_bytes()).hexdigest()
         ):
             raise ValueError("Pinned collector/normalizer source changed; use the original code version")
+        resumed_at = utc_time(clock())
+        if resumed_at < utc_time(manifest["updated_at"]):
+            raise ValueError("Collection clock moved backwards; checkpoint was not changed")
+        _pacing_anchor(store.root, resumed_at)
         # Reconcile lost workers before considering any new send. In-flight
         # attempts were already charged even if the provider never received one.
         for job in manifest["jobs"]:
@@ -305,12 +336,9 @@ def run_fundamental_batch(
         manifest["halt_reason"] = None
         for job in jobs[:allowed]:
             pacing_path = store.root / _PACING
-            pacing = json.loads(pacing_path.read_bytes()) if pacing_path.exists() else {}
             now = utc_time(clock())
-            if pacing.get("last_request_started_at"):
-                previous = utc_time(pacing["last_request_started_at"])
-                if now < previous:
-                    raise ValueError("Collection clock moved backwards; pacing cannot be established safely")
+            previous = _pacing_anchor(store.root, now)
+            if previous is not None:
                 remaining = config["min_interval_seconds"] - (now - previous).total_seconds()
                 if remaining > 0:
                     sleep(remaining)
@@ -318,24 +346,21 @@ def run_fundamental_batch(
                     if now < previous + timedelta(seconds=config["min_interval_seconds"]):
                         raise ValueError("Sleep/clock did not satisfy the persisted request interval")
             attempt = {"number": len(job["attempts"]) + 1, "status": "inflight",
-                       "request_started_at": now.isoformat(), "response_received_at": None, "error_category": None}
+                       "request_started_at": now.isoformat(), "request_finished_at": None,
+                       "response_received_at": None, "error_category": None}
             job["attempts"].append(attempt)
             job["status"] = "inflight"
             manifest["state"] = "running"
             # Pacing is persisted first: a crash can delay a future request but
             # cannot erase the spacing reservation for a request already sent.
-            _atomic(pacing_path, {"last_request_started_at": now.isoformat()})
+            _atomic(pacing_path, {"last_request_started_at": now.isoformat(), "last_request_finished_at": None})
             _save(store.root, manifest, now)
             halt = False
             try:
                 response = client.fetch_json_response(job["request"]["function"], {"symbol": job["request"]["symbol"]})
-                received = utc_time(clock())
-                if received < now:
-                    raise ValueError("Response clock precedes request")
-                attempt["response_received_at"] = received.isoformat()
             except AlphaVantageError as exc:
                 category, halt = _classify(exc.kind)
-                attempt.update(status="failed", response_received_at=utc_time(clock()).isoformat(), error_category=category)
+                attempt.update(status="failed", error_category=category)
                 job["status"] = "failed"
             except (KeyboardInterrupt, SystemExit):
                 attempt.update(status="uncertain", error_category="interrupted_inflight")
@@ -348,7 +373,21 @@ def run_fundamental_batch(
                 # credential-bearing URLs or response bodies in exceptions.
                 attempt.update(status="uncertain", error_category="safety")
                 job["status"], halt = "uncertain", True
-            else:
+            received = utc_time(clock())
+            if received < now:
+                attempt.update(status="uncertain", error_category="clock_rollback")
+                job["status"] = "uncertain"
+                manifest["halt_reason"], manifest["state"] = "clock_rollback", "halted"
+                manifest["halts"].append({"job_id": job["job_id"], "category": "clock_rollback", "at": now.isoformat()})
+                _save(store.root, manifest, now)
+                raise ValueError("Collection clock moved backwards while the request was in flight")
+            attempt["request_finished_at"] = received.isoformat()
+            # Persist every completed response/error before source processing.
+            # Starts remain durable for crash/uncertain-attempt accounting.
+            _atomic(pacing_path, {"last_request_started_at": now.isoformat(),
+                                  "last_request_finished_at": received.isoformat()})
+            if job["status"] == "inflight":
+                attempt["response_received_at"] = received.isoformat()
                 try:
                     record = store.capture("alpha_vantage", job["request"], response.body, observed_at=received)
                     attempt.update(snapshot_id=record["id"], raw_sha256=record["raw_sha256"])

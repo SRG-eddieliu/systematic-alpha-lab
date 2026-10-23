@@ -7,6 +7,7 @@ the same root while collection is active.
 Confirm the provider plan/usage authorization before an explicit run. The
 default interval is conservative; changing it requires checking the plan and
 coordinating all other consumers of the same provider credential.
+The interval is measured after the preceding response or error finishes.
 """
 import argparse
 import json
@@ -33,7 +34,8 @@ def main():
     plan.add_argument("--universe", type=Path, required=True)
     plan.add_argument("--max-total-requests", type=int, required=True)
     plan.add_argument("--max-attempts-per-job", type=int, default=1)
-    plan.add_argument("--interval", type=float, default=15)
+    plan.add_argument("--interval", type=float, default=15,
+                      help="Minimum seconds after the previous response/error finishes (default: 15)")
     plan.add_argument("--import-receipts", type=Path)
     plan.add_argument("--refresh-of", help="Prior run to explicitly refresh into this new run")
     plan.add_argument("--allow-proxy", action="store_true", help="Explicitly accept a frozen proxy, preserving its scope label")

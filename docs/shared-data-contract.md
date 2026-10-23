@@ -104,15 +104,17 @@ new collection action, with a new observation and immutable source object.
 Credentials use the existing private loader. No purchase, key rotation, silent
 source substitution or unbounded retry is authorized by this contract.
 
-The default interval remains 15 seconds. This collection run explicitly selects
-1.1 seconds between requests, about 54.55 requests per minute, below the current
+The default interval remains 15 seconds after the preceding response or error
+completes, including across restarts and batches. This collection run explicitly
+selected a 1.1-second minimum; an additional recorded transport policy waits
+2 seconds after responses. A 1.1-second completion interval has an upper bound
+of about 54.55 requests per minute, below the current
 smallest [official paid plan](https://www.alphavantage.co/premium/) at 75 requests
-per minute as checked on 2026-10-23 UTC. The credential's actual paid tier remains
-unknown, so the published plan floor does not establish its entitlement. A
-provider quota or entitlement notice halts collection. Requests use a finite
-budget without a purchase or credential change. The user has confirmed that
-this collection is for noncommercial research and authorized continuation;
-no additional license confirmation gate is imposed for this run. Permission to
+per minute as checked on 2026-10-23 UTC. Paid-only endpoint access was observed
+for the selected credential; its exact subscription tier and shared usage
+remain unknown. A generic free-burst notice cannot establish that a credential
+is not paid. Provider quota or entitlement notices halt collection. Requests
+use a finite budget without a purchase or credential change. Permission to
 redistribute provider data is not established by collection or this contract.
 
 Collectors and readers must not concurrently mutate/read the same active
