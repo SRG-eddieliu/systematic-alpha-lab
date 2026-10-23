@@ -1,0 +1,91 @@
+{
+  "contract_id": "bxp_doc_statement_availability_v1",
+  "schema_version": 1,
+  "scope": "Six still-failed Alpha Vantage statement jobs; independent supplemental annual and quarterly candidates",
+  "targets": [
+    {
+      "symbol": "BXP",
+      "legal_name": "BXP, Inc.",
+      "cik": "0001037540",
+      "latest_annual_start": "2025-01-01",
+      "latest_annual_end": "2025-12-31",
+      "start_date_basis": "calendar-year availability threshold; individual flow contexts unverified",
+      "excluded_issuer": "Boston Properties Limited Partnership, CIK 0001043121",
+      "identity_source": "https://www.sec.gov/Archives/edgar/data/1037540/000103754026000006/bxp-20251231.htm",
+      "filing_accession": "0001037540-26-000006",
+      "history_limit": "Corporate name changed from Boston Properties on 2024-07-01; combined report has separate corporate and partnership statements"
+    },
+    {
+      "symbol": "DOC",
+      "legal_name": "Healthpeak Properties, Inc.",
+      "cik": "0000765880",
+      "latest_annual_start": "2025-01-01",
+      "latest_annual_end": "2025-12-31",
+      "start_date_basis": "calendar-year availability threshold; individual flow contexts unverified",
+      "merger_effective_date": "2024-03-01",
+      "current_ticker_start": "2024-03-04",
+      "previous_symbol": "PEAK",
+      "excluded_issuer": "Former DOC Physicians Realty Trust, CIK 0001574540",
+      "identity_source": "https://www.sec.gov/Archives/edgar/data/765880/000162828026005044/peak-20251231.htm",
+      "merger_source": "https://ir.healthpeak.com/news/news-details/2024/Healthpeak-Properties-Closes-Merger-with-Physicians-Realty-Trust/default.aspx",
+      "filing_accession": "0001628280-26-005044",
+      "history_limit": "2023 holding-company reorganization and 2024 merger; historical CIK/scope bridge unreviewed; no stitching former DOC"
+    }
+  ],
+  "primary": {
+    "provider": "alpha_vantage",
+    "priority": "Qualified nonmissing primary data retains priority",
+    "original_jobs": 6,
+    "original_status": "failed",
+    "new_requests": 0,
+    "overwritten": false
+  },
+  "supplement": {
+    "provider": "yahoo_financial_timeseries",
+    "adapter": "yfinance",
+    "adapter_version": "1.7.0",
+    "statements": ["income", "balance-sheet", "cash-flow"],
+    "frequencies": ["yearly", "quarterly"],
+    "logical_jobs": 12,
+    "source_window": "Entire native response from each fixed getter; finite provider window, not AV history parity",
+    "capture_layers": ["exact HTTP response bytes", "typed SDK dataframe"],
+    "normalizers": ["yf_statement_http_v2", "yf_statement_frames_v2"]
+  },
+  "budget": {
+    "known_terminal_dispatch_ceiling_including_prior_discovery_attempts": 32,
+    "prior_issuer_listing_connection_attempts": 3,
+    "new_yahoo_session_dispatch_ceiling": 27,
+    "new_original_report_dispatch_ceiling": 2,
+    "automatic_retries": 0,
+    "redirects_enabled": false,
+    "minimum_interval_seconds": 2,
+    "count_scope": "Session dispatch attempts, including authentication and failed connections. Web research discovery calls and backend wire counts are separately unknown and are not claimed to fit this measurable ceiling."
+  },
+  "original_reports": {
+    "purpose": "Optional identity/scope corroboration; candidate document labels do not certify filing-version or field mapping",
+    "sec_contact": "Only an existing authorized SEC contact may be used; absent contact means zero SEC dispatches",
+    "issuer_candidates": [
+      "https://investors.bxp.com/static-files/ecab4353-3900-476b-88d6-416feeec2cb6",
+      "https://s202.q4cdn.com/584270836/files/doc_financials/2026/ar/DOC-2025-Annual-Report.pdf"
+    ],
+    "candidate_link_chain": "unverified"
+  },
+  "availability": {
+    "income_native_probes": ["TotalRevenue", "NetIncome"],
+    "balance_sheet_native_probes": ["TotalAssets", "TotalLiabilitiesNetMinorityInterest"],
+    "cash_flow_native_probes": ["OperatingCashFlow", "InvestingCashFlow", "FinancingCashFlow"],
+    "candidate_rule": "All native probes appear once as finite numbers at 2025-12-31 in annual data and at a quarterly source end on or after 2025-01-01",
+    "readable_table_rule": "At least one numeric source fact; reported separately from candidate_rule",
+    "missingness": "Preserve null, omitted, nonfinite, zero and unknown as distinct states; no zero filling"
+  },
+  "acceptance": {
+    "accounting_fields_accepted": 0,
+    "semantic_status": "unreviewed",
+    "historical_issuer_binding": "unreviewed",
+    "flow_start_unit_currency_scope": "not certified by frequency or native metric name",
+    "backtest_point_in_time": "not certified",
+    "full_statement_history": "not certified",
+    "primary_repair": false,
+    "scores_or_factors": false
+  }
+}
