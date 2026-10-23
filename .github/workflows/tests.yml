@@ -20,4 +20,5 @@ jobs:
       - run: python examples/sec_quarterly_review_demo.py
       - run: python examples/monthly_price_snapshot_demo.py
       - run: python examples/offline_data_access_demo.py
+      - run: python examples/beneish_reproduction_demo.py
       - run: python examples/research_contracts_demo.py

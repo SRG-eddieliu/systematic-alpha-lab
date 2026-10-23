@@ -1,0 +1,363 @@
+{
+  "audit": "private_legacy_q07_fixed_sample_v1",
+  "status": "passed",
+  "aggregate_only": true,
+  "definition": "legacy_q07_quarterly_proxy_v1",
+  "reference_notebook_sha256": "d8191cc510d4957e3a53477405ef9fcafb64c98f9c22434bc18ad7628ef3f359",
+  "selected_policy": {
+    "tickers": [
+      "AAPL",
+      "MSFT",
+      "IBM"
+    ],
+    "input_fiscal_periods": [
+      [
+        2018,
+        4
+      ],
+      [
+        2019,
+        1
+      ],
+      [
+        2019,
+        2
+      ],
+      [
+        2019,
+        3
+      ],
+      [
+        2019,
+        4
+      ],
+      [
+        2020,
+        1
+      ]
+    ],
+    "warmup_fiscal_period": [
+      2018,
+      4
+    ],
+    "expected_input_rows": 18,
+    "expected_target_rows": 15,
+    "join_identity": [
+      "gvkey",
+      "datadate",
+      "fyearq",
+      "fqtr"
+    ],
+    "ticker_role": "sample selection only; never substitutes for stable identity",
+    "duplicate_action": "fail selected key; no deduplication or repair"
+  },
+  "field_map": {
+    "receivables": {
+      "raw": "rectq",
+      "saved": "rectq"
+    },
+    "sales": {
+      "raw": "saleq",
+      "saved": "saleq_beneish"
+    },
+    "cost_of_goods_sold": {
+      "raw": "cogsq",
+      "saved": "cogsq"
+    },
+    "current_assets": {
+      "raw": "actq",
+      "saved": "actq"
+    },
+    "net_ppe": {
+      "raw": "ppentq",
+      "saved": "ppentq"
+    },
+    "total_assets": {
+      "raw": "atq",
+      "saved": "atq_beneish"
+    },
+    "depreciation": {
+      "raw": "dpq",
+      "saved": "dpq"
+    },
+    "sga_expense": {
+      "raw": "xsgaq",
+      "saved": "xsgaq"
+    },
+    "long_term_debt": {
+      "raw": "dlttq",
+      "saved": "dlttq_beneish"
+    },
+    "current_liabilities": {
+      "raw": "lctq",
+      "saved": "lctq"
+    }
+  },
+  "tolerance": {
+    "absolute": 1e-10,
+    "relative": 0.0
+  },
+  "source_files_unchanged": true,
+  "source_code_unchanged": true,
+  "source_quality": {
+    "raw": {
+      "rows": 724081,
+      "columns": 25,
+      "invalid_or_missing_stable_key_rows": 0,
+      "valid_fiscal_key_groups": 723928,
+      "duplicate_fiscal_key_groups": 153,
+      "duplicate_fiscal_key_rows": 306,
+      "valid_stable_period_key_groups": 724081,
+      "duplicate_stable_period_key_groups": 0,
+      "duplicate_stable_period_key_rows": 0,
+      "missing_input_counts": {
+        "rectq": 227367,
+        "cogsq": 197209,
+        "actq": 310206,
+        "ppentq": 227429,
+        "atq": 210578,
+        "dpq": 254127,
+        "xsgaq": 317553,
+        "dlttq": 212519,
+        "lctq": 308134,
+        "saleq": 179905
+      },
+      "invalid_or_nonfinite_input_counts": {},
+      "missing_currency_rows": 0,
+      "unit_column_present": false,
+      "selected_rows": 18,
+      "selected_policy_keys_with_nonunique_rows": 0,
+      "selected_rows_without_unique_global_stable_key": 0
+    },
+    "saved": {
+      "rows": 59507,
+      "columns": 63,
+      "invalid_or_missing_stable_key_rows": 0,
+      "valid_fiscal_key_groups": 59491,
+      "duplicate_fiscal_key_groups": 16,
+      "duplicate_fiscal_key_rows": 32,
+      "valid_stable_period_key_groups": 59491,
+      "duplicate_stable_period_key_groups": 16,
+      "duplicate_stable_period_key_rows": 32,
+      "missing_input_counts": {
+        "rectq": 2456,
+        "actq": 12164,
+        "ppentq": 5043,
+        "atq": 1450,
+        "dpq": 8035,
+        "dlttq": 1868,
+        "lctq": 12067,
+        "cogsq": 797,
+        "saleq": 534,
+        "xsgaq": 15419
+      },
+      "invalid_or_nonfinite_input_counts": {},
+      "missing_currency_rows": 0,
+      "unit_column_present": false,
+      "selected_rows": 18,
+      "selected_policy_keys_with_nonunique_rows": 0,
+      "selected_rows_without_unique_global_stable_key": 0,
+      "saved_output_missing_counts": {
+        "DSRI": 4236,
+        "GMI": 1626,
+        "AQI": 12951,
+        "SGI": 1181,
+        "DEPI": 10721,
+        "SGAI": 15996,
+        "LVGI": 13302,
+        "TATA": 12900,
+        "beneish_mscore": 24262,
+        "beneish_probability": 24262
+      },
+      "saved_output_invalid_or_nonfinite_counts": {
+        "GMI": 8,
+        "SGI": 13,
+        "DSRI": 38,
+        "beneish_mscore": 42,
+        "DEPI": 2,
+        "AQI": 17,
+        "SGAI": 3
+      },
+      "saved_flag_counts": {
+        "False": 53532,
+        "True": 5975
+      },
+      "missing_m_score_with_false_flag": 24262
+    }
+  },
+  "reconciliation_counts": {
+    "stable_identity_date_fiscal_matches": 18,
+    "currency_matches": 18,
+    "calculation_ready_targets": 15,
+    "flag_comparisons": 15,
+    "flag_mismatches": 0
+  },
+  "raw_saved_input_comparisons": {
+    "rectq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "saleq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "cogsq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "actq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "ppentq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "atq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "dpq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "xsgaq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "dlttq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "lctq": {
+      "comparisons": 18,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    }
+  },
+  "saved_output_comparisons": {
+    "DSRI": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "GMI": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "AQI": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "SGI": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "DEPI": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "SGAI": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "LVGI": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "TATA": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 0.0
+    },
+    "beneish_mscore": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 8.881784197001252e-16
+    },
+    "beneish_probability": {
+      "comparisons": 15,
+      "mismatches": 0,
+      "missing_or_nonfinite_pairs": 0,
+      "max_absolute_error": 2.220446049250313e-16
+    }
+  },
+  "error_counts": {},
+  "calculation_reason_counts": {},
+  "context_warning_counts": {
+    "missing_or_invalid_metadata:unit": 15
+  },
+  "limitations": [
+    "Saved outputs are a legacy reconciliation baseline, not independent model truth.",
+    "Quarterly row-lag proxy; no annual/TTM or adjusted-M definition supplied.",
+    "Units and publication availability are unverified; currency is caller-declared.",
+    "No historical constituent reconstruction, regression/composite validation, or alpha test.",
+    "No source repair, mutation, network access, or data redistribution."
+  ],
+  "input_fingerprints": {
+    "raw": {
+      "sha256": "14649527b13fbec9399259f819099a0e6cb2dcc6035e48c7ef239fd5a0e1ceeb",
+      "bytes": 86438992
+    },
+    "saved": {
+      "sha256": "3f6df96eff90cbca7f09c03075537702d21e2badcdaa07bc98c048fd10307aca",
+      "bytes": 32037867
+    }
+  },
+  "source_code_fingerprints": {
+    "cli": {
+      "sha256": "78f9f35950885598a4f0d4d0c6640f3112667694482b5fa1f5aacb43c6b80f81",
+      "bytes": 17785
+    },
+    "beneish_module": {
+      "sha256": "3834677d47afc29315937a6a0f7fdc4b67daab0d603ab308fb4074cde1194b3c",
+      "bytes": 10420
+    }
+  },
+  "config_sha256": "35040d941c4fbdc959f1ea2cc82674b7444c710e61afe6154e825bd020ab1d7d",
+  "code_base_commit": "da4db67c84b203a3b4f14c7570e30fa7dc7160bb",
+  "recorded_at": "2026-10-22T20:45:05-04:00",
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Darwin arm64",
+    "packages": {
+      "numpy": "2.5.4",
+      "pandas": "2.2.3",
+      "pytest": "9.1.1"
+    }
+  }
+}

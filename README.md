@@ -50,6 +50,16 @@ arithmetic, coverage counts and an explicit field-version as-of reference. The o
 automatic fiscal-period-to-daily methods raise a migration error because they do
 not establish publication timing. No fraud probability or market result is claimed.
 
+[Integrity definition reconciliation](docs/integrity-definition-reconciliation.md)
+now separates recovered report definitions from the original notebook behavior.
+The [Beneish arithmetic slice](src/systematic_alpha_lab/factor_research/beneish.py)
+checks the eight-ratio coefficients against the author's public example and
+reproduces an explicitly labeled legacy quarterly proxy with missing/finite,
+company and period guards. Run `python examples/beneish_reproduction_demo.py`
+without credentials. This is arithmetic restoration, not an annual-model adapter,
+fraud probability or validated market signal; Adjusted M and the reported fixed
+composite remain unresolved.
+
 ## Implemented Components
 
 The [shared snapshot pipeline](docs/data-snapshot-pipeline.md) adds bounded
