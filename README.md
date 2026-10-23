@@ -59,9 +59,12 @@ company and period guards. Run `python examples/beneish_reproduction_demo.py`
 without credentials. This is arithmetic restoration, not an annual-model adapter,
 fraud probability or validated market signal. The
 [definition-gap audit](docs/integrity-definition-gaps-2026-10-22.md) locates the
-report's signed five-factor recipe and Adjusted M1 selection, while documenting
-its disagreement with the saved sixteen-factor output. Adjusted M's generator
-and the fixed recipe's operational transforms and lineage remain unresolved.
+report's signed five-factor recipe and Adjusted M1 selection. The
+[history follow-up](docs/integrity-source-history-2026-10-22.md) also recovers a
+separate fixed-five, whole-panel MinMax branch and verifies its normalized
+export against known inputs. This differs from both the report's signs and
+the sixteen-factor output. Adjusted M generation and the upstream input chain
+remain unresolved; the recovered branch has its own explicit execution contract.
 
 ## Implemented Components
 

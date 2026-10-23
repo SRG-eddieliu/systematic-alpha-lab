@@ -5,6 +5,13 @@ audit, not a replacement specification or a second live project checkpoint.
 The written five-factor recipe has been located. Its operational transforms
 and executable lineage, including the Adjusted M1 generator, remain unresolved.
 
+**Subsequent follow-up:** the [history and additional-source audit](integrity-source-history-2026-10-22.md)
+locates another notebook with a fixed-five MinMax implementation and a matching
+normalized export. It is distinct from the signed report formula and Q04's
+sixteen-factor branch. The findings below retain the earlier audit's scope;
+use the follow-up for the newly recovered execution contract and remaining
+upstream gaps.
+
 ## Verified code baseline
 
 [PR 14](https://github.com/SRG-eddieliu/systematic-alpha-lab/pull/14) was

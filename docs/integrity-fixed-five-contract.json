@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "prepared_date": "2026-10-22",
+  "timezone": "America/Toronto",
+  "contract_id": "legacy_q08_minmax_equal5_v1",
+  "status": "recovered_downstream_source_recipe_upstream_lineage_incomplete",
+  "purpose": "Historical branch identity; not a newly approved research signal or an end-to-end reproduced model",
+  "source": {
+    "id": "Q08",
+    "sha256": "0d893c72c487b150a302cc5a80759e1bbd71156ec4f8bada91494e1124f5994f",
+    "bytes": 424025,
+    "cell_indices_zero_based": {
+      "input": 1,
+      "select": 2,
+      "normalize": 3,
+      "normalized_export": 4,
+      "row_score": 5,
+      "date": 6,
+      "calendar_year_mean": 7
+    }
+  },
+  "input": {
+    "role": "separately named prepared Q08 component table",
+    "artifact_located": false,
+    "writer_located": false,
+    "required_component_columns": [
+      "chi2_d1",
+      "chi2_d2",
+      "adj_M_score1",
+      "r2_lag1",
+      "r2_lag2"
+    ],
+    "retained_context_columns": [
+      "conm",
+      "tic",
+      "datadate",
+      "fyearq",
+      "fqtr",
+      "ret_5y"
+    ],
+    "adjusted_m1_generator": "not_recovered",
+    "adjusted_m2_generator": "not_recovered",
+    "return_context_used_by_scaler": false
+  },
+  "normalization": {
+    "library_call": "sklearn.preprocessing.MinMaxScaler().fit_transform",
+    "feature_range": [
+      0,
+      1
+    ],
+    "fit_scope": "entire supplied panel; no date, industry or training split",
+    "component_signs": {
+      "chi2_d1": 1,
+      "chi2_d2": 1,
+      "adj_M_score1": 1,
+      "r2_lag1": 1,
+      "r2_lag2": 1
+    },
+    "outlier_treatment": "none explicitly specified",
+    "historical_dependency_versions": "not_recovered"
+  },
+  "row_score": {
+    "output_name": "integrityScore",
+    "coefficient_by_normalized_component": {
+      "chi2_d1": 0.2,
+      "chi2_d2": 0.2,
+      "adj_M_score1": 0.2,
+      "r2_lag1": 0.2,
+      "r2_lag2": 0.2
+    },
+    "reduction": "pandas DataFrame.sum(axis=1), multiplied by 0.2",
+    "missingness_current_default_semantics": {
+      "skipna": true,
+      "min_count": 0,
+      "renormalize_missing_components": false,
+      "all_missing_row_result": 0
+    },
+    "current_default_checks": "verified with synthetic inputs; not a selected replacement missingness rule"
+  },
+  "calendar_year_aggregation": {
+    "date_conversion": {
+      "origin": "1899-12-30",
+      "unit": "D"
+    },
+    "year_source": "calendar year from converted datadate",
+    "group_keys": [
+      "tic",
+      "year"
+    ],
+    "reduction": "mean row integrityScore, merged back to original rows",
+    "output_name": "is_yoy",
+    "require_complete_four_quarters": false,
+    "enforce_unique_quarters": false,
+    "certified_stable_identity": false,
+    "genuine_publication_time_check": false
+  },
+  "located_export": {
+    "role": "normalized inputs before source-order score assignment",
+    "sha256": "b88a923a2d0a4373a5504c07cc036a867a2edddabe3f533e92cfc3ac263b70f3",
+    "rows": 19228,
+    "columns": 12,
+    "serialized_index": true,
+    "integrityScore_present": false,
+    "is_yoy_present": false
+  },
+  "report_comparison": {
+    "report_source_sha256": "7c63411b4ead3f97303d6f9b6acfe090d670bb7e348d93621f3ad31bf9898c0b",
+    "signed_coefficient_by_term": {
+      "chi2_d1": -0.2,
+      "chi2_d2": 0.2,
+      "adj_M_score1": 0.2,
+      "r2_lag1": -0.2,
+      "r2_lag2": 0.2
+    },
+    "report_symbol_transform_binding": "unresolved",
+    "substitute_report_signs_into_q08": "would_create_a_new_definition"
+  },
+  "readiness": {
+    "component_input_to_score_recipe_recovered": true,
+    "normalized_artifact_compatibility_verified": true,
+    "missing_named_input_bytes_recovered": false,
+    "upstream_generators_recovered": false,
+    "end_to_end_historical_reproduction": false,
+    "canonical_report_definition_certified": false,
+    "historical_market_use_certified": false
+  },
+  "next_source_dependency": "Originating cloud files and related accessible versions/material; connection/access not yet confirmed",
+  "forbidden_substitutions": [
+    "Do not equate M_score with Adjusted M1 based on an explicitly assumed rename.",
+    "Do not fit Adjusted M formulas from output values.",
+    "Do not merge Q08 MinMax rules with report signs and claim recovered historical code."
+  ]
+}

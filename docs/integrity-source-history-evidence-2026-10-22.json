@@ -1,0 +1,364 @@
+{
+  "schema_version": 1,
+  "prepared_date": "2026-10-22",
+  "timezone": "America/Toronto",
+  "scope": "Source history and known-recipe artifact compatibility only; source notebooks were not executed",
+  "local_git_history": {
+    "repositories": 15,
+    "distinct_commits_across_repositories": 118,
+    "distinct_selected_blobs_across_repositories": 461,
+    "distinct_notebook_blobs": 37,
+    "actual_code_cells_across_distinct_notebook_blobs": 384,
+    "all_nonshallow": true,
+    "refs_head_reflog_unchanged": true,
+    "original_named_adjusted_m_generator_found": false,
+    "initial_table_writer_found": false,
+    "private_scan_receipt_sha256": "dfa31a454b00044ba68a6562529599a937ad3984abc6b88f5fe03d6539f02760"
+  },
+  "remote_git_history": {
+    "date": "2026-10-22",
+    "timezone": "America/Toronto",
+    "scope": "Read-only remote public Git history audit for Adjusted M named generators and Final_df(Uncleaned).csv assembly/export; original historical sources only, excluding new restoration material as independent evidence",
+    "repositories": [
+      {
+        "repository": "SRG-eddieliu/systematic-alpha-lab",
+        "reachable_commits": 47,
+        "unique_blobs": 267,
+        "scanned_source_blobs": 266,
+        "notebook_versions": 2,
+        "actual_code_cells": 28,
+        "head_refs": 15,
+        "pull_head_refs": 14,
+        "tags": 0,
+        "independent_named_generator_found": false,
+        "initial_table_writer_found": false,
+        "strong_matches_classification": "All Adjusted M strong-target matches first appear in current restoration head 18f0341 or new gap documentation 5a9b141; not independent historical definitions."
+      },
+      {
+        "repository": "SRG-eddieliu/quantlab_step2_factor_research",
+        "reachable_commits": 22,
+        "unique_blobs": 176,
+        "scanned_source_blobs": 144,
+        "notebook_versions": 9,
+        "actual_code_cells": 77,
+        "head_refs": 1,
+        "pull_head_refs": 0,
+        "tags": 0,
+        "matching_lines": 0,
+        "independent_named_generator_found": false,
+        "initial_table_writer_found": false
+      },
+      {
+        "repository": "SRG-eddieliu/quantlab_step1_data_ingestion",
+        "reachable_commits": 12,
+        "unique_blobs": 45,
+        "scanned_source_blobs": 43,
+        "notebook_versions": 6,
+        "actual_code_cells": 51,
+        "head_refs": 1,
+        "pull_head_refs": 0,
+        "tags": 0,
+        "strong_matches_classification": "Four generic final_df variable references in transform.py write provider data to long-format Parquet; not the target CSV assembly/export.",
+        "independent_named_generator_found": false,
+        "initial_table_writer_found": false
+      },
+      {
+        "repository": "SRG-eddieliu/quantlab_step3_alpha_library",
+        "reachable_commits": 3,
+        "unique_blobs": 13,
+        "scanned_source_blobs": 12,
+        "notebook_versions": 1,
+        "actual_code_cells": 5,
+        "head_refs": 1,
+        "pull_head_refs": 0,
+        "tags": 0,
+        "matching_lines": 0,
+        "independent_named_generator_found": false,
+        "initial_table_writer_found": false
+      }
+    ],
+    "totals": {
+      "reachable_commits_summed_by_repository": 84,
+      "unique_blobs_summed_by_repository": 501,
+      "source_text_or_header_blobs_summed_by_repository": 465,
+      "notebook_versions_summed_by_repository": 18,
+      "actual_code_cells_summed_by_repository": 161
+    },
+    "method": {
+      "connector_inventory": true,
+      "visible_repositories": 11,
+      "additional_owner_repositories_discovered": false,
+      "default_branch_code_search_no_results": true,
+      "code_search_no_results_treated_as_proof": false,
+      "anonymous_public_mirror_clones": true,
+      "project_checkout_mutated": false,
+      "remote_write_performed": false,
+      "notebooks_executed": false,
+      "source_credentials_read": false,
+      "all_advertised_cloned_refs_and_reachable_history_scanned": true,
+      "historical_deleted_file_contents_in_reachable_git_history_included": true,
+      "all_local_mirror_refs_unchanged_during_scan": true
+    },
+    "boundaries": [
+      "Sources were chosen from the four related accessible public repositories. The connector inventory contained eleven repositories, with no additional owner/repository discovered.",
+      "Only refs advertised by GitHub and their reachable history were obtained; deleted branches without preserved refs/PR heads, unreachable or garbage-collected objects, other accounts, GitHub attachments, and external/cloud documents are not ruled out.",
+      "Notebook actual code cells were parsed; outputs and metadata were not treated as source code.",
+      "Source suffixes were inspected as UTF-8 text; CSV files were header-only. Binary saved Parquet outputs, DS_Store, ignore/license files were excluded and inventoried.",
+      "Public aggregate descriptions and local restored code produced during this effort are derivative evidence, not an independent named-variant generator.",
+      "The finding does not authorize filling missing formulas, fitting them from saved scores, or relabeling the separate Excel Beneish implementation as Adjusted M1/M2."
+    ]
+  },
+  "additional_local_versions": {
+    "audit": "local_non_git_integrity_history_followup_v1",
+    "scope": "Read-only filename/archive-directory and source-text review; no notebook execution, data repair, normalization inversion or new alpha experiment",
+    "reviewed": {
+      "downloaded_notebooks": 46,
+      "downloaded_code_cells": 1004,
+      "downloaded_text_source_exports": 69,
+      "zip_archives_directory_only": 9,
+      "archived_notebook_candidates": 0,
+      "duplicate_srg_original_notebooks_hash_identical_and_not_reexecuted": 7
+    },
+    "new_source": {
+      "role": "Downloaded fixed-five-factor return-analysis notebook",
+      "sha256": "0d893c72c487b150a302cc5a80759e1bbd71156ec4f8bada91494e1124f5994f",
+      "bytes": 424025,
+      "code_cells": 29,
+      "all_reviewed_source_bytes_unchanged": true
+    },
+    "new_stored_output": {
+      "role": "Downloaded five-field normalized CSV output",
+      "sha256": "b88a923a2d0a4373a5504c07cc036a867a2edddabe3f533e92cfc3ac263b70f3",
+      "bytes": 2887957,
+      "rows": 19228,
+      "columns": 12,
+      "score_column_present": false,
+      "five_fields_missing_counts_all_zero": true
+    },
+    "code_locations_zero_based": {
+      "input_table": {
+        "cell": 1,
+        "read_csv": "df_clean(new).csv"
+      },
+      "five_field_selection": {
+        "cell": 2,
+        "columns": [
+          "chi2_d1",
+          "chi2_d2",
+          "adj_M_score1",
+          "r2_lag1",
+          "r2_lag2"
+        ]
+      },
+      "normalization": {
+        "cell": 3,
+        "method": "MinMaxScaler.fit_transform pooled over full supplied input panel",
+        "sign_flips": [],
+        "groups_or_time_split": "none",
+        "explicit_missingness_or_finite_policy": "none"
+      },
+      "normalized_csv_writer": {
+        "cell": 4,
+        "to_csv": "df_norm.csv",
+        "index": true,
+        "before_score_assignment": true
+      },
+      "fixed_five_score": {
+        "cell": 5,
+        "formula": "0.2 * sum(chi2_d1, chi2_d2, adj_M_score1, r2_lag1, r2_lag2)",
+        "signs": "all_positive",
+        "row_sum_missingness": "No override of pandas default skipna behavior; no missing-component renormalization"
+      },
+      "date_conversion": {
+        "cell": 6,
+        "basis": "Excel serial dates, origin 1899-12-30, unit D"
+      },
+      "calendar_year_score": {
+        "cell": 7,
+        "operation": "mean quarterly integrityScore by ticker and calendar year derived from datadate"
+      },
+      "fraud_case_input": {
+        "cell": 21,
+        "basename": "manipulated_result.csv",
+        "source_path_role": "absolute path on another computer; not located locally"
+      },
+      "adjusted_m_rename": {
+        "cell": 23,
+        "rename": "M_score -> adj_M_score1",
+        "comment": "Assuming M_score = adj_M_score1",
+        "classification": "explicit assumption in a separate fraud-case branch; not an Adjusted M generator"
+      },
+      "fraud_case_score": {
+        "cell": 27,
+        "formula": "0.333 * sum(chi2_d1, chi2_d2, adj_M_score1)",
+        "classification": "separate three-factor variant after refitted scaling"
+      }
+    },
+    "stored_output_evidence": {
+      "input_displayed_columns": 83,
+      "input_includes": "Q04 broad factors, sixteen normalized fields, three integrity fields, late NICFO lags and their normalized fields, and four serialized-index columns",
+      "displayed_main_score_frame_rows": 19228,
+      "displayed_main_score_frame_columns": 12,
+      "displayed_calendar_year_frame_columns": 14,
+      "limit": "Saved displays and execution counters locate historical state but do not authenticate execution or source lineage."
+    },
+    "static_column_alignment": {
+      "left_role": "downloaded normalized CSV",
+      "right_role": "Q04 saved final-ready panel",
+      "rows_compared": 19228,
+      "columns": [
+        "conm",
+        "tic",
+        "datadate",
+        "fyearq",
+        "fqtr",
+        "ret_5y"
+      ],
+      "mismatches": 0,
+      "normalization_fitting_or_inversion": false,
+      "limit": "Compatible static panels do not recover the missing named input file or prove its generator."
+    },
+    "source_chain_outcomes": {
+      "fixed_five_generator": "new explicit all-positive MinMax variant located",
+      "raw_adjusted_m1_m2_generator": "not_found_in_reviewed_new_sources",
+      "final_df_uncleaned_writer": "not_found_in_reviewed_non_git_sources",
+      "df_clean_new_input": "not_located_by_case_insensitive_filename_search_in_Documents_Downloads_Desktop",
+      "manipulated_result_input": "not_located_in_same_scope",
+      "df_norm_output": "located; schema and saved display compatible with pre-score export"
+    },
+    "version_conflicts": [
+      "This new fixed-five code uses all positive terms after pooled MinMax scaling; the twenty-page report has negative Chi2 D1 and R2 Lag1 terms.",
+      "Q04 uses pooled signed zscores on sixteen fields, while the new notebook selects five raw-named fields and applies another scaler.",
+      "The separate fraud-case branch assumes a raw M-score is AdjM1 and computes only three factors; it cannot define the main sample Adjusted M."
+    ],
+    "origin_clues": {
+      "downloaded_notebook": "Local extended attributes indicate a Google Drive source and a July 2025 download date.",
+      "original_final_input": "Local extended attributes indicate a Google Drive source and a June 2025 download date.",
+      "private_canonical_file_links": "retained only in private sanitized metadata evidence; no download query tokens saved",
+      "limit": "Local metadata is a clue, not authenticated authorship or generation history."
+    },
+    "minimum_next_source": "Recover the exact df_clean(new).csv or its writer/version and inspect the originating Drive files/parent context; retain all variants separately until the Adjusted M definition and signed report mapping are explicit."
+  },
+  "q08_source_cell_sha256": {
+    "1": "9aab61a9d94ee416abf1085d2c3821cd868f0d2d22ffa117ed4a583b22428313",
+    "2": "98559ec846530628ff2de980339877772a98ad1ab354ed9497b4d41d8da7c0ad",
+    "3": "4b75a20eda9e733b33e887eb76c0178ab321995a17b7e07769092a46d5983ec5",
+    "4": "d97af2941fd5a378ccfda498e8dbe2e01a5ecdaef8c4ee0271d7c543186a1ba8",
+    "5": "e1140ba2780c8ff0a6ee126d2ee39bdbaea59740cfb0627f90c874e3dc6a5398",
+    "6": "22f99a9787e6e119e882ab0c64fb14b7b68238bf4db2eb5447b48e32f7549d18",
+    "7": "d246764c19cdda4d89201032f12798b7ff3576d40a539e5658adc3e52d1a349f",
+    "23": "aeee2b01046868c440750a70803f9cd368ffb13f10523ff5366526be1bc9c070",
+    "27": "4a928e8fce79100f4106d6dbd2de86b30823fc94b83ddbaf24ae435203e8abae"
+  },
+  "artifact_alignment": {
+    "audit": "known_five_component_minmax_artifact_alignment_v1",
+    "scope": "Known-recipe compatibility only; no missing input recovery, Adjusted M inference, notebook replay or market test",
+    "input_sha256": {
+      "q04_saved_analysis_panel": "0befad0b118dc04bd4b6ee27a64f369ff7df03bea628619f0377e67568e7d93f",
+      "q08_saved_normalized_inputs": "b88a923a2d0a4373a5504c07cc036a867a2edddabe3f533e92cfc3ac263b70f3"
+    },
+    "rows_each": 19228,
+    "comparison_candidate_key": [
+      "tic",
+      "fyearq",
+      "fqtr"
+    ],
+    "stable_company_identity_certified": false,
+    "missing_candidate_keys_each": 0,
+    "duplicate_candidate_key_rows_each": 0,
+    "candidate_key_order_equal": true,
+    "static_field_mismatches": {
+      "conm": 0,
+      "tic": 0,
+      "datadate": 0,
+      "fyearq": 0,
+      "fqtr": 0,
+      "ret_5y": 0
+    },
+    "normalization": "MinMaxScaler defaults, fit to entire supplied Q04 saved panel; exact recipe independently stated by Q08",
+    "component_comparisons": 96140,
+    "absolute_tolerance": 1e-10,
+    "relative_tolerance": 0,
+    "per_component": {
+      "chi2_d1": {
+        "comparisons": 19228,
+        "mismatches": 0,
+        "max_absolute_error": 2.7755575615628914e-16
+      },
+      "chi2_d2": {
+        "comparisons": 19228,
+        "mismatches": 0,
+        "max_absolute_error": 8.326672684688674e-17
+      },
+      "adj_M_score1": {
+        "comparisons": 19228,
+        "mismatches": 0,
+        "max_absolute_error": 1.1102230246251565e-16
+      },
+      "r2_lag1": {
+        "comparisons": 19228,
+        "mismatches": 0,
+        "max_absolute_error": 2.275957200481571e-15
+      },
+      "r2_lag2": {
+        "comparisons": 19228,
+        "mismatches": 0,
+        "max_absolute_error": 3.2374276870417162e-15
+      }
+    },
+    "max_absolute_error": 3.2374276870417162e-15,
+    "source_bytes_unchanged": true,
+    "environment": {
+      "pandas": "2.2.3",
+      "numpy": "2.5.4",
+      "scikit-learn": "1.9.1"
+    },
+    "limitations": [
+      "The missing named Q08 input and its writer remain unlocated.",
+      "Agreement supports compatible data contents and a known normalization recipe, not byte-level parentage or run chronology.",
+      "Ticker/fiscal keys are comparison keys, not certified security or stable-company identities.",
+      "Adjusted M1 values are consumed unchanged as supplied inputs; their generating formula is not inferred.",
+      "No integrityScore or annual aggregate is compared because this saved normalized-input artifact does not contain them."
+    ]
+  },
+  "independent_artifact_alignment": {
+    "review": "independent_known_recipe_artifact_alignment_v1",
+    "date": "2026-10-22",
+    "method": "Read-only header/key/static comparison and direct (x-min)/(max-min) algebra, without executing notebook or root audit function",
+    "root_audit_code_sha256": "d7b7660e58c1b52e830024df1ddb77200b635749b9383b8c56c267c29436a987",
+    "input_sha256": [
+      "0befad0b118dc04bd4b6ee27a64f369ff7df03bea628619f0377e67568e7d93f",
+      "b88a923a2d0a4373a5504c07cc036a867a2edddabe3f533e92cfc3ac263b70f3"
+    ],
+    "rows_each": 19228,
+    "all_five_nonconstant_finite_columns": true,
+    "candidate_key_order_equal": true,
+    "unique_nonmissing_candidate_keys": true,
+    "static_field_mismatches": {
+      "conm": 0,
+      "tic": 0,
+      "datadate": 0,
+      "fyearq": 0,
+      "fqtr": 0,
+      "ret_5y": 0
+    },
+    "comparisons": 96140,
+    "mismatches_at_absolute_1e_minus_10": 0,
+    "max_absolute_error_direct_algebra": 3.236994006172722e-15,
+    "normalized_artifact_has_integrityScore": false,
+    "normalized_artifact_has_is_yoy": false,
+    "source_bytes_unchanged": true,
+    "conclusion": "Compatible selected contents and known five-component normalization only; no missing parent input or named Adjusted M generator recovered; no score/year output replay"
+  },
+  "audit_code_sha256": "d7b7660e58c1b52e830024df1ddb77200b635749b9383b8c56c267c29436a987",
+  "execution_contract": "integrity-fixed-five-contract.json",
+  "access_gap": {
+    "origin_metadata_has_cloud_original_leads": true,
+    "provider": "Google Drive",
+    "connection_confirmed": false,
+    "cloud_originals_read_this_audit": false,
+    "private_file_identifiers_published": false
+  },
+  "overlap_note": "Local and remote history scopes overlap; their counts are not independent evidence and must not be added.",
+  "source_and_publication_boundary": "Original code cells, reports, financial rows, local paths, private file IDs and tokenized URLs remain outside this repository."
+}

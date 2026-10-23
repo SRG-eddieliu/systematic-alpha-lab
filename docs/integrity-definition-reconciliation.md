@@ -15,11 +15,11 @@ of their behavior; no original notebook is being republished.
 | Component | Report description | Recovered implementation | Current decision |
 | --- | --- | --- | --- |
 | Beneish | Eight-ratio M-score / Adjusted M | Q07 applies the eight coefficients to adjacent retained quarterly rows; TATA is `(change current assets - change current liabilities) / current total assets`. Its threshold and sigmoid are hand-set. | Preserve exact arithmetic as `legacy_q07_quarterly_proxy_v1`, with explicit validity checks. It is not the published annual model. |
-| Adjusted M | A transformed M-score contributes to the composite; the located twenty-page report selects Adjusted M1 | Q04 consumes `adj_M_score1/2` from an existing CSV. An expanded audit of fourteen notebooks/checkpoints and workbook formulas found no generator or binding to the Excel variants. | Generation and upstream lineage remain unresolved; do not infer a formula from saved scores or substitute another transformation. |
+| Adjusted M | A transformed M-score contributes to the composite; the located twenty-page report selects Adjusted M1 | Q04 and the additionally located Q08 consume existing fields. Expanded local versions and reachable Git histories found no original generator or binding to the Excel variants. Q08's separate comparison branch labels a rename from M-score to M1 as an assumption. | Generation and upstream lineage remain unresolved; a rename, output fit or another transformation is not the definition. |
 | Benford | First/second digit chi-square quantities | Q04 consumes precomputed fields; Q07 constructs a different first-digit financial-field distance, without the chi-square sample-size multiplier, then applies a custom sigmoid. Source lineage between these is unproven. | Existing corrected Benford diagnostics are separate. Recover the exact input pool and statistic definition before reconciling the original combined score. |
 | Accrual quality | Net-income/CFO lag regression R-squared | Q04 fits separate single-variable `ibq ~ shifted oancfy` regressions inside an eight-row window, lag 0–4, and attaches output to the next row. It uses YTD CFO rather than the available quarterly CFO column. | Preserve this finding; decide flow alignment and window/sample rules before a replacement regression. It is not a joint distributed-lag model. |
 | Income quality | NI/CFO and lagged CFO ratios | Q04 computes `ibq / shifted oancfy` after complete-case filtering; a row shift can skip missing quarters. | Quarterly NI/YTD CFO basis and lag continuity remain unresolved. |
-| Integrity composite | The Library report names five normalized components; a distinct twenty-page report states signed coefficients of magnitude 0.2 and selects Adjusted M1 | Q04 dynamically prunes correlated candidates, uses full-panel z-scores, reverses M-score signs, and computes PCA/equal/return-correlation-weighted variants. Saved output has 16 normalized factors; the twenty-page report's own Appendix E supplies this broader recipe. | The written five-factor recipe is recovered, but its operational transforms and executable lineage do not match the available implementation. Full-panel transformations and future-return-selected weights cannot support out-of-sample claims. |
+| Integrity composite | The Library report names five normalized components; a distinct twenty-page report states signed coefficients of magnitude 0.2 and selects Adjusted M1 | Q04 uses sixteen signed pooled z-scores. Newly located Q08 explicitly selects five, fits full-panel MinMax, gives all five positive 0.2 coefficients, then averages by ticker/calendar year. Its normalized export matches the known-recipe input comparison. | Preserve three separate versions: report signed five, Q08 positive MinMax five, Q04 sixteen. Q08's downstream execution contract is recovered; Adjusted M, upstream assembly and the report direction disagreement are unresolved. Whole-panel transformations do not support out-of-sample claims. |
 
 The located twenty-page report states `0.2 Chi_d2 - 0.2 Chi_d1 + 0.2 AdjM1 -
 0.2 R2_L1 + 0.2 R2_L2`, with higher values intended to mean better integrity.
@@ -28,6 +28,9 @@ distinguishes both report versions, the recovered written recipe and the
 saved sixteen-factor arithmetic. The formula's input transformations,
 normalization, missingness, scoring frequency and Adjusted M1 generator still
 need an explicit source contract before rebuilding that reported composite.
+The [history follow-up](integrity-source-history-2026-10-22.md) separately fixes
+Q08's recovered MinMax execution contract; it must not be combined with the
+report's signs and called the original formula.
 
 ## Published Beneish versus Q07
 
