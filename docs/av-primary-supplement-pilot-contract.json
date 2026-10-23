@@ -1,0 +1,380 @@
+{
+  "contract_id": "av_primary_supplement_pilot_v1",
+  "prepared_date": "2026-10-23",
+  "status": "bounded_collection_handoff_not_semantic_acceptance",
+  "decision": "Alpha Vantage remains primary when the exact observation is nonmissing and concept-qualified. SEC/issuer original disclosures are preferred for key missing concepts and accounting verification; yfinance supplies quick candidates and a bounded pilot cross-check.",
+  "source_policy": {
+    "priority": [
+      "qualified_nonmissing_Alpha_Vantage",
+      "SEC_or_issuer_original_disclosure_for_key_gaps_and_concept_verification",
+      "yfinance_quick_candidate_and_pilot_crosscheck"
+    ],
+    "wrds_compustat_dependency": "excluded_no_access_historical_manual_is_reference_only",
+    "fmp": "future_conditional_option_not_selected_no_request_or_paid_service",
+    "purchase_or_new_subscription": false
+  },
+  "owners": {
+    "collection_and_snapshot_integrity": "Shared Data Pipeline",
+    "accounting_target_and_mapping_acceptance": "Financial Quality Research",
+    "scope_and_budget_coordination": "SRG coordinator"
+  },
+  "authorization_boundary": {
+    "engineering_is_sole_collector": true,
+    "research_agent_data_api_calls": 0,
+    "new_source_values_accepted_by_this_document": false,
+    "calculator_or_method_definition_changed": false,
+    "frozen_definition_id": "beneish_2013_cashflow_annual_raw_v1",
+    "currency_quarantine_intake": "field_audit_only",
+    "annual_scoring_adapter": "original_av_fundamentals_v1_only",
+    "factor_calculation": false,
+    "reference_screen": false,
+    "backtest_or_investment_claim": false,
+    "expansion_beyond_selected_issuer_periods": false
+  },
+  "scope": {
+    "maximum_issuers": 3,
+    "maximum_fiscal_years_per_issuer": 2,
+    "maximum_selected_issuer_periods": 6,
+    "period_type": "annual",
+    "flow_basis": "annual",
+    "quarterly_or_ttm_substitution": "reject",
+    "provider_extra_history": "Preserve received source evidence privately; exclude nonselected periods from the pilot candidate table and report their exclusion. Do not interpret a provider's wider response as scope expansion.",
+    "issuers": [
+      {
+        "issuer": "Apple Inc.",
+        "av_symbol": "AAPL",
+        "yahoo_symbol": "AAPL",
+        "cik": "0000320193",
+        "identity_status": "verified_public_sec_filer_identity",
+        "identity_evidence": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm",
+        "period_evidence": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm",
+        "period_evidence_locator": "2025 Form 10-K inline-XBRL duration contexts and fiscal-year accounting policy; both selected fiscal years span 52 weeks.",
+        "periods": [
+          {
+            "fiscal_year": 2024,
+            "period_start": "2023-10-01",
+            "period_end": "2024-09-28"
+          },
+          {
+            "fiscal_year": 2025,
+            "period_start": "2024-09-29",
+            "period_end": "2025-09-27"
+          }
+        ],
+        "calendar_status": "verified_primary_source",
+        "observation_context_status": "must_verify_each_collected_fact_not_inherited_from_calendar",
+        "preferred_filing_version": {
+          "form": "10-K",
+          "fiscal_year": 2025,
+          "accession": "0000320193-25-000079",
+          "primary_document": "aapl-20250927.htm",
+          "primary_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm",
+          "selection_reason": "Single FY2025 filing version reporting both target years; verify each financial context and any restatement before accepting values."
+        }
+      },
+      {
+        "issuer": "Microsoft Corporation",
+        "av_symbol": "MSFT",
+        "yahoo_symbol": "MSFT",
+        "cik": "0000789019",
+        "identity_status": "verified_public_sec_filer_identity",
+        "identity_evidence": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/0000950170-25-100235-index.html",
+        "period_evidence": [
+          "https://www.microsoft.com/en-us/investor/faq",
+          "https://www.microsoft.com/investor/reports/ar25/index.html"
+        ],
+        "period_evidence_locator": "Issuer FAQ states July 1 through June 30; 2025 annual consolidated statements identify years ended June 30, 2025 and 2024.",
+        "periods": [
+          {
+            "fiscal_year": 2024,
+            "period_start": "2023-07-01",
+            "period_end": "2024-06-30"
+          },
+          {
+            "fiscal_year": 2025,
+            "period_start": "2024-07-01",
+            "period_end": "2025-06-30"
+          }
+        ],
+        "calendar_status": "verified_primary_source_calendar_and_annual_statement_labels",
+        "observation_context_status": "must_verify_each_collected_fact_not_inherited_from_calendar",
+        "preferred_filing_version": {
+          "form": "10-K",
+          "fiscal_year": 2025,
+          "accession": "0000950170-25-100235",
+          "primary_document": "msft-20250630.htm",
+          "primary_url": "https://www.sec.gov/Archives/edgar/data/789019/000095017025100235/msft-20250630.htm",
+          "selection_reason": "Single FY2025 filing version reporting both target years; verify each financial context and any restatement before accepting values."
+        }
+      },
+      {
+        "issuer": "International Business Machines Corporation",
+        "av_symbol": "IBM",
+        "yahoo_symbol": "IBM",
+        "cik": "0000051143",
+        "identity_status": "verified_public_sec_filer_identity",
+        "identity_evidence": "https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/0000051143-26-000010-index.html",
+        "period_evidence": [
+          "https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/ibm-20251231.htm",
+          "https://www.sec.gov/Archives/edgar/data/51143/000005114326000025/ibm-20260306.htm"
+        ],
+        "period_evidence_locator": "2025 10-K fiscal-year end and 2026 issuer proxy inline-XBRL annual contexts for 2024/2025; proxy compensation contexts establish calendar evidence only, not financial-fact scope.",
+        "periods": [
+          {
+            "fiscal_year": 2024,
+            "period_start": "2024-01-01",
+            "period_end": "2024-12-31"
+          },
+          {
+            "fiscal_year": 2025,
+            "period_start": "2025-01-01",
+            "period_end": "2025-12-31"
+          }
+        ],
+        "calendar_status": "verified_primary_source_calendar_not_financial_fact_context",
+        "observation_context_status": "must_verify_each_collected_financial_fact_against_10k_context",
+        "preferred_filing_version": {
+          "form": "10-K",
+          "fiscal_year": 2025,
+          "accession": "0000051143-26-000010",
+          "primary_document": "ibm-20251231.htm",
+          "primary_url": "https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/ibm-20251231.htm",
+          "selection_reason": "Single FY2025 filing version reporting both target years; verify each financial context and any restatement before accepting values.",
+          "required_financial_exhibit": {
+            "type": "EX-13",
+            "document": "ibm-20251231_d2.htm",
+            "url": "https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/ibm-20251231_d2.htm",
+            "requirement": "Capture the annual financial report incorporated into the 10-K. The primary document alone is not sufficient financial-statement evidence."
+          }
+        }
+      }
+    ]
+  },
+  "collection_plan": {
+    "alpha_vantage": {
+      "mode": "reuse_closed_explicit_pins_no_implicit_refresh",
+      "new_financial_requests": 0,
+      "statement_functions": [
+        "INCOME_STATEMENT",
+        "BALANCE_SHEET",
+        "CASH_FLOW"
+      ],
+      "allowed_materializations": [
+        "av_fundamentals_v1",
+        "av_fundamentals_currency_quarantine_v1"
+      ],
+      "allowed_statement_tables": [
+        "annual"
+      ],
+      "quarantine_and_normalization_audit": "diagnostic_evidence_only_never_financial_input",
+      "primary_qualification": "Retain AV only when the selected value is nonmissing and the evidence establishes the intended concept, exact period, units, currency and scope. A finite number or familiar field name alone is insufficient."
+    },
+    "yfinance": {
+      "role": "quick_supplementary_candidates_and_pilot_crosscheck_not_official_yahoo_accounting_certification",
+      "library_source": "https://github.com/ranaroussi/yfinance",
+      "documented_method_calls": [
+        "Ticker(symbol).get_income_stmt(freq='yearly', pretty=False)",
+        "Ticker(symbol).get_balance_sheet(freq='yearly', pretty=False)",
+        "Ticker(symbol).get_cashflow(freq='yearly', pretty=False)"
+      ],
+      "maximum_logical_statement_calls": 9,
+      "source_key_evidence": "https://github.com/ranaroussi/yfinance/blob/main/yfinance/const.py",
+      "source_key_status": "verified_in_library_source_on_prepared_date_not_a_coverage_or_semantics_guarantee",
+      "preserve_raw_response_requirement": "Capture original response bytes and request/response receipts through an engineering-owned transport boundary in addition to the returned table; a DataFrame alone is not sufficient provenance. Redact credentials, cookies and tokens from public artifacts.",
+      "failure_policy": "Record absence, empty returns, throttling and transport failures. No symbol substitution, automatic provider switch or unbounded retry."
+    },
+    "original_filings": {
+      "role": "preferred_key_gap_source_and_accounting_verification_for_the_selected_periods",
+      "allowed_sources": [
+        "SEC EDGAR original issuer filings",
+        "issuer-hosted annual reports and notes"
+      ],
+      "maximum_annual_filing_versions": 6,
+      "version_policy": "Prefer a single documented annual-filing version that reports both target years when compatible; preserve any additionally consulted version and explain restatements. Never mix versions silently.",
+      "aggregate_xbrl_limit": "Companyfacts or frames are discovery aids; verify exact accession/context and original notes when taxonomy, dimensions or classification do not establish the target.",
+      "sec_contact_configuration": "Use an existing authorized SEC identification/contact configuration. Do not invent a contact or print credentials; if unavailable, report the precise prerequisite and use an already authorized issuer-hosted original report where suitable."
+    },
+    "network_budget": {
+      "maximum_total_http_requests": 48,
+      "includes": [
+        "Yahoo statement requests",
+        "authentication or metadata requests initiated by the library",
+        "SEC or issuer document requests",
+        "retries and redirects issuing another request"
+      ],
+      "maximum_automatic_retries": 0,
+      "engineering_preflight": "Declare a per-source request plan within this ceiling and instrument actual wire requests before collection. If request interception or raw-response capture cannot be implemented, report the blocker rather than claiming a complete collection receipt.",
+      "limit_behavior": "Stop before exceeding the ceiling; report partial evidence and remaining gaps. Do not buy a subscription, rotate credentials or enlarge scope.",
+      "stricter_existing_limit": "Use the lower of this ceiling and any already established engineering per-session/per-source request bound; this contract does not enlarge an existing budget."
+    }
+  },
+  "candidate_concepts": {
+    "pure_depreciation_policy": {
+      "status": "candidate_only_for_unchanged_srg_policy",
+      "av_fields": {
+        "INCOME_STATEMENT": [
+          "depreciation"
+        ]
+      },
+      "yahoo_income_fields": [
+        "DepreciationIncomeStatement"
+      ],
+      "yahoo_cash_flow_fields": [
+        "Depreciation"
+      ],
+      "acceptance": "Require evidence of annual tangible depreciation expense with matching reporting scope. Cash-flow presentation alone does not establish income-statement expense equivalence. No D&A/DD&A substitution or depletion inclusion."
+    },
+    "paper_dp_minus_am_target": {
+      "status": "separate_method_review_candidate_not_v1_input",
+      "paper_expression": "Compustat income-statement item 14 minus item 65",
+      "av_fields": {
+        "INCOME_STATEMENT": [
+          "depreciationAndAmortization"
+        ],
+        "CASH_FLOW": [
+          "depreciationDepletionAndAmortization"
+        ]
+      },
+      "yahoo_income_fields": [
+        "DepreciationAmortizationDepletionIncomeStatement",
+        "DepletionIncomeStatement",
+        "DepreciationAndAmortizationInIncomeStatement",
+        "Amortization",
+        "AmortizationOfIntangiblesIncomeStatement"
+      ],
+      "yahoo_cash_flow_fields": [
+        "DepreciationAmortizationDepletion",
+        "Depletion",
+        "DepreciationAndAmortization",
+        "AmortizationCashFlow",
+        "AmortizationOfIntangibles"
+      ],
+      "acceptance": "Collect components separately. Establish income-statement basis, component inclusion and vendor-to-filing scope before any subtraction. Never treat CF D&A minus an arbitrary amortization field as a recovered paper target; no calculation is authorized here."
+    },
+    "noncurrent_debt_and_lease_scope": {
+      "status": "candidate_components_only",
+      "av_fields": {
+        "BALANCE_SHEET": [
+          "longTermDebtNoncurrent",
+          "longTermDebt",
+          "currentLongTermDebt",
+          "currentDebt",
+          "capitalLeaseObligations"
+        ]
+      },
+      "yahoo_balance_sheet_fields": [
+        "LongTermDebt",
+        "LongTermDebtAndCapitalLeaseObligation",
+        "LongTermCapitalLeaseObligation",
+        "CapitalLeaseObligations",
+        "CurrentDebt",
+        "CurrentDebtAndCapitalLeaseObligation",
+        "CurrentCapitalLeaseObligation",
+        "CurrentLiabilities"
+      ],
+      "acceptance": "Distinguish current/noncurrent, finance/capital versus operating leases and gross/net carrying bases. Require nonoverlap before adding lease components and identical inclusion before total-minus-current reasoning. Broad currentDebt is not current maturities of long-term debt."
+    },
+    "ib18_income_bridge": {
+      "status": "candidate_components_only_not_ibei_certification",
+      "av_fields": {
+        "INCOME_STATEMENT": [
+          "netIncome",
+          "netIncomeFromContinuingOperations",
+          "incomeBeforeTax",
+          "incomeTaxExpense"
+        ],
+        "CASH_FLOW": [
+          "netIncome",
+          "profitLoss",
+          "operatingCashflow"
+        ]
+      },
+      "yahoo_income_fields": [
+        "NetIncomeFromContinuingOperationNetMinorityInterest",
+        "NetIncomeContinuousOperations",
+        "NetIncome",
+        "NetIncomeIncludingNoncontrollingInterests",
+        "MinorityInterests",
+        "NetIncomeDiscontinuousOperations",
+        "NetIncomeExtraordinary",
+        "NetIncomeCommonStockholders",
+        "PreferredStockDividends",
+        "PretaxIncome",
+        "TaxProvision",
+        "SpecialIncomeCharges"
+      ],
+      "yahoo_cash_flow_fields": [
+        "NetIncomeFromContinuingOperations",
+        "OperatingCashFlow",
+        "CashFlowFromContinuingOperatingActivities",
+        "CashFromDiscontinuedOperatingActivities"
+      ],
+      "acceptance": "Verify tax, NCI attribution, discontinued/extraordinary items, special items and before-dividend basis using the filing. Preserve the CFO scope separately. Neither equality with another field nor an absent discontinued/extraordinary row proves the bridge."
+    },
+    "receivables_scope_check": {
+      "status": "supporting_candidate_if_av_broad_receivables_are_not_qualified",
+      "av_fields": {
+        "BALANCE_SHEET": [
+          "currentNetReceivables"
+        ]
+      },
+      "yahoo_balance_sheet_fields": [
+        "AccountsReceivable",
+        "Receivables",
+        "OtherReceivables",
+        "NotesReceivable",
+        "LoansReceivable",
+        "AllowanceForDoubtfulAccountsReceivable",
+        "GrossAccountsReceivable"
+      ],
+      "acceptance": "Trade/current/net scope must be demonstrated; no name-only acceptance of total receivables or a stock allowance as an expense."
+    }
+  },
+  "observation_receipt_required": [
+    "public issuer CIK and exact provider symbol mapping with evidence",
+    "provider and original field/tag spelling, statement family and proposed target concept",
+    "source URL or request, response status, capture time, raw-content digest and immutable private snapshot pin",
+    "code commit, exact library version and source/configuration fingerprints",
+    "source-reported period label, explicit flow start/end or instant date, fiscal-year label and annual versus TTM status",
+    "currency, displayed unit and scale, source numeric representation and documented scaling operation if any",
+    "consolidated/parent/segment scope, NCI attribution, tax/dividend and continuing/discontinued scope where relevant",
+    "filing accession, form, filed date, source publication/revision version, source location and XBRL context/dimensions when available",
+    "missingness status, conflict status, semantic evidence and named reviewer decision kept separate from engineering integrity checks"
+  ],
+  "alignment_and_conflicts": {
+    "issuer": "Exact verified legal issuer mapping; ticker similarity is insufficient.",
+    "periods": "Require exact stated start/end for flows and exact end date for stocks. No nearest-date, same-month, calendar-month-end or previous-row bridge. A Yahoo month-end label that differs from the issuer date remains an unmatched candidate until an explicit, separately reviewed provider-label explanation is recorded; it is not accepted by this contract.",
+    "duration": "Do not invent starts from a year label, assume four quarters equal an annual flow, or infer a start from the previous end. Calendar evidence is a planned selector, not a provider fact's duration certificate.",
+    "units_and_currency": "No guessed currency/scale, FX conversion or split adjustment. A documented deterministic scale conversion must retain the original amount and unit; unknowns stay unverified.",
+    "versions": "Retain original and restated observations separately; select a coherent documented version, never an implicit latest or a value-by-value mixture.",
+    "priority": "Qualified nonmissing AV has priority. An AV semantic failure is an explicit qualification gap, not permission to accept any nonmissing supplement. Do not overwrite the raw AV observation.",
+    "disagreement": "Preserve both candidates and reconcile using original filing evidence. Do not average, choose the nearest number, or resolve by majority/provider precedence alone.",
+    "numeric_agreement": "Exact equality is an arithmetic diagnostic, not semantic proof. Preserve source display precision/decimals and exact scaled residuals as diagnostics. This pilot permits no rounding tolerance to match or accept a candidate; any later bounded rounding-acceptance rule requires separate technical review and cannot waive concept, scope or date differences.",
+    "missingness": "Preserve missing, absent field, explicit source zero, nonfinite, boolean and invalid numeric states separately. No blind fill, adjacent-period carry, assumed zero, double-counted components or silently repaired sign."
+  },
+  "acceptance_and_delivery": {
+    "engineering_acceptance": [
+      "Closed, separately versioned pilot package using the shared snapshot/reader implementation; original AV objects and manifests unchanged.",
+      "At most six selected issuer-periods; exact source tables and excluded extra periods are accounted for.",
+      "All collected candidate components, failures and missingness have source receipts; do not suppress an issuer because its supplement failed.",
+      "Prove original/derived input immutability, source-byte integrity, normalizer/table pins and actual request accounting.",
+      "Return a field-by-issuer-period coverage/conflict matrix and review queue; no candidate is automatically marked verified_exact."
+    ],
+    "research_acceptance": "Separate later review of each mapping and method target; this handoff supplies evidence and does not clear the calculator gates.",
+    "public_delivery": "Contract, code and sanitized aggregate counts/statuses only. Keep source payloads, financial values, capture timestamps, private pins/digests, credentials and machine paths in authorized private evidence.",
+    "failure_is_a_valid_result": "Report exact unresolved concept/context/version reasons. A completed bounded collection need not yield any accepted Beneish input or score.",
+    "standard_definition_satisfied": false,
+    "research_ready": false
+  },
+  "primary_references": [
+    "https://www.alphavantage.co/documentation/",
+    "https://documentation.alphavantage.co/FundamentalDataDocs/gaap_documentation.html",
+    "https://ranaroussi.github.io/yfinance/reference/api/yfinance.Ticker.get_income_stmt.html",
+    "https://ranaroussi.github.io/yfinance/reference/api/yfinance.Ticker.get_balance_sheet.html",
+    "https://ranaroussi.github.io/yfinance/reference/api/yfinance.Ticker.get_cashflow.html",
+    "https://github.com/ranaroussi/yfinance/blob/main/yfinance/const.py",
+    "https://github.com/ranaroussi/yfinance/blob/main/yfinance/scrapers/fundamentals.py",
+    "https://www.sec.gov/search-filings/edgar-application-programming-interfaces",
+    "https://github.com/SRG-eddieliu/systematic-alpha-lab/pull/20"
+  ]
+}
