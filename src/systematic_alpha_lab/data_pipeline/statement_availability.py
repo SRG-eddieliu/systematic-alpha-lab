@@ -70,15 +70,18 @@ def build_gap_coverage(contract, *, statements, primary_jobs, logical_jobs):
         if not isinstance(frame, pd.DataFrame) or not isinstance(pin, dict):
             raise TypeError("Require stored source facts and exact reader metadata")
         request = pin["request"]
-        if pin["provider"] != "yahoo_financial_timeseries" or any(
+        if (pin["provider"] != "yahoo_financial_timeseries" or pin.get("normalizer") != "yf_statement_http_v2"
+                or request.get("schema") != "yf_statement_http_capture_v2" or any(
             request.get(name) != value for name, value in (("symbol", symbol), ("statement", statement),
                                                           ("frequency", frequency))
-        ):
+        )):
             raise ValueError("Source pin differs from the explicit availability selection")
         required = {"source_metric", "period_end", "source_value_json", "source_value_type", "value_status"}
         if not required.issubset(frame.columns):
             raise ValueError("Source facts schema missing")
-        for name, value in (("symbol", symbol), ("provider", "yahoo_financial_timeseries")):
+        for name, value in (("symbol", symbol), ("provider", "yahoo_financial_timeseries"),
+                            ("source_statement", statement), ("source_frequency", frequency),
+                            ("normalizer", pin["normalizer"]), ("snapshot_id", pin["snapshot_id"])):
             if name in frame and not frame[name].eq(value).fillna(False).all():
                 raise ValueError("Source rows differ from their availability selection")
         dates = pd.to_datetime(frame.period_end, utc=True, errors="raise")
@@ -97,7 +100,13 @@ def build_gap_coverage(contract, *, statements, primary_jobs, logical_jobs):
             expected = [FREQUENCIES[frequency] + field for field in fields]
             missing = [field for field, metric in zip(fields, expected) if metric_counts.get(metric, 0) == 0]
             duplicate = [field for field, metric in zip(fields, expected) if metric_counts.get(metric, 0) > 1]
-            complete = not missing and not duplicate
+            expected_type = "12M" if frequency == "yearly" else "3M"
+            type_conflicts = [field for field, metric in zip(fields, expected) if any(
+                not isinstance(row.get("source_period_type"), str) or row["source_period_type"] != expected_type
+                for row in numeric_rows
+                if row["source_metric"] == metric
+            )]
+            complete = not missing and not duplicate and not type_conflicts
             if complete:
                 state["core_complete_periods"].append(label)
             history = "source_period_issuer_unreviewed"
@@ -107,6 +116,8 @@ def build_gap_coverage(contract, *, statements, primary_jobs, logical_jobs):
                             "source_frequency": frequency, "period_end": pd.Timestamp(label, tz="UTC"),
                             "numeric_fact_rows": len(numeric_rows), "native_core_fields_present": complete,
                             "missing_core_fields_json": _json(missing), "duplicate_core_fields_json": _json(duplicate),
+                            "core_period_type_conflicts_json": _json(type_conflicts),
+                            "frequency_label_status": "missing_or_conflicting" if type_conflicts else "matching_source_label_duration_unverified",
                             "source_period_type_labels_json": _json(sorted(selected.source_period_type.dropna().unique().tolist()))
                             if "source_period_type" in selected else "[]",
                             "flow_start_status": "instant" if statement == "balance-sheet" else "unknown",
@@ -136,11 +147,12 @@ def build_gap_coverage(contract, *, statements, primary_jobs, logical_jobs):
                          "quarterly_periods_json": _json(quarterly["source_periods"]),
                          "annual_pin_json": _json(annual["pin"]), "quarterly_pin_json": _json(quarterly["pin"]),
                          "annual_attempt_status": annual["attempt_status"], "quarterly_attempt_status": quarterly["attempt_status"],
-                         "entity_binding": "verified_public_current_ticker_mapping; provider_symbol_only",
+                         "entity_binding": "contract_declared_current_mapping; provider_symbol_only",
                          "historical_issuer_binding": "unreviewed", "accounting_scope": "unreviewed",
                          "semantic_acceptance": "unreviewed", "historical_availability": "not_certified"})
     columns = ["symbol", "cik", "source_statement", "source_frequency", "period_end", "numeric_fact_rows",
                "native_core_fields_present", "missing_core_fields_json", "duplicate_core_fields_json",
-               "source_period_type_labels_json", "flow_start_status", "issuer_period_status", "unit_scope_status",
+               "core_period_type_conflicts_json", "frequency_label_status", "source_period_type_labels_json",
+               "flow_start_status", "issuer_period_status", "unit_scope_status",
                "semantic_acceptance", "source_pin_json"]
     return {"coverage": pd.DataFrame(rows), "periods": pd.DataFrame(periods, columns=columns)}

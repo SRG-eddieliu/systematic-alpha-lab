@@ -25,7 +25,12 @@ def inputs():
                                "provider": "yahoo_financial_timeseries", "symbol": symbol}
                               for metric in CORE_FIELDS[statement]])
         pin = {"provider": "yahoo_financial_timeseries", "snapshot_id": "synthetic",
-               "request": {"symbol": symbol, "statement": statement, "frequency": freq}}
+               "normalizer": "yf_statement_http_v2",
+               "request": {"symbol": symbol, "statement": statement, "frequency": freq,
+                           "schema": "yf_statement_http_capture_v2"}}
+        for name, value in {"source_statement": statement, "source_frequency": freq,
+                            "normalizer": pin["normalizer"], "snapshot_id": pin["snapshot_id"]}.items():
+            frame[name] = value
         statements[symbol, statement, freq] = {"frame": frame, "pin": pin}
     return contract, primary, jobs, statements
 
@@ -97,5 +102,39 @@ def test_mismatched_primary_or_source_scope_rejected(change):
         statements["DOC", "income", "yearly"]["pin"]["request"]["symbol"] = "PEAK"
     else:
         statements["DOC", "income", "yearly"]["frame"]["symbol"] = "OTHER"
+    with pytest.raises(ValueError):
+        build(contract, primary, jobs, statements)
+
+
+@pytest.mark.parametrize("column", ["source_statement", "source_frequency", "normalizer", "snapshot_id"])
+def test_wrong_row_identity_rejected(column):
+    contract, primary, jobs, statements = inputs()
+    statements["DOC", "income", "yearly"]["frame"][column] = "wrong"
+    with pytest.raises(ValueError):
+        build(contract, primary, jobs, statements)
+
+
+@pytest.mark.parametrize("frequency,label", [("yearly", "3M"), ("quarterly", "TTM"), ("quarterly", None),
+                                             ("quarterly", pd.NA)])
+def test_source_period_type_conflict_blocks_positive_coverage(frequency, label):
+    contract, primary, jobs, statements = inputs()
+    statements["DOC", "income", frequency]["frame"]["source_period_type"] = label
+    result = build(contract, primary, jobs, statements)
+    assert result["coverage"].availability_status.eq("readable_supplement_candidate").sum() == 5
+    assert result["periods"].frequency_label_status.eq("missing_or_conflicting").any()
+
+
+def test_contract_mapping_is_declared_not_verified_by_coverage_helper():
+    contract, primary, jobs, statements = inputs()
+    contract["targets"][0]["cik"] = "0000000001"
+    result = build(contract, primary, jobs, statements)
+    assert result["coverage"].entity_binding.eq("contract_declared_current_mapping; provider_symbol_only").all()
+
+
+@pytest.mark.parametrize("part", ["schema", "normalizer"])
+def test_old_source_version_cannot_enter_new_availability(part):
+    contract, primary, jobs, statements = inputs()
+    pin = statements["BXP", "income", "yearly"]["pin"]
+    (pin["request"] if part == "schema" else pin)[part] = "old_version"
     with pytest.raises(ValueError):
         build(contract, primary, jobs, statements)

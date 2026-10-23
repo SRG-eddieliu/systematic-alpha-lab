@@ -74,7 +74,7 @@
     "income_native_probes": ["TotalRevenue", "NetIncome"],
     "balance_sheet_native_probes": ["TotalAssets", "TotalLiabilitiesNetMinorityInterest"],
     "cash_flow_native_probes": ["OperatingCashFlow", "InvestingCashFlow", "FinancingCashFlow"],
-    "candidate_rule": "All native probes appear once as finite numbers at 2025-12-31 in annual data and at a quarterly source end on or after 2025-01-01",
+    "candidate_rule": "All native probes appear once as finite numbers with source periodType 12M at 2025-12-31 in annual data and 3M at a quarterly source end on or after 2025-01-01; duration remains unverified",
     "readable_table_rule": "At least one numeric source fact; reported separately from candidate_rule",
     "missingness": "Preserve null, omitted, nonfinite, zero and unknown as distinct states; no zero filling"
   },
