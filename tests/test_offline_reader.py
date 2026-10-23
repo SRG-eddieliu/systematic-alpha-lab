@@ -420,6 +420,50 @@ def test_sec_quarterly_requires_source_manifest_even_after_suffix_is_recomputed(
         OfflineDataReader(tmp_path).read(snapshot_id=record["id"], normalizer=changed["normalizer"], table="quarterly_review")
 
 
+@pytest.mark.parametrize("kind", ["annual", "quarterly", "sec_quarterly", "batch"])
+def test_known_reviews_reject_truncated_source_manifests_after_suffix_is_recomputed(tmp_path, kind):
+    store = SnapshotStore(tmp_path)
+    if kind == "sec_quarterly":
+        record, _, source = capture_sec_pair(store)
+        provenance = {"source_manifest": source}
+        version = "sec_quarterly_review_v1_" + hashlib.sha256(
+            json.dumps(provenance, sort_keys=True).encode()
+        ).hexdigest()[:20]
+        frame = pd.DataFrame({"period_end": ["2020-06-30"], "calculation_ready": [False]})
+        manifest = store.publish_tables(record, version, {"quarterly_review": frame}, provenance=provenance)
+    else:
+        records = provider_review_records(store)
+        if kind == "annual":
+            manifest = review_fundamental_snapshots(store, records)
+        elif kind == "quarterly":
+            manifest = review_quarterly_snapshots(store, records)
+        else:
+            manifest = review_fundamental_batch(store, symbols=["SYNTH"])["manifest"]
+    table = "annual_review" if kind == "annual" else "quarterly_review"
+    reader = OfflineDataReader(tmp_path)
+    original = reader.read(snapshot_id=manifest["snapshot_id"], normalizer=manifest["normalizer"], table=table)
+    assert not original.frame.empty
+
+    def truncate_sources(data):
+        provenance = data["provenance"]
+        if kind == "annual":
+            sources = provenance["input_manifests"]
+        elif kind == "quarterly":
+            sources = [provenance["annual_review_manifest"]]
+        elif kind == "sec_quarterly":
+            sources = [provenance["source_manifest"]]
+        else:
+            sources = provenance["company_manifests"].values()
+        for source in sources:
+            # IDs alone cannot replace the complete registered dependency.
+            for key in set(source) - {"snapshot_id", "normalizer"}:
+                del source[key]
+
+    changed = rewrite_derived_manifest(store, manifest, truncate_sources)
+    with pytest.raises(ValueError):
+        reader.read(snapshot_id=changed["snapshot_id"], normalizer=changed["normalizer"], table=table)
+
+
 def test_catalog_rejects_incorrect_manifest_row_count(sample):
     store, _, manifest = sample
     update_manifest(store, manifest, lambda data: data["tables"]["quarterly"].update(rows=9999))

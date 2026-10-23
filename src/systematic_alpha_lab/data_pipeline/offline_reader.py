@@ -185,6 +185,9 @@ class OfflineDataReader:
             raise ValueError("Normalizer version does not bind its complete provenance")
         if any(name not in provenance for name in families[family]):
             raise ValueError("Known normalizer lacks required dependency provenance")
+        # Known review contracts embed registered manifests. An ID-only object
+        # would not enter the manifest recursion in _dependencies below.
+        manifest_keys = {"snapshot_id", "normalizer", "tables"}
         if family == "sec_accession_facts_v1":
             items = provenance["input_snapshots"]
             if not isinstance(items, list) or len(items) < 2 or any(not isinstance(item, dict) for item in items):
@@ -200,8 +203,10 @@ class OfflineDataReader:
                 raise ValueError("SEC facts dependencies do not match the source contract")
         elif family == "av_statement_review_v1":
             items = provenance["input_manifests"]
-            if not isinstance(items, list) or len(items) != 3 or any(not isinstance(item, dict) for item in items):
-                raise ValueError("Statement review requires three statement manifests")
+            if not isinstance(items, list) or len(items) != 3 or any(
+                not isinstance(item, dict) or not manifest_keys.issubset(item) for item in items
+            ):
+                raise ValueError("Statement review requires three complete statement manifests")
             dependencies = [self._record(db, item.get("snapshot_id"), state) for item in items]
             functions = set()
             for item, dependency in zip(items, dependencies):
@@ -218,10 +223,10 @@ class OfflineDataReader:
                 "annual_review_manifest", "av_statement_review_v1_"
             )
             item = provenance[name]
-            if not isinstance(item, dict) or item.get("snapshot_id") != record["id"] or not isinstance(
-                item.get("normalizer"), str
-            ) or not item["normalizer"].startswith(prefix):
-                raise ValueError("Quarterly review lacks its required source manifest")
+            if not isinstance(item, dict) or not manifest_keys.issubset(item) or (
+                item.get("snapshot_id") != record["id"]
+            ) or not isinstance(item.get("normalizer"), str) or not item["normalizer"].startswith(prefix):
+                raise ValueError("Quarterly review lacks its required complete source manifest")
         elif family == "av_batch_review_v1":
             items = provenance["company_manifests"]
             selection = provenance.get("selection")
@@ -230,10 +235,10 @@ class OfflineDataReader:
             if not set(items).issubset(selection):
                 raise ValueError("Batch company manifests fall outside the explicit selection")
             for symbol, item in items.items():
-                if not isinstance(item, dict) or not isinstance(item.get("normalizer"), str) or not item[
-                    "normalizer"
-                ].startswith("av_quarterly_review_v1_"):
-                    raise ValueError("Batch review requires quarterly company manifests")
+                if not isinstance(item, dict) or not manifest_keys.issubset(item) or not isinstance(
+                    item.get("normalizer"), str
+                ) or not item["normalizer"].startswith("av_quarterly_review_v1_"):
+                    raise ValueError("Batch review requires complete quarterly company manifests")
                 dependency = self._record(db, item.get("snapshot_id"), state)
                 if dependency["provider"] != "alpha_vantage" or dependency["request"].get("symbol") != symbol:
                     raise ValueError("Batch company dependency differs from its declared symbol")
