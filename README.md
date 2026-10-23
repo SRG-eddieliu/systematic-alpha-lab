@@ -152,6 +152,7 @@ For live ingestion, provide local credentials in `config/credentials.yml` or `co
 ## Documentation
 
 - [Shared universe, bounded statement collection and pinned offline replay](docs/shared-pipeline-collection.md)
+- [Statement failure diagnosis and offline currency quarantine](docs/statement-failure-recovery.md)
 - [Factor diagnostic arithmetic, missingness and coverage](docs/factor-analytics.md)
 - [Weighting and monthly study-split contracts](docs/research-correctness-contracts.md)
 - [Monthly adjusted-price snapshots and one-month change diagnostics](docs/monthly-price-snapshots.md)
