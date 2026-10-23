@@ -13,6 +13,14 @@ AV can never supply them. A more fundamental target-definition discrepancy also
 needs resolving before choosing a supplement. No calculator, contract, provider
 or research eligibility rule is changed by this note.
 
+**Subsequent direction update (2026-10-23):** retain AV as the primary source and
+assess supplemental candidates, including Yahoo Finance via yfinance and original
+filings, for at most three issuers across two adjacent annual periods. This bounded
+feasibility direction is now selected; no supplemental field is thereby accepted
+as a standard-model input. The initial note's unselected status remains part of
+the decision history. Research owns target/mapping review; shared-data engineering
+is the sole collector. No new source values are captured by this document change.
+
 ## Reconcile the target before repairing the data
 
 The [2013 paper, Appendix A / Exhibit A1, printed p.76](https://cpb-us-w2.wpmucdn.com/sites.udel.edu/dist/a/855/files/2020/07/Earnings-Manipulation-and-Expected-Returns.pdf#page=20)
@@ -64,7 +72,7 @@ alone, including IS/CF D&A subtraction, cannot supply missing accounting evidenc
 | Path | Work and tradeoff | Acceptance / decision status |
 | --- | --- | --- |
 | **1. AV only, retain strict v1** | Keep the shared AV inputs and null outputs; seek documented provider clarification. Least additional engineering, but no demonstrated route or ETA to a valid score. | Available now; blocked inputs remain blocked. No purchase or provider contact has been made. |
-| **2. AV plus bounded original-filing supplementation — recommended feasibility step** | First choose and freeze the intended expense/debt/income targets. Then assess a few issuers across two adjacent annual periods, supplementing only missing concepts. Public SEC access needs no data subscription; extraction and accounting review are the real effort. | Proposed, not executed or selected. Expand only after source/context reconciliation and independent validation succeed. |
+| **2. AV plus bounded supplemental-source feasibility — selected direction** | Resolve the expense/debt/income targets through technical review. Check candidate coverage for at most three issuers across two adjacent annual periods, supplementing only genuine gaps after validation. Public SEC access needs no data subscription; extraction and accounting review are the real effort. | Bounded feasibility selected; supplemental values and mappings remain unaccepted. Inspect yfinance candidates and original filings as needed. No automatic market-wide expansion or score calculation. |
 | **3. Separately named AV proxy** | Explicitly choose available D&A, debt and income definitions, disclose substitutions and validate a different research output. Easier coverage may trade away the historical target. | Requires a new definition ID and `standard_definition_satisfied=false`. No automatic historical cutoff, fraud-probability or empirical-performance interpretation. Not implemented. |
 
 For path 2, reuse the existing [SEC snapshot connector](sec-filing-snapshots.md)

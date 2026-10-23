@@ -66,9 +66,11 @@
   },
   "options": {
     "av_only_strict": "retain_blocked_until_source_evidence",
-    "bounded_filings_supplement": "recommended_feasibility_after_target_choice_not_executed",
+    "bounded_filings_supplement": "bounded_multi_source_feasibility_selected_field_acceptance_pending",
     "separately_named_av_proxy": "requires_new_definition_and_independent_validation_not_implemented",
-    "new_source_or_proxy_selected": false
+    "new_source_or_proxy_selected": true,
+    "proxy_selected": false,
+    "supplemental_values_accepted_as_standard_inputs": false
   },
   "engineering_recovery_handoff": {
     "review_scope": "read_only_closed_handoff_aggregate_arithmetic_not_source_field_audit",
@@ -140,5 +142,20 @@
     "independent_recovery_and_privacy_review_passed": true,
     "independent_engineering_aggregate_review_passed": true,
     "independent_primary_source_and_method_review_passed": true
+  },
+  "direction_update": {
+    "initial_note_status": "no_supplement_selected",
+    "subsequent_direction": "alpha_vantage_primary_bounded_supplement_feasibility",
+    "candidate_sources": [
+      "yahoo_finance_via_yfinance",
+      "original_filings"
+    ],
+    "maximum_issuers": 3,
+    "adjacent_annual_periods_per_issuer": 2,
+    "technical_target_review_required": true,
+    "sole_collector": "shared_data_engineering",
+    "new_financial_api_calls_by_this_document_change": 0,
+    "market_wide_expansion": false,
+    "return_backtest_started": false
   }
 }
