@@ -61,8 +61,10 @@
     "alternative_av_endpoint_or_upgrade_resolution_demonstrated": false,
     "provider_can_never_supply_required_concepts_claimed": false,
     "provider_contacted": false,
-    "new_currency_recovery_version_field_audited": false,
-    "new_normalizer_accepted_by_research_adapter": false
+    "new_currency_recovery_version_field_audited": true,
+    "new_normalizer_accepted_by_field_audit": true,
+    "new_normalizer_accepted_by_annual_scoring_adapter": false,
+    "followup_intake_evidence": "PR21_audit_only_original_collection_rates_above_unchanged"
   },
   "options": {
     "av_only_strict": "retain_blocked_until_source_evidence",
@@ -84,9 +86,10 @@
     "securities_still_without_usable_recovery": 2,
     "tasks_still_without_usable_recovery": 6,
     "historical_failed_response_bodies_still_unavailable": 8,
-    "research_normalizer_acceptance_passed": false,
-    "research_field_audit_completed": false,
-    "all_periods_complete_or_research_ready_claimed": false
+    "research_normalizer_acceptance_passed": true,
+    "research_field_audit_completed": true,
+    "all_periods_complete_or_research_ready_claimed": false,
+    "research_acceptance_level": "field_audit_only_not_annual_scoring"
   },
   "drive_sample_recovery": {
     "independently_reviewed": true,
@@ -147,8 +150,8 @@
     "initial_note_status": "no_supplement_selected",
     "subsequent_direction": "alpha_vantage_primary_bounded_supplement_feasibility",
     "candidate_sources": [
-      "yahoo_finance_via_yfinance",
-      "original_filings"
+      "sec_or_original_issuer_disclosures",
+      "yahoo_finance_via_yfinance"
     ],
     "maximum_issuers": 3,
     "adjacent_annual_periods_per_issuer": 2,
@@ -156,6 +159,15 @@
     "sole_collector": "shared_data_engineering",
     "new_financial_api_calls_by_this_document_change": 0,
     "market_wide_expansion": false,
-    "return_backtest_started": false
+    "return_backtest_started": false,
+    "wrds_compustat_access_dependency": false,
+    "fmp_future_conditional_only": true,
+    "paid_service_added": false,
+    "pilot_contract_id": "av_primary_supplement_pilot_v1"
+  },
+  "initial_preparation_status": {
+    "new_currency_recovery_field_audited": false,
+    "new_normalizer_accepted": false,
+    "supplement_selected": false
   }
 }

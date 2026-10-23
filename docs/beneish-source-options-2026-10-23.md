@@ -21,6 +21,13 @@ as a standard-model input. The initial note's unselected status remains part of
 the decision history. Research owns target/mapping review; shared-data engineering
 is the sole collector. No new source values are captured by this document change.
 
+**Current source policy:** qualified, nonmissing AV is primary. SEC/issuer
+original disclosures support key gaps and accounting verification; yfinance is
+for quick candidates and cross-checks. WRDS/Compustat access is excluded as a
+dependency, and FMP remains a future conditional candidate with no paid service
+added. [PR #21](https://github.com/SRG-eddieliu/systematic-alpha-lab/pull/21)
+contains the frozen bounded collection contract and technical method-review draft.
+
 ## Reconcile the target before repairing the data
 
 The [2013 paper, Appendix A / Exhibit A1, printed p.76](https://cpb-us-w2.wpmucdn.com/sites.udel.edu/dist/a/855/files/2020/07/Earnings-Manipulation-and-Expected-Returns.pdf#page=20)
@@ -95,8 +102,11 @@ that closed handoff confirms 109 recovered selections with 8,123 retained rows
 and 1,204 quarantined rows. Combined three-endpoint coverage reaches 501
 securities; 46 have quarantined periods, and two securities' six tasks still lack
 usable data. Its [engineering PR #16](https://github.com/SRG-eddieliu/systematic-alpha-lab/pull/16)
-remains a draft. That version needs explicit
-normalizer/schema acceptance before the research adapter consumes it. Restored
+remains a draft. At initial preparation, research intake was pending. The
+subsequent [PR #21](https://github.com/SRG-eddieliu/systematic-alpha-lab/pull/21)
+records a passed explicit field-audit intake and exhaustive raw/accepted/quarantine
+partition for all 109 recovered selections. Annual scoring remains v1-only;
+that audit does not accept the materialization for scoring. Restored
 coverage does not certify accounting semantics, exact S&P 500 membership or
 historical point-in-time use. The original batch and eight unavailable historical
 failed-response bodies remain part of the evidence account.
