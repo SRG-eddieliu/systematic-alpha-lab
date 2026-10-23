@@ -20,6 +20,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+yahoo = [
+    "yfinance==1.7.0",
+]
 ml = [
     "xgboost>=2.0",
 ]
