@@ -51,6 +51,12 @@ coverage account. AV documents pure depreciation, but the audited source has no
 usable values; noncurrent debt and IBEI also remain blocked. Exact S&P 500
 membership, accounting equivalence and metadata acceptance remain unverified.
 
+The [target reconciliation and source options](docs/beneish-source-options-2026-10-23.md)
+qualify v1's pure-depreciation policy against the paper's historical expense
+construction and outline three paths without changing the calculator. The same
+note records a passed real Drive download/restore of a 397-snapshot sample;
+full-batch and different-machine recovery remain unverified.
+
 [Financial quality: data gate and protocol](docs/financial-quality-study.md) locks
 one sub-study of the wider Integrity Factor review to accrual intensity and
 one-month returns. A tested release-time

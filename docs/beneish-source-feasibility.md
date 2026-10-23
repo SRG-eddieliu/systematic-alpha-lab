@@ -5,6 +5,12 @@ was reviewed again at its exact head, passed 794 local tests and Python 3.10/3.1
 CI, and merged. This follow-up uses the same frozen annual Beneish definition;
 it extends diagnostics without accepting substitutions or calculating M.
 
+**2026-10-23 addendum:** [target reconciliation, source alternatives and real
+Drive sample recovery](beneish-source-options-2026-10-23.md) qualify the historical
+expense/debt/income targets and update the recovery status. The counts below
+remain evidence for the original closed collection, not the new engineering
+currency-recovery version. The strict v1 contract is unchanged.
+
 **Conclusion:** AV documents the correct pure-depreciation concept, but this
 closed collection supplies no usable values for it. Noncurrent debt and IBEI
 also remain blocked. More arithmetic cannot repair absent source concepts.
