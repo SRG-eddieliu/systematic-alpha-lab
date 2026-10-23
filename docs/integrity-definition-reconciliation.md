@@ -1,5 +1,9 @@
 # Integrity definition reconciliation
 
+**Historical restoration record.** The fresh-data research direction is now
+defined in [Integrity research method v1](integrity-research-method-v1.md).
+Recovery of unknown Adjusted M inputs is not a prerequisite for that work.
+
 Prepared 2026-10-22, America/Toronto. This records source restoration and
 arithmetic verification under SRG-RD-002. It does not establish a market alpha,
 a calibrated fraud classifier or a new composite specification.

@@ -32,6 +32,14 @@ The generated data includes a deliberately embedded weak momentum effect. These 
 
 ## Focused Research Follow-up
 
+[Integrity research method v1](docs/integrity-research-method-v1.md) defines the
+new annual, cash-flow/raw-ratio Beneish specification, required financial fields,
+candidate Alpha Vantage mappings and acceptance gates. Accrual quality and Benford
+remain separate outputs. Run `python examples/verify_integrity_method_contract.py`
+for the public author-fixture arithmetic check. Provider integration and empirical
+validation remain pending; historical Adjusted M/fixed-five recovery is no longer
+a prerequisite for this fresh-data research direction.
+
 [Financial quality: data gate and protocol](docs/financial-quality-study.md) locks
 one sub-study of the wider Integrity Factor review to accrual intensity and
 one-month returns. A tested release-time

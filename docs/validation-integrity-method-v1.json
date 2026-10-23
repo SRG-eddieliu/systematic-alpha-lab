@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "definition_id": "beneish_2013_cashflow_annual_raw_v1",
+  "checked_scope": "public_fixture_arithmetic_and_contract_structure_only",
+  "contract_sha256": "03a5d8025ecf3d5c895d3a42c4bc339f4841f4374d57ba63bbe4c40647a09fcf",
+  "fixture_sha256": "0706537d545eaefb9e3b9ec912c011f67049b50412209655b6f0e0df5e08e6a3",
+  "ratios": {
+    "DSRI": "1.1670142885176322820279422824178435507522286547909",
+    "GMI": "0.30024007149574471813503583548969328091869695500558",
+    "AQI": "0.92816558549412818339095748214802983876754303208439",
+    "SGI": "1.1869538711643974801869538711643974801869538711644",
+    "DEPI": "1.2830661953416299452811001888528400561716139654254",
+    "SGAI": "0.51573152721576608793462904028403790798848616051215",
+    "TATA": "0.10497188253146478621797732750156208158528965455682",
+    "LVGI": "0.79546164432329949699736091346229470516610579523630"
+  },
+  "m_score_decimal": "-1.8841840767415742751639352797037185763600577222638",
+  "existing_coefficient_function_m_score": -1.8841840767415738,
+  "decimal_to_float_absolute_error": "4.751639352797037185763600577222638E-16",
+  "published_display_matches": true,
+  "common_scale_invariance": true,
+  "neutral_case_m_score": "-2.480",
+  "provider_data_read": false,
+  "network_calls": 0,
+  "adapter_source_timing_or_market_validation": false
+}
