@@ -22,5 +22,6 @@ jobs:
       - run: python examples/offline_data_access_demo.py
       - run: python examples/beneish_reproduction_demo.py
       - run: python examples/verify_integrity_method_contract.py
+      - run: python examples/annual_beneish_demo.py
       - run: python examples/research_contracts_demo.py
       - run: python examples/shared_pipeline_demo.py

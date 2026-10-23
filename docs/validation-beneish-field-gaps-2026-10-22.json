@@ -1,0 +1,1350 @@
+{
+  "validation_date": "2026-10-22",
+  "scope": "fixed completed prefix of an in-progress Alpha Vantage collection; not full-universe coverage",
+  "universe": {
+    "kind": "ETF_holdings_proxy",
+    "provider_securities": 503,
+    "exact_current_sp500_membership_certified": false,
+    "directory_verified_provider_symbols": 501,
+    "directory_unverified_candidates": 2,
+    "stable_company_links": "not_verified"
+  },
+  "collection_checkpoint": {
+    "planned_provider_symbols": 503,
+    "planned_jobs": 1509,
+    "checkpoint_state": "running",
+    "job_status_counts": {
+      "succeeded": 397,
+      "failed": 40,
+      "inflight": 1,
+      "pending": 1071
+    },
+    "failure_categories": {
+      "data_quality": 34,
+      "response_format": 6
+    },
+    "complete_three_statement_symbols": 128,
+    "closed_audit_selected_jobs": 397,
+    "closed_audit_tables": 794,
+    "source_selected_immutable_files_unchanged": 1191,
+    "active_catalog_opened": false,
+    "provider_requests": 0,
+    "credentials_read": false,
+    "materialization": "offline copy from pinned immutable source inputs; original-to-copy lineage private"
+  },
+  "failed_source_categories": [
+    {
+      "category": "data_quality",
+      "reason": "Missing or unsupported reported currency",
+      "tasks": 34
+    },
+    {
+      "category": "response_format",
+      "reason": "no_successful_raw_statement_pin_for_normalization",
+      "tasks": 6
+    }
+  ],
+  "execution": {
+    "closed_independent_copy": true,
+    "original_to_copy_lineage": "private",
+    "raw_bytes_and_original_normalized_tables_compared": true,
+    "normalized_copy_comparison_excluded_only": "snapshot_id",
+    "network_blocked": true,
+    "provider_requests": 0,
+    "credentials_read": false,
+    "active_catalog_opened": false,
+    "selected_original_files_unchanged": 1191,
+    "closed_audit_root_files_unchanged": 1192
+  },
+  "public_output_policy": "counts and fixed policies only; exact source identifiers, observed timestamps, fingerprints, raw amounts and local paths stay private",
+  "field_audit": {
+    "audit_version": "beneish_field_coverage_v1",
+    "definition_id": "beneish_2013_cashflow_annual_raw_v1",
+    "normalizer": "av_fundamentals_v1",
+    "selection_count": 397,
+    "provider_symbol_count": 139,
+    "semantic_verification_status": "not_assessed",
+    "standard_definition_satisfied": false,
+    "factor_calculated": false,
+    "research_ready": false,
+    "metadata_gate_status": "not_assessed_nonempty_and_source_labels_do_not_verify_metadata",
+    "annual_duration_status": "not_inferred_from_source_annual_label",
+    "row_basis": "source_statement_rows_not_aligned_research_rows",
+    "finite_policy": "decimal_finite_parse_not_calculator_eligibility",
+    "missing_marker_policy": "null_pandas_na_nat_or_trimmed_case_insensitive_empty_none_null",
+    "nonfinite_policy": "native_or_text_nan_infinity_nonfinite_not_missing",
+    "network_operations": "none_requested",
+    "groups": [
+      {
+        "function": "INCOME_STATEMENT",
+        "table": "annual",
+        "source_tables": 131,
+        "source_rows": 2504,
+        "provider_symbol_denominator": 131,
+        "fields": {
+          "totalRevenue": {
+            "canonical_fields": [
+              "sales"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 0,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2504,
+            "column_absent_tables": 0,
+            "positive_rows": 2501,
+            "zero_rows": 0,
+            "negative_rows": 3,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "costofGoodsAndServicesSold": {
+            "canonical_fields": [
+              "cost_of_goods_sold"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 4,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2500,
+            "column_absent_tables": 0,
+            "positive_rows": 2497,
+            "zero_rows": 0,
+            "negative_rows": 3,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "depreciation": {
+            "canonical_fields": [
+              "depreciation"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 2504,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 0,
+            "column_absent_tables": 0,
+            "positive_rows": 0,
+            "zero_rows": 0,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 0,
+            "provider_symbol_denominator": 131
+          },
+          "sellingGeneralAndAdministrative": {
+            "canonical_fields": [
+              "sga_expense"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 116,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2388,
+            "column_absent_tables": 0,
+            "positive_rows": 2354,
+            "zero_rows": 34,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "incomeBeforeExtraordinaryItems": {
+            "canonical_fields": [
+              "income_before_extraordinary_items"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "probed_field_not_certified_direct_mapping",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 2504,
+            "missing_marker_rows": 0,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 0,
+            "column_absent_tables": 131,
+            "positive_rows": 0,
+            "zero_rows": 0,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 0,
+            "provider_symbol_denominator": 131
+          },
+          "costOfRevenue": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "scope_equivalence_unverified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 4,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2500,
+            "column_absent_tables": 0,
+            "positive_rows": 2497,
+            "zero_rows": 0,
+            "negative_rows": 3,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "depreciationAndAmortization": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_pure_depreciation_not_standard_accepted",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 36,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2468,
+            "column_absent_tables": 0,
+            "positive_rows": 2455,
+            "zero_rows": 0,
+            "negative_rows": 13,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "netIncome": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_ibei_without_verified_bridge",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 2,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2502,
+            "column_absent_tables": 0,
+            "positive_rows": 2272,
+            "zero_rows": 0,
+            "negative_rows": 230,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "netIncomeFromContinuingOperations": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_ibei_without_verified_bridge",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 565,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 1939,
+            "column_absent_tables": 0,
+            "positive_rows": 1775,
+            "zero_rows": 0,
+            "negative_rows": 164,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "incomeBeforeTax": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_ibei_not_standard_accepted",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2504,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 2,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2502,
+            "column_absent_tables": 0,
+            "positive_rows": 2298,
+            "zero_rows": 0,
+            "negative_rows": 204,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          }
+        },
+        "period_quality": {
+          "period_column_absent_tables": 0,
+          "missing_period_rows": 0,
+          "invalid_period_rows": 0,
+          "duplicate_period_rows": 0,
+          "duplicate_period_excess_rows": 0
+        },
+        "metadata_coverage": {
+          "asset_id": {
+            "column_present_tables": 131,
+            "nonempty_rows": 0
+          },
+          "available_at": {
+            "column_present_tables": 131,
+            "nonempty_rows": 0
+          },
+          "period_start": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "fiscal_year": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "amount_unit_status_counts": {
+            "unverified": 2504,
+            "verified": 0,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          },
+          "flow_basis_counts": {
+            "stock": 0,
+            "annual": 0,
+            "quarterly": 0,
+            "ytd": 0,
+            "unverified": 2504,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          }
+        }
+      },
+      {
+        "function": "INCOME_STATEMENT",
+        "table": "quarterly",
+        "source_tables": 131,
+        "source_rows": 10049,
+        "provider_symbol_denominator": 131,
+        "fields": {
+          "totalRevenue": {
+            "canonical_fields": [
+              "sales"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 4,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10045,
+            "column_absent_tables": 0,
+            "positive_rows": 10008,
+            "zero_rows": 3,
+            "negative_rows": 34,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "costofGoodsAndServicesSold": {
+            "canonical_fields": [
+              "cost_of_goods_sold"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 27,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10022,
+            "column_absent_tables": 0,
+            "positive_rows": 9939,
+            "zero_rows": 4,
+            "negative_rows": 79,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "depreciation": {
+            "canonical_fields": [
+              "depreciation"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 10049,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 0,
+            "column_absent_tables": 0,
+            "positive_rows": 0,
+            "zero_rows": 0,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 0,
+            "provider_symbol_denominator": 131
+          },
+          "sellingGeneralAndAdministrative": {
+            "canonical_fields": [
+              "sga_expense"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 396,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 9653,
+            "column_absent_tables": 0,
+            "positive_rows": 9278,
+            "zero_rows": 375,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "incomeBeforeExtraordinaryItems": {
+            "canonical_fields": [
+              "income_before_extraordinary_items"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "probed_field_not_certified_direct_mapping",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 10049,
+            "missing_marker_rows": 0,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 0,
+            "column_absent_tables": 131,
+            "positive_rows": 0,
+            "zero_rows": 0,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 0,
+            "provider_symbol_denominator": 131
+          },
+          "costOfRevenue": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "scope_equivalence_unverified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 27,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10022,
+            "column_absent_tables": 0,
+            "positive_rows": 9939,
+            "zero_rows": 4,
+            "negative_rows": 79,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "depreciationAndAmortization": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_pure_depreciation_not_standard_accepted",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 228,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 9821,
+            "column_absent_tables": 0,
+            "positive_rows": 9735,
+            "zero_rows": 0,
+            "negative_rows": 86,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "netIncome": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_ibei_without_verified_bridge",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 9,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10040,
+            "column_absent_tables": 0,
+            "positive_rows": 9051,
+            "zero_rows": 16,
+            "negative_rows": 973,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "netIncomeFromContinuingOperations": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_ibei_without_verified_bridge",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 574,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 9475,
+            "column_absent_tables": 0,
+            "positive_rows": 6796,
+            "zero_rows": 1962,
+            "negative_rows": 717,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          },
+          "incomeBeforeTax": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_ibei_not_standard_accepted",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10049,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 11,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10038,
+            "column_absent_tables": 0,
+            "positive_rows": 9113,
+            "zero_rows": 23,
+            "negative_rows": 902,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 131
+          }
+        },
+        "period_quality": {
+          "period_column_absent_tables": 0,
+          "missing_period_rows": 0,
+          "invalid_period_rows": 0,
+          "duplicate_period_rows": 0,
+          "duplicate_period_excess_rows": 0
+        },
+        "metadata_coverage": {
+          "asset_id": {
+            "column_present_tables": 131,
+            "nonempty_rows": 0
+          },
+          "available_at": {
+            "column_present_tables": 131,
+            "nonempty_rows": 0
+          },
+          "period_start": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "fiscal_year": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "amount_unit_status_counts": {
+            "unverified": 10049,
+            "verified": 0,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          },
+          "flow_basis_counts": {
+            "stock": 0,
+            "annual": 0,
+            "quarterly": 0,
+            "ytd": 0,
+            "unverified": 10049,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          }
+        }
+      },
+      {
+        "function": "BALANCE_SHEET",
+        "table": "annual",
+        "source_tables": 134,
+        "source_rows": 2577,
+        "provider_symbol_denominator": 134,
+        "fields": {
+          "currentNetReceivables": {
+            "canonical_fields": [
+              "trade_receivables_net"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "broader_receivables_proxy_until_trade_equivalence_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 25,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2552,
+            "column_absent_tables": 0,
+            "positive_rows": 2541,
+            "zero_rows": 0,
+            "negative_rows": 11,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "totalCurrentAssets": {
+            "canonical_fields": [
+              "current_assets"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 13,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2564,
+            "column_absent_tables": 0,
+            "positive_rows": 2561,
+            "zero_rows": 3,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "totalCurrentLiabilities": {
+            "canonical_fields": [
+              "current_liabilities"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 6,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2571,
+            "column_absent_tables": 0,
+            "positive_rows": 2570,
+            "zero_rows": 0,
+            "negative_rows": 1,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "totalAssets": {
+            "canonical_fields": [
+              "total_assets"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 5,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2572,
+            "column_absent_tables": 0,
+            "positive_rows": 2572,
+            "zero_rows": 0,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "propertyPlantEquipment": {
+            "canonical_fields": [
+              "net_ppe"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 307,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2270,
+            "column_absent_tables": 0,
+            "positive_rows": 2247,
+            "zero_rows": 23,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 131,
+            "provider_symbol_denominator": 134
+          },
+          "longTermDebtNoncurrent": {
+            "canonical_fields": [
+              "long_term_debt_noncurrent"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 2577,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 0,
+            "column_absent_tables": 0,
+            "positive_rows": 0,
+            "zero_rows": 0,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 0,
+            "provider_symbol_denominator": 134
+          },
+          "longTermDebt": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "scope_equivalence_unverified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 230,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2347,
+            "column_absent_tables": 0,
+            "positive_rows": 2295,
+            "zero_rows": 52,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "currentLongTermDebt": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "current_maturities_not_noncurrent_debt",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 1261,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 1316,
+            "column_absent_tables": 0,
+            "positive_rows": 1305,
+            "zero_rows": 11,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 133,
+            "provider_symbol_denominator": 134
+          },
+          "capitalLeaseObligations": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "scope_equivalence_unverified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 1817,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 760,
+            "column_absent_tables": 0,
+            "positive_rows": 750,
+            "zero_rows": 8,
+            "negative_rows": 2,
+            "provider_symbols_with_finite": 105,
+            "provider_symbol_denominator": 134
+          },
+          "accumulatedDepreciationAmortizationPPE": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "stock_not_current_pure_depreciation_expense",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2577,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 2351,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 226,
+            "column_absent_tables": 0,
+            "positive_rows": 24,
+            "zero_rows": 2,
+            "negative_rows": 200,
+            "provider_symbols_with_finite": 28,
+            "provider_symbol_denominator": 134
+          }
+        },
+        "period_quality": {
+          "period_column_absent_tables": 0,
+          "missing_period_rows": 0,
+          "invalid_period_rows": 0,
+          "duplicate_period_rows": 0,
+          "duplicate_period_excess_rows": 0
+        },
+        "metadata_coverage": {
+          "asset_id": {
+            "column_present_tables": 134,
+            "nonempty_rows": 0
+          },
+          "available_at": {
+            "column_present_tables": 134,
+            "nonempty_rows": 0
+          },
+          "period_start": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "fiscal_year": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "amount_unit_status_counts": {
+            "unverified": 2577,
+            "verified": 0,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          },
+          "flow_basis_counts": {
+            "stock": 2577,
+            "annual": 0,
+            "quarterly": 0,
+            "ytd": 0,
+            "unverified": 0,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          }
+        },
+        "conditional_debt_diagnostic": {
+          "status": "conditional_derivation_only_not_standard_accepted",
+          "minuend": "longTermDebt",
+          "subtrahend": "currentLongTermDebt",
+          "source_rows": 2577,
+          "jointly_finite_rows": 1313,
+          "difference_nonnegative_rows": 1211,
+          "difference_negative_rows": 102,
+          "standard_field_filled": false
+        }
+      },
+      {
+        "function": "BALANCE_SHEET",
+        "table": "quarterly",
+        "source_tables": 134,
+        "source_rows": 10333,
+        "provider_symbol_denominator": 134,
+        "fields": {
+          "currentNetReceivables": {
+            "canonical_fields": [
+              "trade_receivables_net"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "broader_receivables_proxy_until_trade_equivalence_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 157,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10176,
+            "column_absent_tables": 0,
+            "positive_rows": 10157,
+            "zero_rows": 0,
+            "negative_rows": 19,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "totalCurrentAssets": {
+            "canonical_fields": [
+              "current_assets"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 62,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10271,
+            "column_absent_tables": 0,
+            "positive_rows": 10270,
+            "zero_rows": 1,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "totalCurrentLiabilities": {
+            "canonical_fields": [
+              "current_liabilities"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 54,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10279,
+            "column_absent_tables": 0,
+            "positive_rows": 10270,
+            "zero_rows": 1,
+            "negative_rows": 8,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "totalAssets": {
+            "canonical_fields": [
+              "total_assets"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 47,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10286,
+            "column_absent_tables": 0,
+            "positive_rows": 10286,
+            "zero_rows": 0,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "propertyPlantEquipment": {
+            "canonical_fields": [
+              "net_ppe"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 1718,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 8615,
+            "column_absent_tables": 0,
+            "positive_rows": 8441,
+            "zero_rows": 174,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 132,
+            "provider_symbol_denominator": 134
+          },
+          "longTermDebtNoncurrent": {
+            "canonical_fields": [
+              "long_term_debt_noncurrent"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 10333,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 0,
+            "column_absent_tables": 0,
+            "positive_rows": 0,
+            "zero_rows": 0,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 0,
+            "provider_symbol_denominator": 134
+          },
+          "longTermDebt": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "scope_equivalence_unverified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 972,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 9361,
+            "column_absent_tables": 0,
+            "positive_rows": 9103,
+            "zero_rows": 258,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "currentLongTermDebt": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "current_maturities_not_noncurrent_debt",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 5859,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 4474,
+            "column_absent_tables": 0,
+            "positive_rows": 4460,
+            "zero_rows": 14,
+            "negative_rows": 0,
+            "provider_symbols_with_finite": 134,
+            "provider_symbol_denominator": 134
+          },
+          "capitalLeaseObligations": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "scope_equivalence_unverified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 7757,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2576,
+            "column_absent_tables": 0,
+            "positive_rows": 2566,
+            "zero_rows": 8,
+            "negative_rows": 2,
+            "provider_symbols_with_finite": 105,
+            "provider_symbol_denominator": 134
+          },
+          "accumulatedDepreciationAmortizationPPE": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "stock_not_current_pure_depreciation_expense",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10333,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 9325,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 1008,
+            "column_absent_tables": 0,
+            "positive_rows": 30,
+            "zero_rows": 4,
+            "negative_rows": 974,
+            "provider_symbols_with_finite": 38,
+            "provider_symbol_denominator": 134
+          }
+        },
+        "period_quality": {
+          "period_column_absent_tables": 0,
+          "missing_period_rows": 0,
+          "invalid_period_rows": 0,
+          "duplicate_period_rows": 0,
+          "duplicate_period_excess_rows": 0
+        },
+        "metadata_coverage": {
+          "asset_id": {
+            "column_present_tables": 134,
+            "nonempty_rows": 0
+          },
+          "available_at": {
+            "column_present_tables": 134,
+            "nonempty_rows": 0
+          },
+          "period_start": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "fiscal_year": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "amount_unit_status_counts": {
+            "unverified": 10333,
+            "verified": 0,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          },
+          "flow_basis_counts": {
+            "stock": 10333,
+            "annual": 0,
+            "quarterly": 0,
+            "ytd": 0,
+            "unverified": 0,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          }
+        },
+        "conditional_debt_diagnostic": {
+          "status": "conditional_derivation_only_not_standard_accepted",
+          "minuend": "longTermDebt",
+          "subtrahend": "currentLongTermDebt",
+          "source_rows": 10333,
+          "jointly_finite_rows": 4470,
+          "difference_nonnegative_rows": 4108,
+          "difference_negative_rows": 362,
+          "standard_field_filled": false
+        }
+      },
+      {
+        "function": "CASH_FLOW",
+        "table": "annual",
+        "source_tables": 132,
+        "source_rows": 2524,
+        "provider_symbol_denominator": 132,
+        "fields": {
+          "operatingCashflow": {
+            "canonical_fields": [
+              "operating_cash_flow"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2524,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 1,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2523,
+            "column_absent_tables": 0,
+            "positive_rows": 2419,
+            "zero_rows": 0,
+            "negative_rows": 104,
+            "provider_symbols_with_finite": 132,
+            "provider_symbol_denominator": 132
+          },
+          "depreciationDepletionAndAmortization": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_pure_depreciation_not_standard_accepted",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2524,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 13,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2511,
+            "column_absent_tables": 0,
+            "positive_rows": 2490,
+            "zero_rows": 12,
+            "negative_rows": 9,
+            "provider_symbols_with_finite": 132,
+            "provider_symbol_denominator": 132
+          },
+          "netIncome": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_ibei_without_verified_bridge",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 2524,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 2,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 2522,
+            "column_absent_tables": 0,
+            "positive_rows": 2303,
+            "zero_rows": 0,
+            "negative_rows": 219,
+            "provider_symbols_with_finite": 132,
+            "provider_symbol_denominator": 132
+          }
+        },
+        "period_quality": {
+          "period_column_absent_tables": 0,
+          "missing_period_rows": 0,
+          "invalid_period_rows": 0,
+          "duplicate_period_rows": 0,
+          "duplicate_period_excess_rows": 0
+        },
+        "metadata_coverage": {
+          "asset_id": {
+            "column_present_tables": 132,
+            "nonempty_rows": 0
+          },
+          "available_at": {
+            "column_present_tables": 132,
+            "nonempty_rows": 0
+          },
+          "period_start": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "fiscal_year": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "amount_unit_status_counts": {
+            "unverified": 2524,
+            "verified": 0,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          },
+          "flow_basis_counts": {
+            "stock": 0,
+            "annual": 0,
+            "quarterly": 0,
+            "ytd": 0,
+            "unverified": 2524,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          }
+        }
+      },
+      {
+        "function": "CASH_FLOW",
+        "table": "quarterly",
+        "source_tables": 132,
+        "source_rows": 10118,
+        "provider_symbol_denominator": 132,
+        "fields": {
+          "operatingCashflow": {
+            "canonical_fields": [
+              "operating_cash_flow"
+            ],
+            "candidate_role": "canonical_candidate",
+            "acceptance_constraint": "candidate_semantics_not_verified",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10118,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 23,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10095,
+            "column_absent_tables": 0,
+            "positive_rows": 9153,
+            "zero_rows": 0,
+            "negative_rows": 942,
+            "provider_symbols_with_finite": 132,
+            "provider_symbol_denominator": 132
+          },
+          "depreciationDepletionAndAmortization": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_pure_depreciation_not_standard_accepted",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10118,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 101,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10017,
+            "column_absent_tables": 0,
+            "positive_rows": 9879,
+            "zero_rows": 77,
+            "negative_rows": 61,
+            "provider_symbols_with_finite": 132,
+            "provider_symbol_denominator": 132
+          },
+          "netIncome": {
+            "canonical_fields": [],
+            "candidate_role": "alternative_candidate",
+            "acceptance_constraint": "not_ibei_without_verified_bridge",
+            "semantic_status": "unverified_not_standard_accepted",
+            "source_rows": 10118,
+            "column_absent_rows": 0,
+            "missing_marker_rows": 17,
+            "invalid_numeric_rows": 0,
+            "nonfinite_numeric_rows": 0,
+            "boolean_rows": 0,
+            "finite_rows": 10101,
+            "column_absent_tables": 0,
+            "positive_rows": 9139,
+            "zero_rows": 0,
+            "negative_rows": 962,
+            "provider_symbols_with_finite": 132,
+            "provider_symbol_denominator": 132
+          }
+        },
+        "period_quality": {
+          "period_column_absent_tables": 0,
+          "missing_period_rows": 0,
+          "invalid_period_rows": 0,
+          "duplicate_period_rows": 0,
+          "duplicate_period_excess_rows": 0
+        },
+        "metadata_coverage": {
+          "asset_id": {
+            "column_present_tables": 132,
+            "nonempty_rows": 0
+          },
+          "available_at": {
+            "column_present_tables": 132,
+            "nonempty_rows": 0
+          },
+          "period_start": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "fiscal_year": {
+            "column_present_tables": 0,
+            "nonempty_rows": 0
+          },
+          "amount_unit_status_counts": {
+            "unverified": 10118,
+            "verified": 0,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          },
+          "flow_basis_counts": {
+            "stock": 0,
+            "annual": 0,
+            "quarterly": 0,
+            "ytd": 0,
+            "unverified": 10118,
+            "not_supplied": 0,
+            "other": 0,
+            "missing": 0,
+            "column_absent": 0
+          }
+        }
+      }
+    ]
+  },
+  "code_validation": {
+    "full_local_pytest_passed": 794,
+    "new_synthetic_tests_passed": 37,
+    "ruff_new_python_files": "passed_E4_E7_E9_F_I",
+    "independent_code_review": "no_material_findings",
+    "notebook_executed_code_cells": 4,
+    "notebook_saved_tables": 4,
+    "notebook_output_arithmetic": "checked",
+    "notebook_rendered_visual_qa": "not_completed_local_file_protocol_preview_blocked"
+  }
+}

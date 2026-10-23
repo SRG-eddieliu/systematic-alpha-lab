@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "definition_id": "integrity_research_method_v1",
-  "status": "method_defined_provider_adapter_pending",
+  "status": "calculator_and_pinned_reader_implemented_source_acceptance_pending",
   "beneish": {
     "definition_id": "beneish_2013_cashflow_annual_raw_v1",
     "frequency": "annual",

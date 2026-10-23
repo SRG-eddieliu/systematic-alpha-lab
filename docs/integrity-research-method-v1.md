@@ -1,10 +1,11 @@
 # Integrity research method v1
 
-Status: research definitions and acceptance criteria, **before provider integration**.
+Status: research definitions and acceptance criteria; implementation and current
+source-acceptance limits are documented in the [annual calculator](annual-beneish-calculator.md).
 Prepared 2026-10-22 (America/Toronto). The companion
 [machine-readable contract](integrity-research-contract-v1.json) identifies the
-selected definitions. No annual Beneish provider adapter, fraud classifier,
-Integrity composite or market result is introduced by this document.
+selected definitions. The method contract itself does not certify a provider,
+fraud classifier, Integrity composite or market result.
 
 ## Scope and order
 
@@ -234,7 +235,8 @@ checked scope. Public fixtures are not statistical samples.
 
 Engineering owns raw snapshots, identity/universe metadata, normalization and
 versioned reads. Research owns concept mappings, period eligibility, formulas
-and these acceptance gates. Next implement the annual adapter against synthetic
-and author fixtures, then accept a pinned pipeline snapshot through gate C.
+and these acceptance gates. The [annual calculator and pinned source review](annual-beneish-calculator.md)
+implement public/synthetic checks and source-gap reporting; acceptance of real
+inputs through gate C remains separate.
 If AV-only data cannot satisfy a field, report the gap or define a separately
 named proxy; no new source or hidden substitution is implied.
