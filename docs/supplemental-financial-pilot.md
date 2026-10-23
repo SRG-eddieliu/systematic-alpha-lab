@@ -87,6 +87,16 @@ python examples/yfinance_statement_pilot.py \
 Offline verification does not construct a collector or writable store, import
 yfinance, read credentials, select `latest`, or fetch missing materializations.
 
+`supplement_candidate_audit.build_pilot_candidate_audit` is a pure offline
+presence audit for the separately frozen research contract. It returns all
+59 native alternative fields across six target issuer-periods (354 cells), a
+five-concept by six-period review queue (30 rows), and an exclusion ledger for
+source rows outside the exact target ends. Missing sources keep their full
+denominator. Every cell separates value presence, exact end alignment, unknown
+flow start, annual/TTM label, units/scope and review status. Alternative fields
+are not all required scoring inputs. Duplicate candidates remain ambiguous;
+no field is selected or accepted by this audit.
+
 ## Research acceptance
 
 Research must compare company identity, actual duration/instant, currency, unit
