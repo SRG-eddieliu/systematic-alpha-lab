@@ -133,7 +133,7 @@
   "documentation_validation": {
     "production_code_changed": false,
     "contract_json_changed": false,
-    "full_test_suite_repeated_for_documentation_only_change": false,
+    "local_full_test_suite_repeated_for_documentation_only_change": false,
     "json_parse_and_aggregate_arithmetic_passed": true,
     "new_note_relative_links_checked": 3,
     "privacy_pattern_check_passed": true,
