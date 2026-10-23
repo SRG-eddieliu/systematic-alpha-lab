@@ -272,14 +272,15 @@ def provider_requests(manifest, *, provider="alpha_vantage", require_verified=Tr
     Unavailable mappings block collection. With require_verified=False and
     include_unavailable=True they remain explicit null-symbol blocked rows.
     Unverified mappings require an opt-in and keep their status in the result.
+    Every security must declare this provider; subsets require a separate freeze.
     """
     manifest = validate_universe(manifest)
     _label(provider, "provider")
     if not isinstance(require_verified, bool) or not isinstance(include_unavailable, bool):
         raise TypeError("Mapping gate flags must be booleans")
-    rows = [row for row in manifest["securities"] if row["provider"] == provider]
-    if not rows:
-        raise ValueError("Universe has no mappings for the requested provider")
+    rows = manifest["securities"]
+    if any(row["provider"] != provider for row in rows):
+        raise ValueError("Complete universe scope lacks mappings for the requested provider")
     if not include_unavailable and any(row["provider_symbol_status"] == "unavailable" for row in rows):
         raise ValueError("Universe contains unavailable provider mappings")
     if require_verified and any(row["provider_symbol_status"] != "verified" for row in rows):

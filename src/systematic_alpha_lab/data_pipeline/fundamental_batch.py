@@ -196,14 +196,14 @@ def create_fundamental_batch(
             raise ValueError("Batch already exists; resume it or explicitly refresh into a new run")
         if refresh_of is not None:
             prior = _load(store.root, _run_id(refresh_of))
-            if prior["config"]["universe_sha256"] != universe_sha256 or prior["config"]["symbols"] != list(symbols):
+            if prior["config"]["universe_sha256"] != universe_sha256 or set(prior["config"]["symbols"]) != set(symbols):
                 raise ValueError("Refresh must retain the original frozen universe and selection")
             if import_receipts:
                 raise ValueError("A refresh creates fresh observations; imports are not permitted")
         else:
             for path in (store.root / "fundamental_batches").glob("*/manifest.json"):
                 prior = _load(store.root, path.parent.name)
-                if prior["config"]["universe_sha256"] == universe_sha256 and prior["config"]["symbols"] == list(symbols):
+                if prior["config"]["universe_sha256"] == universe_sha256 and set(prior["config"]["symbols"]) == set(symbols):
                     raise ValueError("Selection already has a run; explicit refresh_of is required")
         jobs = [{"job_id": f"{symbol}:{function}", "request": {"function": function, "symbol": symbol},
                  "status": "pending", "imported": False, "pin": None, "attempts": []}

@@ -1,9 +1,9 @@
 """Read-only statement diagnostics; source amounts and eligibility remain unchanged."""
 from __future__ import annotations
 
-from decimal import Decimal, InvalidOperation
 import hashlib
 import json
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 import pandas as pd

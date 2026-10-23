@@ -64,7 +64,10 @@ itself establish a security's identity.
 `provider_requests(manifest)` defaults to verified mappings and returns unique
 explicit provider symbols, each linked to its security and company IDs. This
 avoids duplicate company requests when a provider maps multiple share classes
-to one symbol. Unavailable mappings block the plan; an explicit
+to one symbol. Every security in the manifest must declare the requested
+provider. If any row declares another provider, the entire plan fails; it does
+not silently filter the universe. A desired subset requires an explicit
+separate freeze with its own fingerprint. Unavailable mappings block the plan; an explicit
 `require_verified=False` opt-in permits unverified mappings while preserving
 their status. That opt-in does not satisfy an exact-index collection gate.
 An additional `include_unavailable=True` opt-in returns each unavailable
@@ -101,12 +104,16 @@ new collection action, with a new observation and immutable source object.
 Credentials use the existing private loader. No purchase, key rotation, silent
 source substitution or unbounded retry is authorized by this contract.
 
-The known paid credential does not establish an account's current requests per
-minute. Until verified plan terms justify a different interval, collection
-uses the existing conservative 15-second minimum interval and a finite budget.
-Official endpoint, entitlement and usage-term review is a separate collection
-preflight; this document does not claim a particular subscription limit or
-permission to redistribute provider data.
+The default interval remains 15 seconds. This collection run explicitly selects
+1.1 seconds between requests, about 54.55 requests per minute, below the current
+smallest [official paid plan](https://www.alphavantage.co/premium/) at 75 requests
+per minute as checked on 2026-10-23 UTC. The credential's actual paid tier remains
+unknown, so the published plan floor does not establish its entitlement. A
+provider quota or entitlement notice halts collection. Requests use a finite
+budget without a purchase or credential change. The user has confirmed that
+this collection is for noncommercial research and authorized continuation;
+no additional license confirmation gate is imposed for this run. Permission to
+redistribute provider data is not established by collection or this contract.
 
 Collectors and readers must not concurrently mutate/read the same active
 catalog. Close collection before replay, or explicitly use a closed independent
