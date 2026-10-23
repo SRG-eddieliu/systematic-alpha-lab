@@ -1,0 +1,50 @@
+{
+  "validation": "annual_beneish_implementation_v1",
+  "date": "2026-10-22",
+  "timezone": "America/Toronto",
+  "baseline_merge": "57210e0484d2943227a895de3a74b7cc2762c02c",
+  "definition_id": "beneish_2013_cashflow_annual_raw_v1",
+  "python": "3.12.14",
+  "checks": {
+    "full_pytest": {
+      "passed": 757,
+      "command": "pytest -q --disable-warnings"
+    },
+    "new_annual_cases": 199,
+    "new_pipeline_cases": 11,
+    "ruff": "passed_on_all_six_new_Python_files",
+    "diff_check": "passed",
+    "public_author_amount_demo": "passed",
+    "independent_decimal_method_example": "passed",
+    "pure_depreciation_missing_returns_null": "passed",
+    "exact_decimal_domain_boundary_rejections": "passed"
+  },
+  "public_m_score": -1.8841840767415738,
+  "synthetic_metadata_is_historical_source_evidence": false,
+  "closed_provider_trial": {
+    "symbols": 3,
+    "annual_observations": 60,
+    "strict_computable_scores": 0,
+    "network_calls": 0,
+    "credentials_read": false,
+    "source_files_and_mtimes_unchanged": true,
+    "receipt": "validation-annual-beneish-pipeline-2026-10-22.json"
+  },
+  "artifact_sha256": {
+    "src/systematic_alpha_lab/factor_research/beneish_standard.py": "0f9873ac8e48c656e6b61b401e8a240c79d70da0da2d69ecae81316f31fb14f1",
+    "src/systematic_alpha_lab/factor_research/beneish_pipeline.py": "bffc22ce506239ebac7d4984e1302b76f1452408ab7820e3b46fd010702d9fa4",
+    "tests/test_beneish_standard.py": "e7a708319b36367074e369ecc5e709d88f7dc2c47b9d28a0d6f3a7ebfdb8aa88",
+    "tests/test_beneish_pipeline.py": "191018cc9ddb3791f535a1dcf38a40b72dc76ab30c8d26cb94c696916d6011fe",
+    "examples/annual_beneish_demo.py": "41ca5c66940d249d25e704b0b9224905bf0564fed73969f5405ef5553fa9d859",
+    "examples/review_beneish_pipeline.py": "c533621362378e5403a22e4d42a350d3baa1f7b112122322887a3fd9b1530872",
+    "docs/integrity-research-contract-v1.json": "b6063b620b08817b31a0870c8372b91770af330fd374d8bffac40a6221404d46",
+    "docs/fixtures/beneish-sunbeam-1997.json": "0706537d545eaefb9e3b9ec912c011f67049b50412209655b6f0e0df5e08e6a3",
+    "docs/validation-annual-beneish-pipeline-2026-10-22.json": "c226094dcf1c8162d68e147e85c2f072c96c7b7543c7b25f009de5bebf10601c"
+  },
+  "limits": [
+    "Calculator certifies consistency of caller declarations only, not external source authenticity",
+    "No current S&P 500 full-collection result is claimed",
+    "No calibrated fraud probability, historical PIT qualification or market result"
+  ],
+  "hosted_ci": "recorded_in_pull_request_checks"
+}
