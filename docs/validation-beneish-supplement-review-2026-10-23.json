@@ -1,0 +1,894 @@
+{
+  "schema": "beneish_bounded_supplement_research_review_v1",
+  "prepared_date": "2026-10-23",
+  "scope": {
+    "companies": 3,
+    "years_per_company": 2,
+    "selected_periods": 6,
+    "concept_groups": 5,
+    "review_cells": 30,
+    "financial_amounts_published": 0
+  },
+  "contract": {
+    "id": "av_primary_supplement_pilot_v1",
+    "sha256": "04f37cd3e6daeb0eeb9dc5eb5b51a0a3c38170564b5017c8be1d028d2603fbc6",
+    "public_code_commit": "495c04b72f616156cc44458288555c6e0364c366",
+    "changed": false
+  },
+  "native_coverage": {
+    "provider_statement_scoped_fields": 59,
+    "AV_fields": 16,
+    "Yahoo_fields": 43,
+    "target_cells": 354,
+    "finite": 166,
+    "field_absent": 94,
+    "unavailable": 78,
+    "literal_missing": 16,
+    "finite_by_source": {
+      "AV": 48,
+      "Yahoo": 118
+    },
+    "unavailable_by_source": {
+      "AV": 32,
+      "Yahoo": 46
+    },
+    "literal_missing_by_source": {
+      "AV": 16,
+      "Yahoo": 0
+    },
+    "interpretation": "Producer value-status precedence, not accounting acceptance or unique fiscal periods; exact date alignment is assessed separately."
+  },
+  "independent_yahoo_selected_slots": {
+    "slots": 258,
+    "exact_end_finite": 118,
+    "library_field_absent": 94,
+    "field_present_no_exact_end_cell": 46,
+    "AAPL_each_year": {
+      "exact_end_finite": 0,
+      "field_absent": 20,
+      "no_exact_end": 23,
+      "unmatched_same_calendar_year_finite": 20,
+      "unmatched_same_calendar_year_typed_missing": 3
+    },
+    "MSFT_each_year": {
+      "exact_end_finite": 25,
+      "field_absent": 18
+    },
+    "IBM_each_year": {
+      "exact_end_finite": 34,
+      "field_absent": 9
+    },
+    "all_three_DepreciationIncomeStatement_absent": true,
+    "same_calendar_year_is_not_accepted_alignment": true
+  },
+  "AV_Apple_date_gap": {
+    "native_slots_without_exact_end": 32,
+    "fields_per_year": 16,
+    "selected_years": [
+      2024,
+      2025
+    ],
+    "source_labels": [
+      "2024-09-30",
+      "2025-09-30"
+    ],
+    "actual_fiscal_ends": [
+      "2024-09-28",
+      "2025-09-27"
+    ],
+    "status": "no_exact_end_not_field_absence_or_source_missing",
+    "date_bridge_accepted": false
+  },
+  "unmatched_source_records": {
+    "count": 1540,
+    "AV_annual_report_rows": 168,
+    "Yahoo_metric_period_records": 1372,
+    "basis": "Mixed AV report-row and Yahoo metric-period records outside exact selections; not 1540 distinct fiscal periods or years.",
+    "amounts_in_review_queue": false
+  },
+  "status_counts": {
+    "ambiguous_scope": 6,
+    "components_missing": 2,
+    "source_mapping_candidate": 12,
+    "partial_bridge": 6,
+    "partial_components": 4
+  },
+  "status_meaning": {
+    "source_mapping_candidate": "Reported context supports useful scoped facts; executable canonical mapping not accepted.",
+    "ambiguous_scope": "Related facts exist but the target scope conflicts or is unresolved.",
+    "partial_components": "Useful components exist but the complete paper construction is not established.",
+    "components_missing": "Complete component pair not located within the single-report review.",
+    "partial_bridge": "Useful income/CFO facts exist; the full historical target and construction remain unresolved."
+  },
+  "sources": {
+    "AAPL": {
+      "url": "https://s2.q4cdn.com/470004039/files/doc_financials/2025/ar/_10-K-2025-As-Filed.pdf",
+      "kind": "FY2025 Form 10-K PDF candidate",
+      "document_identity_reviewed": true,
+      "exact_issuer_IR_to_PDF_href_chain_verified": false
+    },
+    "MSFT": {
+      "url": "https://www.microsoft.com/investor/reports/ar25/index.html",
+      "kind": "official issuer FY2025 annual-report HTML",
+      "official_issuer_source_verified": true
+    },
+    "IBM": {
+      "url": "https://www.ibm.com/downloads/documents/us-en/15db52348fc203a4",
+      "kind": "official issuer FY2025 annual-report PDF",
+      "official_issuer_link_chain_verified": true
+    }
+  },
+  "matrix": [
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-10-01",
+      "selected_period_end": "2024-09-28",
+      "concept_group": "pure_tangible_depreciation",
+      "recommendation": "ambiguous_scope",
+      "reason": "Reported PPE expense includes asset classes containing internal-use software and finance-lease assets; no tangible-only expense decomposition is established. Preserve the coarser billion-unit precision.",
+      "qualified_reported_source_facts": [
+        "PPE depreciation expense"
+      ],
+      "source_locations": [
+        "Note 5: PPE; physical PDF p.42",
+        "Note 8: leases; physical PDF p.45"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-10-01",
+      "selected_period_end": "2024-09-28",
+      "concept_group": "paper_dp14_minus_am65",
+      "recommendation": "components_missing",
+      "reason": "A complete same-scope income-statement DP14 and AM65 pair was not located. The CF aggregate and its difference from a rounded PPE expense cannot recover that target.",
+      "qualified_reported_source_facts": [
+        "CF depreciation/amortization adjustment"
+      ],
+      "source_locations": [
+        "CF statement: physical PDF p.36",
+        "PPE note: physical PDF p.42"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-10-01",
+      "selected_period_end": "2024-09-28",
+      "concept_group": "noncurrent_debt_finance_leases",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Noncurrent term debt and finance-lease liabilities are separately reported. The noncurrent lease amount is in other noncurrent liabilities; current finance leases already enter current liabilities.",
+      "qualified_reported_source_facts": [
+        "noncurrent term debt carrying amount",
+        "separate current/noncurrent finance-lease liabilities"
+      ],
+      "source_locations": [
+        "Balance sheet: physical PDF p.34",
+        "Lease note: physical PDF p.45",
+        "Debt note: physical PDF p.47"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-10-01",
+      "selected_period_end": "2024-09-28",
+      "concept_group": "ib18_income_cfo_bridge",
+      "recommendation": "partial_bridge",
+      "reason": "Annual consolidated NI and CFO are explicit on a wholly-owned-subsidiary basis. A complete historical IB18 exclusion/dividend bridge was not established; absent lines are not encoded as zero.",
+      "qualified_reported_source_facts": [
+        "consolidated annual NI",
+        "annual CFO"
+      ],
+      "source_locations": [
+        "Income statement: physical PDF p.32",
+        "CF statement: physical PDF p.36",
+        "Basis: physical PDF p.37"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-10-01",
+      "selected_period_end": "2024-09-28",
+      "concept_group": "trade_current_net_AR",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Current customer receivables net of allowances are distinct from vendor nontrade receivables. Do not add the separate vendor category to the trade-only candidate.",
+      "qualified_reported_source_facts": [
+        "current net trade/customer AR"
+      ],
+      "source_locations": [
+        "Balance sheet: physical PDF p.34",
+        "Trade receivables: physical PDF pp.37,42"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-09-29",
+      "selected_period_end": "2025-09-27",
+      "concept_group": "pure_tangible_depreciation",
+      "recommendation": "ambiguous_scope",
+      "reason": "Reported PPE expense includes asset classes containing internal-use software and finance-lease assets; no tangible-only expense decomposition is established. Preserve the coarser billion-unit precision.",
+      "qualified_reported_source_facts": [
+        "PPE depreciation expense"
+      ],
+      "source_locations": [
+        "Note 5: PPE; physical PDF p.42",
+        "Note 8: leases; physical PDF p.45"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-09-29",
+      "selected_period_end": "2025-09-27",
+      "concept_group": "paper_dp14_minus_am65",
+      "recommendation": "components_missing",
+      "reason": "A complete same-scope income-statement DP14 and AM65 pair was not located. The CF aggregate and its difference from a rounded PPE expense cannot recover that target.",
+      "qualified_reported_source_facts": [
+        "CF depreciation/amortization adjustment"
+      ],
+      "source_locations": [
+        "CF statement: physical PDF p.36",
+        "PPE note: physical PDF p.42"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-09-29",
+      "selected_period_end": "2025-09-27",
+      "concept_group": "noncurrent_debt_finance_leases",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Noncurrent term debt and finance-lease liabilities are separately reported. The noncurrent lease amount is in other noncurrent liabilities; current finance leases already enter current liabilities.",
+      "qualified_reported_source_facts": [
+        "noncurrent term debt carrying amount",
+        "separate current/noncurrent finance-lease liabilities"
+      ],
+      "source_locations": [
+        "Balance sheet: physical PDF p.34",
+        "Lease note: physical PDF p.45",
+        "Debt note: physical PDF p.47"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-09-29",
+      "selected_period_end": "2025-09-27",
+      "concept_group": "ib18_income_cfo_bridge",
+      "recommendation": "partial_bridge",
+      "reason": "Annual consolidated NI and CFO are explicit on a wholly-owned-subsidiary basis. A complete historical IB18 exclusion/dividend bridge was not established; absent lines are not encoded as zero.",
+      "qualified_reported_source_facts": [
+        "consolidated annual NI",
+        "annual CFO"
+      ],
+      "source_locations": [
+        "Income statement: physical PDF p.32",
+        "CF statement: physical PDF p.36",
+        "Basis: physical PDF p.37"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "AAPL",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-09-29",
+      "selected_period_end": "2025-09-27",
+      "concept_group": "trade_current_net_AR",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Current customer receivables net of allowances are distinct from vendor nontrade receivables. Do not add the separate vendor category to the trade-only candidate.",
+      "qualified_reported_source_facts": [
+        "current net trade/customer AR"
+      ],
+      "source_locations": [
+        "Balance sheet: physical PDF p.34",
+        "Trade receivables: physical PDF pp.37,42"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-07-01",
+      "selected_period_end": "2024-06-30",
+      "concept_group": "pure_tangible_depreciation",
+      "recommendation": "ambiguous_scope",
+      "reason": "PPE depreciation is a qualified reported source fact, but PPE includes internal-use software and finance-lease assets. Tangible-only expense is not isolated; billion-unit one-decimal precision is retained.",
+      "qualified_reported_source_facts": [
+        "reported PPE depreciation expense"
+      ],
+      "source_locations": [
+        "Note 1: PPE and leases",
+        "Note 6: PPE",
+        "Note 13: finance leases"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-07-01",
+      "selected_period_end": "2024-06-30",
+      "concept_group": "paper_dp14_minus_am65",
+      "recommendation": "partial_components",
+      "reason": "PPE expense and intangible amortization are explicit, but the CF adjustment includes an additional other component. Complete historical income-statement DP14/AM65 inclusion is not established.",
+      "qualified_reported_source_facts": [
+        "PPE expense",
+        "intangible amortization",
+        "CF combined adjustment"
+      ],
+      "source_locations": [
+        "CF statement",
+        "Note 6",
+        "Note 9"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-07-01",
+      "selected_period_end": "2024-06-30",
+      "concept_group": "noncurrent_debt_finance_leases",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Noncurrent senior debt and noncurrent finance-lease liabilities are separately classified, with the latter in other long-term liabilities. The current lease component must not be added again to current liabilities.",
+      "qualified_reported_source_facts": [
+        "noncurrent debt carrying amount",
+        "noncurrent finance-lease liability"
+      ],
+      "source_locations": [
+        "Balance sheet",
+        "Note 10: debt",
+        "Note 13: leases"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-07-01",
+      "selected_period_end": "2024-06-30",
+      "concept_group": "ib18_income_cfo_bridge",
+      "recommendation": "partial_bridge",
+      "reason": "After-tax NI, common-shareholder attribution and same-source annual CFO are explicit. Complete historical IB18 discontinued/extraordinary/dividend treatment remains unestablished; NI/CFO agreement alone does not certify it.",
+      "qualified_reported_source_facts": [
+        "after-tax NI",
+        "common-shareholder income attribution",
+        "annual CFO"
+      ],
+      "source_locations": [
+        "Income and CF statements",
+        "Note 2: EPS"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2024,
+      "selected_period_start": "2023-07-01",
+      "selected_period_end": "2024-06-30",
+      "concept_group": "trade_current_net_AR",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Current customer AR is net of allowance. The policies distinguish long-term AR, financing and other receivables from that current customer category.",
+      "qualified_reported_source_facts": [
+        "current net customer AR"
+      ],
+      "source_locations": [
+        "Balance sheet",
+        "Note 1: receivables"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-07-01",
+      "selected_period_end": "2025-06-30",
+      "concept_group": "pure_tangible_depreciation",
+      "recommendation": "ambiguous_scope",
+      "reason": "PPE depreciation is a qualified reported source fact, but PPE includes internal-use software and finance-lease assets. Tangible-only expense is not isolated; billion-unit one-decimal precision is retained.",
+      "qualified_reported_source_facts": [
+        "reported PPE depreciation expense"
+      ],
+      "source_locations": [
+        "Note 1: PPE and leases",
+        "Note 6: PPE",
+        "Note 13: finance leases"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-07-01",
+      "selected_period_end": "2025-06-30",
+      "concept_group": "paper_dp14_minus_am65",
+      "recommendation": "partial_components",
+      "reason": "PPE expense and intangible amortization are explicit, but the CF adjustment includes an additional other component. Complete historical income-statement DP14/AM65 inclusion is not established.",
+      "qualified_reported_source_facts": [
+        "PPE expense",
+        "intangible amortization",
+        "CF combined adjustment"
+      ],
+      "source_locations": [
+        "CF statement",
+        "Note 6",
+        "Note 9"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-07-01",
+      "selected_period_end": "2025-06-30",
+      "concept_group": "noncurrent_debt_finance_leases",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Noncurrent senior debt and noncurrent finance-lease liabilities are separately classified, with the latter in other long-term liabilities. The current lease component must not be added again to current liabilities.",
+      "qualified_reported_source_facts": [
+        "noncurrent debt carrying amount",
+        "noncurrent finance-lease liability"
+      ],
+      "source_locations": [
+        "Balance sheet",
+        "Note 10: debt",
+        "Note 13: leases"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-07-01",
+      "selected_period_end": "2025-06-30",
+      "concept_group": "ib18_income_cfo_bridge",
+      "recommendation": "partial_bridge",
+      "reason": "After-tax NI, common-shareholder attribution and same-source annual CFO are explicit. Complete historical IB18 discontinued/extraordinary/dividend treatment remains unestablished; NI/CFO agreement alone does not certify it.",
+      "qualified_reported_source_facts": [
+        "after-tax NI",
+        "common-shareholder income attribution",
+        "annual CFO"
+      ],
+      "source_locations": [
+        "Income and CF statements",
+        "Note 2: EPS"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "MSFT",
+      "fiscal_year": 2025,
+      "selected_period_start": "2024-07-01",
+      "selected_period_end": "2025-06-30",
+      "concept_group": "trade_current_net_AR",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Current customer AR is net of allowance. The policies distinguish long-term AR, financing and other receivables from that current customer category.",
+      "qualified_reported_source_facts": [
+        "current net customer AR"
+      ],
+      "source_locations": [
+        "Balance sheet",
+        "Note 1: receivables"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2024,
+      "selected_period_start": "2024-01-01",
+      "selected_period_end": "2024-12-31",
+      "concept_group": "pure_tangible_depreciation",
+      "recommendation": "ambiguous_scope",
+      "reason": "The CF depreciation adjustment explicitly includes operating-lease ROU amortization. A rounded billion-unit footnote cannot be subtracted to manufacture an exact tangible-only expense.",
+      "qualified_reported_source_facts": [
+        "CF depreciation adjustment with disclosed operating-ROU inclusion"
+      ],
+      "source_locations": [
+        "CF statement footnote: printed p.45 / physical PDF p.47"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2024,
+      "selected_period_start": "2024-01-01",
+      "selected_period_end": "2024-12-31",
+      "concept_group": "paper_dp14_minus_am65",
+      "recommendation": "partial_components",
+      "reason": "Software/acquired-intangible amortization and acquired-intangible segment reconciliations supply partial information. A complete same-scope income-statement DP14/AM65 pair is not established.",
+      "qualified_reported_source_facts": [
+        "CF software/intangible amortization",
+        "segment acquired-intangible expense reconciliation"
+      ],
+      "source_locations": [
+        "CF statement: printed p.45",
+        "Segment disclosures: printed pp.66\u201367"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2024,
+      "selected_period_start": "2024-01-01",
+      "selected_period_end": "2024-12-31",
+      "concept_group": "noncurrent_debt_finance_leases",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Reported long-term debt ALREADY includes the noncurrent finance-lease liability. Do not add it again. The current finance-lease liability sits in short-term debt and is already within current liabilities.",
+      "qualified_reported_source_facts": [
+        "noncurrent debt inclusive of finance leases",
+        "finance-lease classification"
+      ],
+      "source_locations": [
+        "Balance sheet: printed p.44 / physical PDF p.46",
+        "Note M: printed p.84 / physical PDF p.86"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2024,
+      "selected_period_start": "2024-01-01",
+      "selected_period_end": "2024-12-31",
+      "concept_group": "ib18_income_cfo_bridge",
+      "recommendation": "partial_bridge",
+      "reason": "After-tax continuing income and nonzero discontinued income are explicit; Note A describes the net-of-tax NCI deduction. NI cannot stand in for continuing income. Do not subtract NCI a second time. Complete IB18 exclusions/dividend and total-CFO method treatment still need acceptance.",
+      "qualified_reported_source_facts": [
+        "after-tax continuing income",
+        "separate discontinued income",
+        "NCI policy",
+        "annual total CFO"
+      ],
+      "source_locations": [
+        "Income statement: printed p.42",
+        "CF statement: printed p.45",
+        "Note A: printed p.48"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2024,
+      "selected_period_start": "2024-01-01",
+      "selected_period_end": "2024-12-31",
+      "concept_group": "trade_current_net_AR",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Current trade notes/accounts receivable are net of allowances and separately presented from financing and other receivables.",
+      "qualified_reported_source_facts": [
+        "current net trade notes/accounts receivable"
+      ],
+      "source_locations": [
+        "Balance sheet: printed p.44 / physical PDF p.46"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2025,
+      "selected_period_start": "2025-01-01",
+      "selected_period_end": "2025-12-31",
+      "concept_group": "pure_tangible_depreciation",
+      "recommendation": "ambiguous_scope",
+      "reason": "The CF depreciation adjustment explicitly includes operating-lease ROU amortization. A rounded billion-unit footnote cannot be subtracted to manufacture an exact tangible-only expense.",
+      "qualified_reported_source_facts": [
+        "CF depreciation adjustment with disclosed operating-ROU inclusion"
+      ],
+      "source_locations": [
+        "CF statement footnote: printed p.45 / physical PDF p.47"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2025,
+      "selected_period_start": "2025-01-01",
+      "selected_period_end": "2025-12-31",
+      "concept_group": "paper_dp14_minus_am65",
+      "recommendation": "partial_components",
+      "reason": "Software/acquired-intangible amortization and acquired-intangible segment reconciliations supply partial information. A complete same-scope income-statement DP14/AM65 pair is not established.",
+      "qualified_reported_source_facts": [
+        "CF software/intangible amortization",
+        "segment acquired-intangible expense reconciliation"
+      ],
+      "source_locations": [
+        "CF statement: printed p.45",
+        "Segment disclosures: printed pp.66\u201367"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2025,
+      "selected_period_start": "2025-01-01",
+      "selected_period_end": "2025-12-31",
+      "concept_group": "noncurrent_debt_finance_leases",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Reported long-term debt ALREADY includes the noncurrent finance-lease liability. Do not add it again. The current finance-lease liability sits in short-term debt and is already within current liabilities.",
+      "qualified_reported_source_facts": [
+        "noncurrent debt inclusive of finance leases",
+        "finance-lease classification"
+      ],
+      "source_locations": [
+        "Balance sheet: printed p.44 / physical PDF p.46",
+        "Note M: printed p.84 / physical PDF p.86"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2025,
+      "selected_period_start": "2025-01-01",
+      "selected_period_end": "2025-12-31",
+      "concept_group": "ib18_income_cfo_bridge",
+      "recommendation": "partial_bridge",
+      "reason": "After-tax continuing income and nonzero discontinued income are explicit; Note A describes the net-of-tax NCI deduction. NI cannot stand in for continuing income. Do not subtract NCI a second time. Complete IB18 exclusions/dividend and total-CFO method treatment still need acceptance.",
+      "qualified_reported_source_facts": [
+        "after-tax continuing income",
+        "separate discontinued income",
+        "NCI policy",
+        "annual total CFO"
+      ],
+      "source_locations": [
+        "Income statement: printed p.42",
+        "CF statement: printed p.45",
+        "Note A: printed p.48"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    },
+    {
+      "symbol": "IBM",
+      "fiscal_year": 2025,
+      "selected_period_start": "2025-01-01",
+      "selected_period_end": "2025-12-31",
+      "concept_group": "trade_current_net_AR",
+      "recommendation": "source_mapping_candidate",
+      "reason": "Current trade notes/accounts receivable are net of allowances and separately presented from financing and other receivables.",
+      "qualified_reported_source_facts": [
+        "current net trade notes/accounts receivable"
+      ],
+      "source_locations": [
+        "Balance sheet: printed p.44 / physical PDF p.46"
+      ],
+      "source_version": "FY2025 report comparative presentation",
+      "canonical_mapping_accepted": false,
+      "model_ready": false
+    }
+  ],
+  "gates": {
+    "canonical_fields_populated": 0,
+    "frozen_v1_definition_changed": false,
+    "annual_adapter_changed": false,
+    "M_score_calculated": false,
+    "backtest_performed": false,
+    "historical_available_at_verified": false,
+    "exact_SEC_accession_content_binding_verified": false,
+    "original_FY2024_vintage_verified": false,
+    "rounding_acceptance_tolerance_created": false,
+    "Apple_Yahoo_date_bridge_accepted": false,
+    "research_ready": false
+  },
+  "execution": {
+    "engineering_sole_collector": true,
+    "new_AV_requests": 0,
+    "Yahoo_logical_getters": 9,
+    "Yahoo_HTTP_dispatches_including_auth": 11,
+    "issuer_original_document_HTTP_dispatches": 3,
+    "retry_or_redirect_dispatches": 0,
+    "SEC_document_dispatches": 0,
+    "SEC_reason": "Authorized contact User-Agent not configured; none invented.",
+    "research_capture_requests": 0
+  },
+  "source_context_limits": [
+    "Issuer annual statements and notes support a source-level review; provider flow starts, units, currency, accounting scope and version require per-fact bridging.",
+    "Both years use FY2025 comparative presentation, not independent historical vintages.",
+    "Exact SEC accession/EX-13 content binding is not established by the collected issuer documents.",
+    "Preserve original display precision; arithmetic agreement or a residual cannot establish concept or date equivalence."
+  ],
+  "independent_closed_package_verification": {
+    "apple_yahoo": {
+      "date_bridge_accepted": false,
+      "same_year_label_finite_candidate_counts_per_target_year": [
+        20,
+        20
+      ],
+      "target_slots": 86,
+      "without_exact_target_end": 86
+    },
+    "candidate_tables": {
+      "coverage_cells": 354,
+      "review_queue": 30,
+      "unmatched_source_periods": 1540
+    },
+    "concept_groups": 5,
+    "datasets": 32,
+    "excluded_source_records": {
+      "meaning": "mixed_native_report_rows_and_metric_period_records_not_distinct_fiscal_years",
+      "total": 1540,
+      "unit_counts": {
+        "annual_report_row": 168,
+        "metric_period_row": 1372
+      }
+    },
+    "interpretation": [
+      "Finite presence is not semantic or historical-availability acceptance.",
+      "An absent field can take precedence over no_exact_end; unavailable is not a count of all date mismatches.",
+      "The 354 slots are native alternative candidates, not all required scoring inputs.",
+      "The 30 review units are concept-by-target-period tasks; semantic PDF decisions are separate."
+    ],
+    "native_candidate_fields": {
+      "alpha_vantage": 16,
+      "total": 59,
+      "yahoo_financial_timeseries": 43
+    },
+    "passed": true,
+    "presence": {
+      "field_absent": 94,
+      "finite_candidate": 166,
+      "missing_literal": 16,
+      "unavailable": 78
+    },
+    "presence_by_source": {
+      "alpha_vantage": {
+        "finite_candidate": 48,
+        "missing_literal": 16,
+        "unavailable": 32
+      },
+      "yahoo_financial_timeseries": {
+        "field_absent": 94,
+        "finite_candidate": 118,
+        "unavailable": 46
+      }
+    },
+    "presence_end_alignment_cross_count": {
+      "field_absent": {
+        "no_field_observation": 94
+      },
+      "finite_candidate": {
+        "exact_end": 166
+      },
+      "missing_literal": {
+        "exact_end": 16
+      },
+      "unavailable": {
+        "no_exact_end": 78
+      }
+    },
+    "root_files": 100,
+    "schema_version": 1,
+    "scope": "closed_candidate_presence_and_data_quality_only",
+    "semantic_acceptance": {
+      "accepted_research_fields": 0,
+      "factor_calculated": false,
+      "required_scoring_inputs_complete": false,
+      "review_decision": "unreviewed",
+      "source_acceptance": "none"
+    },
+    "snapshots": 32,
+    "stored_rows": 8671,
+    "tables": 61,
+    "target_periods": 6,
+    "verification": {
+      "active_catalog_accessed": false,
+      "contract_cross_product_and_definitions_independently_checked": true,
+      "external_hashes_and_mtimes_unchanged": true,
+      "guards": {
+        "catalog_discovery": 0,
+        "credentials": 0,
+        "latest": 0,
+        "network": 0,
+        "writable_store": 0
+      },
+      "normalizer_reexecuted": false,
+      "parent_full_source_capture_not_reaudited": true,
+      "parent_pinned_capture_manifests_and_copied_files_match": true,
+      "presence_and_date_alignment_independently_recomputed": true,
+      "producer_build_function_called": false,
+      "root_hashes_and_mtimes_unchanged": true,
+      "unmatched_native_row_partition_independently_recomputed": true
+    }
+  },
+  "independent_existing_full_Drive_recovery_review": {
+    "record_kind": "safe_aggregate_of_independent_existing_full_bundle_review",
+    "scope": "both_full_declared_original_and_currency_derived_closures",
+    "archive_bytes": 63129600,
+    "existing_local_artifacts_rehashed": 9361,
+    "archive_regular_members_recompared_to_existing_extraction": 13,
+    "packages": {
+      "baseline": {
+        "data_files": 4322,
+        "payload_files_including_manifest": 4405,
+        "selected_financial_tables": 2788,
+        "selected_financial_rows": 133180
+      },
+      "derived": {
+        "data_files": 4762,
+        "payload_files_including_manifest": 4890,
+        "selected_financial_tables": 3006,
+        "selected_financial_rows": 141303
+      }
+    },
+    "current_artifact_and_receipt_checks_passed": true,
+    "new_network_or_cloud_operations": 0,
+    "reader_or_restic_rerun_by_this_review": false,
+    "prior_sample_snapshots": 397,
+    "different_machine_tested": false,
+    "clean_runtime_rebuild_tested": false,
+    "off_machine_key_retrieval_tested": false,
+    "live_cloud_permissions_requeried": false,
+    "historical_failed_response_bodies_still_missing": 8,
+    "complete_disaster_recovery_certified": false,
+    "research_input_semantics_certified": false,
+    "restored_pinned_pipeline_code_files_verified": {
+      "baseline": 26,
+      "derived": 27
+    }
+  }
+}
