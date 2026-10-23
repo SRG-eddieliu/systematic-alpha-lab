@@ -219,6 +219,19 @@ flow start/duration, completeness of every field at those ends, or unchanged
 historical issuer scope. Per-field sparsity and accounting acceptance remain
 separate checks.
 
+Of the **65** source statement/end-label groups, **54** pass the native-core
+probe. The six 2021 annual groups and the five returned 2025 Q1 groups are
+sparse and fail that probe; DOC income has no 2025 Q1 group. Core presence holds
+across 2022–2025 annual ends and the five quarterly ends from 2025 Q2 through
+2026 Q2 for both companies' three statements. This remains a probe for a small
+set of native fields, rather than full-statement certification.
+
+Independent comparison matched all 3,045 raw numbers to the same library
+metric/end label. The frame has 814 further missing cells; none has a raw
+observation or was filled with zero. Seventy SDK numbers reflect decimal-to-
+binary float rounding. Their original decimal tokens are retained in the
+HTTP layer, so a consumer can distinguish source precision from SDK precision.
+
 Optional issuer reports were not requested after the Yahoo availability stage
 succeeded. SEC requests were zero; no authorized SEC contact was configured and
 no identification was invented. Including the three earlier failed issuer-
