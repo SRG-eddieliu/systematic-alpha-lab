@@ -1,0 +1,187 @@
+{
+  "record_date": "2026-10-23",
+  "timezone": "America/Toronto",
+  "record_kind": "historical_execution_receipt_not_live_checkpoint",
+  "code_commit": "29d5541ce5a57bfaa6a8cae1f1b6579a60478798",
+  "base_main_commit": "6339914594cb3510386492ce622099508adecc6b",
+  "parent_batch": {
+    "planned_jobs": 1509,
+    "original_successful_jobs": 1394,
+    "original_failed_jobs": 115,
+    "original_failed_jobs_unchanged": 115,
+    "manifest_sha256": "0158630fa9841eedddc2cd081596409c708d88d2bb2457813811e6bae84e665d",
+    "config_sha256": "66a0f01a2bf1bc9f93ec1ff752a621fd51fccd7c3781827dbd61571fc25d3f42",
+    "universe_sha256": "0480b3130b45bf645e5491c1cb65e21c2dddc1b1d65bf662e8b836d527cb38ee",
+    "universe_scope": "etf_proxy",
+    "universe_as_of": "2026-10-21",
+    "exact_index_verified": false
+  },
+  "raw_failure_audit": {
+    "jobs": 109,
+    "source_rows": 9327,
+    "annual_source_rows": 1915,
+    "quarterly_source_rows": 7412,
+    "currency_none_string_rows": 1204,
+    "currency_none_annual_rows": 182,
+    "currency_none_quarterly_rows": 1022,
+    "bad_rows_with_finite_amount": 1204,
+    "bad_rows_all_amounts_missing": 0,
+    "jobs_with_exactly_one_bad_row": 67,
+    "bad_row_year_min": 2002,
+    "bad_row_year_max": 2026,
+    "bad_rows_in_2026": 63,
+    "source_currency_imputed": false
+  },
+  "derived_recovery": {
+    "normalizer": "av_fundamentals_currency_quarantine_v1",
+    "manifest_sha256": "d9b93a03732df48515a2164a8bc7e486a35666437fec0dd94c97142da5376bd9",
+    "normalization_policy_sha256": "100cc9dfc1bff2a2b49c4dc997a929f90886ca2e6c0a76e5707c43afc782e3b9",
+    "selection_sha256": "8e0afa8ef92b2bf064b11e2fd7719373081bd7204e428a1193096b4fe0c254aa",
+    "receipts_file_sha256": "6233f87756db6bc3b412eb57b390f4f69a933649ffe38b6e5eb23bf735f03830",
+    "coverage": {
+      "accepted_recovery_rows": 8123,
+      "original_success_jobs": 1394,
+      "quarantine_only_jobs": 0,
+      "quarantined_rows": 1204,
+      "recovered_with_usable_rows_jobs": 109,
+      "recovery_attempted_jobs": 109,
+      "recovery_materialized_jobs": 109,
+      "recovery_rejected_jobs": 0,
+      "still_no_usable_data_jobs": 6
+    },
+    "usable_statement_jobs": 1503,
+    "three_statements_readable_securities": 501,
+    "quarantine_affected_securities": 46,
+    "securities_without_usable_statements": 2,
+    "usable_does_not_mean_all_periods_complete": true,
+    "original_and_recovered_statement_tables": 3006,
+    "original_and_recovered_statement_rows": 141303,
+    "all_selected_tables_including_diagnostics": 3224,
+    "all_selected_rows_including_diagnostics": 142725,
+    "statement_rows_by_period": {
+      "annual": 28358,
+      "quarterly": 112945
+    },
+    "recovered_source_currency_rows": {
+      "USD": 7964,
+      "EUR": 159
+    },
+    "recovered_source_amount_cells": {
+      "finite": 148444,
+      "missing": 87824,
+      "nonnumeric": 0,
+      "nonfinite": 0
+    },
+    "all_9327_source_rows_accounted_for": true,
+    "exact_original_values_and_types_preserved": true,
+    "quarantine_is_not_financial_table_coverage": true,
+    "eligibility": "not_certified"
+  },
+  "offline_execution": {
+    "network_attempts": 0,
+    "credential_load_attempts": 0,
+    "writable_store_constructions": 1,
+    "writable_store_restricted_to_new_output": true,
+    "code_unchanged_during_execution": true,
+    "source_fingerprints": {
+      "cli": "79383aed84a1fd59bb5c0c62d649a01e4f33304d5d15a98e0fd9df991bd31dc3",
+      "recovery_normalizer": "be4646ad5e64408169391265e24a2dca3df1541f59c032c729f50c00f9ee8cff",
+      "original_normalizer": "f7eb4cec65f59d25c6c85e3e8e425d8039636eb94a349618c1c2b406eec6f3c3",
+      "reader": "86cf1c6b21c8b0f79c3cc71a0b9a4e7f0b10e4063e410bd0fb073f0b02664380",
+      "guard_wrapper": "85544eee6113406f878288a627e56dd61be86bb7711be368c7d9a2b3be2b31d2"
+    }
+  },
+  "closed_verification": {
+    "network_attempts": 0,
+    "credential_load_attempts": 0,
+    "writable_store_attempts": 0,
+    "parent_input_files": 4322,
+    "child_input_files": 4762,
+    "parent_and_child_bytes_mtime_unchanged": true,
+    "parent_matches_closed_handoff_v2": true,
+    "parent_inventory_sha256": "38e87335d3348bd1813b49a6e3316b4ae9db06ec5ba7352cf0b9ad258858ac15",
+    "child_inventory_sha256": "52117bb8a054d8e3601e73071d7b6392b833c38c305e15327e5e3baba3d8bb23",
+    "all_source_rows_accounted_for": true
+  },
+  "provider_diagnostics": {
+    "new_requests": 11,
+    "statement_rechecks": 6,
+    "company_name_searches": 2,
+    "overview_checks": 3,
+    "http_200_responses": 11,
+    "empty_object_responses": 9,
+    "all_new_response_bodies_hash_verified": true,
+    "alternative_symbols_automatically_selected": 0,
+    "current_us_scope_preserved": true,
+    "conclusion": "tested_endpoints_return_empty_objects_no_verified_alias_not_proof_of_permanent_unavailability",
+    "prior_statement_attempts": 1505,
+    "combined_prior_and_recovery_requests": 1516,
+    "combined_phase_ceiling": 1530,
+    "remaining_combined_capacity": 14,
+    "original_batch_counter_rewritten": false,
+    "earlier_auxiliary_identity_requests": 3,
+    "earlier_auxiliary_premium_probe_requests": 1,
+    "historical_failure_bodies_still_unretained": 8,
+    "historical_bodies_reconstructed": false
+  },
+  "validation": {
+    "pytest": "992 passed",
+    "pytest_warnings": 3286,
+    "new_normalizer_tests": 68,
+    "new_recovery_cli_tests": 10,
+    "ruff_new_files": "passed",
+    "independent_review_findings_fixed": [
+      "source_numeric_type_and_precision_preservation",
+      "reject_empty_and_incomplete_receipt_table_sets"
+    ],
+    "ci": {
+      "code_commit": "29d5541ce5a57bfaa6a8cae1f1b6579a60478798",
+      "url": "https://github.com/SRG-eddieliu/systematic-alpha-lab/actions/runs/39962196462",
+      "conclusion": "success",
+      "python_versions": [
+        "3.10",
+        "3.11"
+      ]
+    }
+  },
+  "code_fingerprints": {
+    "README.md": "6bf27ed4649b8d91fbc49d6ddd7f9fefddbb177a3bc3bce7d910ef528227c54d",
+    "src/systematic_alpha_lab/data_pipeline/fundamental_recovery.py": "be4646ad5e64408169391265e24a2dca3df1541f59c032c729f50c00f9ee8cff",
+    "examples/recover_currency_statements.py": "79383aed84a1fd59bb5c0c62d649a01e4f33304d5d15a98e0fd9df991bd31dc3",
+    "tests/test_fundamental_recovery.py": "f92a52a685428a491d6e4ff099f232b4fa9559ee4df8785d0abfeb45fdf5f3d3",
+    "tests/test_currency_recovery_cli.py": "38f76ec8d22c49e0d646bc480ff257e5646ade4f224802ea4d2e67879738cbb9"
+  },
+  "private_evidence_fingerprints": {
+    "data-quality-raw-audit-v1.json": "3e47b183912914d45b3493a566c95cc32623524ac40d169a00c94bbcf3479b16",
+    "mapping-investigation-private.json": "9e1f6dc270fd6ee362e1cdbd7a3db89b11e7b342fd9483c5938b0572f164e263",
+    "closed-baseline-handoff-v2.json": "ac7a323082753d26b0056cf82ac0bea7e5d9d62b800064796c2b38aed39b928b",
+    "closed-recovery-handoff-v1.json": "dc16e1c8942132b9805b1b794f292387c0fdb77d28d1e0b1a412fe8118f8a8cd",
+    "offline-execution-guards-v1.json": "8240d1a97a41ba56053d43f08afe09c07d55b15b77011282a2c38b2e3a1b7dac",
+    "recovery-closed-offline-verification-v1.json": "16175d9b5d5af411087ca67d75e949c6beda457a84fc93adc942d703ed85e03c",
+    "recovery-exact-row-audit-private-v1.json": "db3c23eff7c5a1ab6ad055ec5ff7e7815fcb34b50f7ca8a9c3c34d0fa401021c",
+    "recovery-closed-inventory-private-v1.json": "c654ccadf7e8c0ebcb612d6d6c6d5f49c1c8443491ff232f09c86c18071266c1",
+    "run_offline_currency_recovery.py": "85544eee6113406f878288a627e56dd61be86bb7711be368c7d9a2b3be2b31d2",
+    "verify_recovery_closed.py": "c1f1321fb2f999a4cd91ddfbfaaab6c27d9be1ec0982b425f0239d8d531a3f40",
+    "diagnose_empty_responses.py": "b91b8c8c788c423657a7644ad4d7da179198e531106e0bb05da0922e2bc4315b",
+    "diagnose_provider_mapping.py": "f3c18d454c29a803de88a7a1b2292b599b25d568717a31a502a68473d86a1128",
+    "diagnose_historical_alias.py": "e8b60baf190b81c112d9405ee44b54136e0aae0fe1d077f6e518e05a1dd9eed0",
+    "pytest-recovery.log": "430826f6055e86772dcc2dd3f445fe60d3ba13c87c3a06df6d2d6a8b71512e1a"
+  },
+  "environment": {
+    "python": "3.12.14",
+    "pandas": "2.2.3",
+    "pyarrow": "26.0.0",
+    "numpy": "2.5.4",
+    "requests": "2.34.2"
+  },
+  "remaining_gaps": [
+    "1204_source_currency_rows_quarantined_not_repaired",
+    "six_empty_statement_responses_for_two_securities",
+    "eight_historical_failed_response_bodies_unretained",
+    "exact_current_or_historical_index_membership",
+    "stable_company_identity",
+    "units_and_flow_basis_and_fiscal_period_semantics",
+    "financial_statement_available_at_and_historical_vintages",
+    "research_field_semantics_and_eligibility"
+  ]
+}
